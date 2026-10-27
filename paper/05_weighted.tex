@@ -1,0 +1,175 @@
+%%==================================================================
+\section{Weighted counting in subexponential time}\label{sec:weighted}
+%%==================================================================
+
+\subsection{Bounded occurrences}
+We first state the outcome of Sections \ref{sec:routine} and \ref{sec:design}
+for a factor system in which every variable occurs in few factors.
+
+\begin{theorem}[Bounded occurrences]\label{thm:bounded-occ}
+Fix an integer $\beta\ge1$. There are $n_0=n_0(\beta)$ and an absolute constant
+$C_0$ with the following property. Let $\A$ be a commutative $\Q$-algebra, let
+$n\ge n_0$, and let a factor system on $n$ variables have largest scope $w$,
+largest occurrence number $b$ and total degree $d$ with
+\[
+  w\le\lambda^{\beta},\qquad b\le\lambda^{\beta},\qquad d\le\kappa n
+\]
+for some $\kappa\ge1$. Then $Z$ in \eqref{eq:Z} can be computed deterministically
+with at most
+\begin{equation}\label{eq:boundedocc}
+  |\F|\,\poly(n)\,2^{\,C_0(\kappa+1)(\beta+3)\,n\nu^2/\sqrt\lambda}
+\end{equation}
+operations in $\A$, evaluations of factors at inputs in $\Q[z]/(z^{J})$ with
+$J\le\kappa n$, and bit operations on rational numbers, using polynomially many
+elements of $\A$ and polynomially many bits of storage in addition to the
+factors' own.
+\end{theorem}
+
+\begin{proof}
+Adjoin the constant-one factors of Section~\ref{sec:design} so that
+\eqref{eq:nMb} holds; $b$ grows by at most one and $d$ is unchanged, and we may
+take $n_0$ so large that $\lambda^\beta+1\le\lambda^{\beta+1}$ is not needed:
+replace $\beta$ by $\beta+1$ in Lemma~\ref{lem:params} if $b$ was exactly
+$\lambda^\beta$, which changes only the constants. Choose the parameters
+\eqref{eq:params} by Lemma~\ref{lem:params}, which for $n\ge n_0(\beta)$
+satisfy the hypotheses of Lemma~\ref{lem:complete}; construct the design in
+polynomial time by that lemma; and run the routine of
+Proposition~\ref{prop:routine}. The degree bound \eqref{eq:degbound} holds with
+$d\le\kappa n$, so $d_H\le\kappa nR$, $q\le\kappa nR/Q$ and $J\le q+1\le\kappa n$
+because $R<Q$. By \eqref{eq:logCq},
+\[
+  \log C_q\le\kappa n\frac RQ\log\frac QR+\frac{3nR}{Q}
+  \le(\kappa+1)\,n\,\frac{R}{Q}\log\frac{2Q}{R}\cdot 3 .
+\]
+With the parameters \eqref{eq:params} and $n$ large, $R/Q\le 300(\beta+3)\nu/\sqrt\lambda$
+and $\log(2Q/R)\le\nu$, while $\tau\log(2D+1)\le 1/r$ and
+$1/r\le 2\nu^2/\sqrt\lambda$. Hence the logarithm of the vector count
+\eqref{eq:routinecost} is at most
+\[
+  \log(2Qr)+900(\kappa+1)(\beta+3)\frac{n\nu^2}{\sqrt\lambda}+\frac{4n\nu^2}{\sqrt\lambda}
+  \le \log(2Qr)+C_0(\kappa+1)(\beta+3)\frac{n\nu^2}{\sqrt\lambda}
+\]
+with $C_0=904$, and each vector costs at most $|\F|$ factor evaluations and
+polynomially many further operations. The storage bound is that of
+Proposition~\ref{prop:routine}.
+\end{proof}
+
+\subsection{Branching on frequent variables}
+A sparse system may still contain variables occurring in many factors. Fixing
+them removes the obstacle at a cost that is negligible against
+\eqref{eq:boundedocc}.
+
+\begin{lemma}[Frequent variables]\label{lem:frequent}
+Let a factor system on $n\ge 20$ variables have $|\F|\le cn$ factors, each of
+scope at most $k$, and let $V_{\mathrm{hi}}=\{v\in[n]:\#\{f:v\in I_f\}>ck\lambda\}$.
+Then $|V_{\mathrm{hi}}|<n/\lambda$. For every assignment
+$y\in\{0,1\}^{V_{\mathrm{hi}}}$ the system obtained by substituting $x_v=y_v$ for
+$v\in V_{\mathrm{hi}}$ is a factor system on the $n'=n-|V_{\mathrm{hi}}|$
+remaining variables, with at most $cn$ factors, scopes at most $k$, occurrence
+numbers at most $ck\lambda$ and total degree at most $d$, and
+\begin{equation}\label{eq:branchsum}
+  Z=\sum_{y\in\{0,1\}^{V_{\mathrm{hi}}}}Z_y ,
+\end{equation}
+where $Z_y$ is the sum \eqref{eq:Z} of the substituted system.
+\end{lemma}
+
+\begin{proof}
+The incidences number $M\le k|\F|\le ckn$, so fewer than $ckn/(ck\lambda)=n/\lambda$
+variables occur more than $ck\lambda$ times. Substituting values for the variables
+in $V_{\mathrm{hi}}$ restricts each $\Phi_f$ to a polynomial in the remaining
+variables of its scope, of no larger degree; the scopes shrink and the occurrence
+numbers of the remaining variables are unchanged, hence at most $ck\lambda$.
+Splitting the sum over $\{0,1\}^n$ according to $x|_{V_{\mathrm{hi}}}$ gives
+\eqref{eq:branchsum}.
+\end{proof}
+
+\subsection{The weighted counting theorem}
+\begin{theorem}[Weighted counting]\label{thm:weighted}
+Fix integers $k\ge1$ and $c\ge1$. There is a deterministic algorithm that, given
+a factor system on $n\ge 20$ variables with at most $cn$ factors, each of scope at
+most $k$ and with values in a commutative $\Q$-algebra $\A$, computes
+\[
+  Z=\sum_{x\in\{0,1\}^n}\prod_{f\in\F}\Phi_f\bigl((x_v)_{v\in I_f}\bigr)
+\]
+with
+\begin{equation}\label{eq:weightedtime}
+  \poly(n)\,2^{\,O_{k,c}(\rhon(n))},\qquad \rhon(n)=\frac{n(\log\log n)^2}{\sqrt{\log n}},
+\end{equation}
+operations in $\A$ and evaluations of the factors at inputs in $\Q[z]/(z^J)$,
+$J\le ckn$, together with polynomially many bit operations on rationals, and
+polynomially many elements of $\A$ and bits of storage. The implied constant
+depends only on $k$ and $c$.
+\end{theorem}
+
+\begin{proof}
+Let $n_0=n_0(2)$ be the threshold of Theorem~\ref{thm:bounded-occ} with $\beta=2$,
+enlarged so that $ck\lambda\le(\lambda-1)^2$ and $k\le(\lambda-1)^2$ for
+$n\ge n_0$. If $n<2n_0$, enumerate the cube directly: $2^{n}\le 2^{2n_0}$ is a
+constant depending on $k,c$. Otherwise $n\ge 2n_0$; apply Lemma~\ref{lem:frequent}. For each
+of the fewer than $2^{n/\lambda}$ assignments $y$, the substituted system has
+$n'\ge n-n/\lambda\ge n/2\ge n_0$ variables, scopes at most $k\le\lambda'^{2}$,
+occurrences at most $ck\lambda\le\lambda'^{2}$, where $\lambda'=\lceil\log n'\rceil\ge\lambda-1$,
+and total degree $d\le kcn\le 2ck\,n'$. Theorem~\ref{thm:bounded-occ} with
+$\beta=2$ and $\kappa=2ck$ computes $Z_y$ with
+$|\F|\poly(n)2^{5C_0(2ck+1)n'\nu'^2/\sqrt{\lambda'}}$ operations, and
+$n'\nu'^2/\sqrt{\lambda'}\le 2n\nu^2/\sqrt\lambda$ for large $n$. Summing the
+$Z_y$ costs one operation each. The total is
+\[
+  2^{n/\lambda}\cdot cn\,\poly(n)\,2^{10C_0(2ck+1)n\nu^2/\sqrt\lambda}
+  =\poly(n)\,2^{O_{k,c}(n\nu^2/\sqrt\lambda)},
+\]
+since $n/\lambda\le n\nu^2/\sqrt\lambda$, and $n\nu^2/\sqrt\lambda=\Theta(\rhon(n))$.
+The space bound follows from Theorem~\ref{thm:bounded-occ} because the branches
+are processed one after the other.
+\end{proof}
+
+\begin{remark}
+For $\A=\Q$ and $\Phi_f$ the satisfaction indicator of a clause, $Z$ is the number
+of satisfying assignments and the theorem is the sparse case of
+\oai{}'s Theorem 1.1, with the exponent $\rhon(n)$ of their Proposition 6.4 in
+place of $n\log\log n/\sqrt{\log n}$. The dense case, and the better exponent, use
+their Sections 5, 6 and Appendices A and B, which are not reproduced here; the
+dense case is recovered in Section~\ref{sec:snp} from the published
+sparsification lemma, with a weaker time bound.
+\end{remark}
+
+\subsection{Bit complexity over truncated polynomial rings}
+\begin{lemma}[Bit complexity]\label{lem:bits}
+In the situation of Theorem~\ref{thm:bounded-occ} or of Theorem~\ref{thm:weighted},
+with $|\F|$ factors of scope at most $k$ and total degree $d$, let $\A$ be one of the algebras
+$\A_N=\Q[W]/(W^N)$, $\A_{N_1,\dots,N_s}$ of dimension $N=N_1\cdots N_s$, or
+$\Q[W]/(W^N-1)$, and suppose every coefficient of every $\Phi_f$, as a polynomial
+in the $Y_v$ with coefficients in $\A$, is a polynomial in the generators with
+integer coefficients of absolute value at most $2^{L}$. Then every rational number that the algorithm
+forms has numerator and denominator of $\poly(n,|\F|,k,N,L)$ bits; hence the operation
+counts of those theorems turn into bounds on bit operations after multiplication
+by a polynomial in $n$, $|\F|$, $k$, $N$ and $L$, and the space stays polynomial.
+\end{lemma}
+
+\begin{proof}
+All numbers arise in the following places. (a) The rows: by \ref{D5},
+$d_{\mathrm{den}}\PP_{f,v}$ has integer coefficients of $O(Q\log Q+\log D)=O(\lambda)$
+bits, and the values $\ip{\PP_{f,v}(t)}{x}$ for Boolean $x$ and the coefficients of
+$\ip{\Delta\PP_{f,v}(z)}{\mathbf 1_U}$ are sums of at most $n$ such coefficients
+times powers $t^{i}\le Q^{R}$, hence rationals with denominator
+$d_{\mathrm{den}}$ and numerators of $O(\lambda+R\log Q+\log n)=O(\lambda)$ bits.
+(b) A factor evaluation: $\Phi_f$ has degree at most $k$, so its value at inputs
+in $\Q[z]/(z^J)$ with the bounds of (a) is an element of $\A[z]/(z^J)$ with
+denominator $d_{\mathrm{den}}^{k}$ and numerators of $O(L+k\lambda+k\log J)$ bits.
+(c) A group product is a product of at most $|\F|$ factor values in
+$\A[z]/(z^J)$; the number of monomials contributing to one coefficient is at
+most $(NJ)^{|\F|}$, so the product has denominator $d_{\mathrm{den}}^{k|\F|}$ and
+numerators of $O(|\F|(L+k\lambda+k\log(NJ)))$ bits. (d) The sums
+\eqref{eq:Sigma}, \eqref{eq:ZE} and \eqref{eq:Htsum} add at most
+$2^{n}\cdot 3^{n}\cdot(2D+1)^{2\tau n}$ terms with a common denominator, adding
+$O(n+n\log(2D+1))=O(n\lambda)$ bits to the numerators. (e) Hermite interpolation
+solves a $QJ\times QJ$ rational system with entries of $O(QJ\log(QJ))$ bits and
+right-hand sides as in (d); by Cramer's rule the solution has denominator and
+numerators of $\poly(QJ)\cdot O(n\lambda+|\F|(L+k\lambda+k\log(NJ)))$ bits. Since
+$Q,\lambda=O(\log n)$ and $J\le d+1\le k|\F|+1$, all bit lengths are
+$\poly(n,|\F|,k,N,L)$, and each
+operation in $\A$ costs $O(N^2)$ operations on such rationals. The count of
+monomials in (c) used only that a product of two basis elements of $\A$ is a
+basis element or zero, which holds in all three algebras.
+The case $\A=\Q$ is $N=1$.
+\end{proof}

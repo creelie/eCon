@@ -1,0 +1,17 @@
+[PASS] #2-SAT count over Q: n=6 m=7 h=2 c=20 Q=3 R=2 D=64 q=9
+       algorithm: 8*W^0
+       brute    : 8*W^0
+[PASS] Max-2-SAT profile over Q[W]/(W^(m+1)): n=6 m=7 h=2 c=20 Q=3 R=2 D=64 q=9
+       algorithm: 4*W^3 + 8*W^4 + 28*W^5 + 16*W^6 + 8*W^7
+       brute    : 4*W^3 + 8*W^4 + 28*W^5 + 16*W^6 + 8*W^7
+[PASS] independence polynomial of C6 plus chord: n=6 m=13 h=2 c=20 Q=3 R=2 D=64 q=13
+       algorithm: 1*W^0 + 6*W^1 + 8*W^2 + 2*W^3
+       brute    : 1*W^0 + 6*W^1 + 8*W^2 + 2*W^3
+[PASS] Max-Cut profile of C6 plus chord: n=6 m=7 h=2 c=20 Q=3 R=2 D=64 q=9
+       algorithm: 2*W^0 + 12*W^2 + 18*W^3 + 18*W^4 + 12*W^5 + 2*W^7
+       brute    : 2*W^0 + 12*W^2 + 18*W^3 + 18*W^4 + 12*W^5 + 2*W^7
+4 checks passed, 0 failed
+
+real	9m40.837s
+user	9m34.238s
+sys	0m0.016s

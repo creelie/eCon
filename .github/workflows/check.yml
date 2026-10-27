@@ -1,0 +1,35 @@
+name: check
+
+# Runs the exact-arithmetic check of Appendix A (Python, Fractions only, about
+# ten minutes) and compiles the paper.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exact-arithmetic check
+        run: |
+          cd code
+          python3 -I check_interpolation.py | tee check_run.txt
+          grep -q "4 checks passed, 0 failed" check_run.txt
+  paper:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install TeX Live
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-science lmodern latexmk
+      - name: Compile
+        run: |
+          cd paper
+          latexmk -pdf -interaction=nonstopmode main.tex
+          ! grep -q "Overfull\|Underfull" main.log
+          ! grep -qi "undefined references\|multiply defined" main.log

@@ -1,0 +1,96 @@
+%%==================================================================
+\section{Preliminaries}\label{sec:prelim}
+%%==================================================================
+
+\subsection{Notation}
+For an integer $Q\ge1$ we write $[Q]=\{1,\dots,Q\}$. Boolean assignments are
+vectors $x\in\{0,1\}^n$, also read as vectors in $\Q^n$. For $S\subseteq[n]$,
+$x|_S$ is the restriction and, for $\xi\in\Q^S$, $\tilde\xi\in\Q^n$ is the
+extension of $\xi$ by zero. The unit vector at $v$ is $\e_v$, and $\mathbf 1_U$ is
+the indicator vector of $U\subseteq[n]$. Logarithms are to base $2$ unless
+written $\ln$. For $n\ge 20$ put
+\begin{equation}\label{eq:lambda}
+  \lambda=\lceil\log n\rceil,\qquad \nu=\lceil\log\lambda\rceil,
+\end{equation}
+so that $\lambda=\Theta(\log n)$ and $\nu=\Theta(\log\log n)$.
+
+\subsection{Algebras and factors}
+Throughout, $\A$ is a commutative $\Q$-algebra with identity. The two cases of
+interest are $\A=\Q$ and the truncated polynomial ring
+\begin{equation}\label{eq:AN}
+  \A_N=\Q[W]/(W^{N}),\qquad N\ge1,
+\end{equation}
+whose elements are polynomials of degree less than $N$ with rational
+coefficients, added coefficientwise and multiplied with the terms of degree at
+least $N$ discarded. An addition in $\A_N$ costs $N$ rational additions and a
+multiplication costs at most $N^2$ rational multiplications and additions. More
+generally, for integers $N_1,\dots,N_s\ge1$ we use
+\begin{equation}\label{eq:ANs}
+  \A_{N_1,\dots,N_s}=\Q[W_1,\dots,W_s]/(W_1^{N_1},\dots,W_s^{N_s}),
+\end{equation}
+a $\Q$-vector space of dimension $N=N_1\cdots N_s$ with the monomials
+$W_1^{j_1}\cdots W_s^{j_s}$, $0\le j_i<N_i$, as a basis; its arithmetic costs
+the same as that of $\A_N$ with this $N$. Both are commutative $\Q$-algebras,
+and so is the group algebra $\Q[W]/(W^{m}-1)$ of the cyclic group of order $m$,
+which appears in Section~\ref{sec:applications}.
+
+A \emph{factor system} on $n$ variables is a finite index set $\F$ together with,
+for each $f\in\F$, a scope $I_f\subseteq[n]$ and a polynomial
+$\Phi_f\in\A[Y_v:v\in I_f]$. We write
+\begin{equation}\label{eq:Z}
+  Z=\sum_{x\in\{0,1\}^n}\ \prod_{f\in\F}\Phi_f\bigl((x_v)_{v\in I_f}\bigr)\in\A
+\end{equation}
+for its sum over the cube, and
+\begin{equation}\label{eq:M}
+  M=\sum_{f\in\F}|I_f|,\qquad w=\max_f|I_f|,\qquad b=\max_{v\in[n]}\#\{f:v\in I_f\},
+  \qquad d=\sum_{f\in\F}\deg\Phi_f
+\end{equation}
+for the number of incidences, the largest scope, the largest number of factors
+containing one variable, and the total degree. A function
+$\phi:\{0,1\}^{I}\to\A$ on at most $k$ Boolean inputs is represented by its
+multilinear extension
+\begin{equation}\label{eq:multilinear}
+  \Phi(Y)=\sum_{U\subseteq I}\phi(\mathbf 1_U)\prod_{v\in U}Y_v\prod_{v\in I\setminus U}(1-Y_v),
+\end{equation}
+a polynomial of degree at most $|I|\le k$ that agrees with $\phi$ on
+$\{0,1\}^{I}$. Every factor below is of this kind, so $\deg\Phi_f\le |I_f|$ and
+$d\le M$.
+
+\subsection{Weights}
+Let $\omega_f:\{0,1\}^{I_f}\to\{0,1,\dots\}$ be integer-valued and let $N$ exceed
+$\sum_f\max \omega_f$. With $\A=\A_N$ and $\Phi_f$ the multilinear extension of
+$W^{\,\omega_f}$, the sum \eqref{eq:Z} is
+\begin{equation}\label{eq:profile}
+  Z=\sum_{x\in\{0,1\}^n}W^{\sum_f \omega_f(x|_{I_f})}
+   =\sum_{j\ge0}\#\Bigl\{x:\sum_f \omega_f(x|_{I_f})=j\Bigr\}\,W^{j},
+\end{equation}
+and no term is lost to the truncation. We call the right-hand side the
+\emph{profile} of the weight system. The largest $j$ with a nonzero coefficient
+is the maximum of the total weight, the smallest is the minimum, and the
+coefficients count the assignments attaining each value.
+
+\subsection{Model of computation}
+Running times count bit operations on a deterministic random-access machine.
+Elements of $\Q$ are stored as pairs of integers in lowest terms. When a bound is
+stated as a number of \emph{operations in $\A$}, each operation is an addition,
+a multiplication, or a multiplication by a rational scalar, and the bound on bit
+operations follows once the bit lengths of the operands are bounded. For
+$\A=\A_N$ this is done in Lemma~\ref{lem:bits}. The space bound ``polynomial''
+means a polynomial in $n$, $|\F|$, $N$ and the bit lengths of the input.
+
+\subsection{Two classical tools}
+We use Hoeffding's inequality for a binomial variable \cite{Hoe63}: if
+$W\sim\Bin(Q,p)$ and $s>0$ then
+\begin{equation}\label{eq:hoeffding}
+  \Pr\bigl[\,|W-Qp|\ge s\,\bigr]\le 2e^{-2s^2/Q}.
+\end{equation}
+We use Hermite interpolation in the following form. Let $m=QJ$ and let
+$H\in\A[T]$ have degree less than $m$. The $m$ quantities
+$[z^j]H(t+z)$ for $t\in[Q]$ and $0\le j<J$ are rational linear combinations of
+the coefficients of $H$, through the $m\times m$ matrix with entries
+$\binom{i}{j}t^{\,i-j}$ (zero when $i<j$) indexed by $(t,j)$ and $i$. This matrix
+is invertible over $\Q$: a polynomial of degree less than $QJ$ whose first $J$
+Taylor coefficients vanish at each of $Q$ distinct points is divisible by
+$\prod_t(T-t)^J$, hence zero. Since the entries are rationals of
+$O(QJ\log(QJ))$ bits, Gaussian elimination recovers the coefficients of $H$ with
+$O((QJ)^3)$ operations in $\A$ and rational numbers of $\poly(QJ)$ bits.

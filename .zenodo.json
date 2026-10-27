@@ -1,0 +1,42 @@
+{
+  "title": "Source and verification code for the paper Subexponential Weighted Counting and Exact Optimisation",
+  "version": "1.0.0",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Bhattacharjee, Deep",
+      "orcid": "0000-0003-0466-750X",
+      "affiliation": "Formerly, Electro-Gravitational Space Propulsion Laboratory (EGSPL), Bhubaneswar, Odisha 751030, India"
+    }
+  ],
+  "description": "<p>LaTeX source, figures and the exact-arithmetic check program of the paper <em>Subexponential Weighted Counting and Exact Optimisation</em> by Deep Bhattacharjee.</p><p>The paper reproduces, with credit, the summation routine of OpenAI's preprint \"The Exponential Time Hypothesis is False\" (25 October 2026) for sparse formulas and proves from it, with complete proofs, deterministic algorithms of running time 2^{o(n)} for: the whole weight profile of a sparse weighted constraint system (Max-k-SAT, Min-k-SAT and the number of optimal assignments); the number of satisfying assignments of each Hamming weight; Max-Cut and the maximum and minimum bisection of a graph with O(n) edges; the weighted independence polynomial of every graph, hence the independence number, the clique number and their counts; Vertex Cover in time 2^{o(k)} + poly(n); partition functions and homomorphism counts on bounded-degree graphs; the density of states of Ising and Potts systems with polynomially bounded couplings; dominating sets, matchings, hitting sets and sparse permanents; counting under a congruence; k-SAT in SE and SNP contained in SE. The paper proves nothing about P versus NP, and says so.</p><p>The check program (Python, exact rational arithmetic) confirms the algebraic identities of the routine on small instances; no statement of the paper depends on it.</p>",
+  "keywords": [
+    "exponential time hypothesis",
+    "weighted counting",
+    "independence polynomial",
+    "vertex cover",
+    "Max-SAT",
+    "partition functions",
+    "68Q25",
+    "68Q17",
+    "68W40",
+    "05C31",
+    "05C85",
+    "82B20"
+  ],
+  "license": "mit-license",
+  "language": "eng",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/creelie/eCon",
+      "relation": "isSupplementedBy",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://github.com/openai/math/blob/main/preprints/The-Exponential-Time-Hypothesis-is-False-October-25-2026/paper.pdf",
+      "scheme": "url",
+      "relation": "cites"
+    }
+  ],
+  "publication_date": "2026-10-27"
+}

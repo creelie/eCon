@@ -1,0 +1,262 @@
+%%==================================================================
+\section{The summation routine}\label{sec:routine}
+%%==================================================================
+
+This section and the next reproduce the algorithm of \oai{}
+\cite[Sections 3--4]{OAI26} for a factor system with values in a commutative
+$\Q$-algebra $\A$. The algorithm is theirs; the statements are repeated with
+proofs so that the paper is self-contained.
+
+\subsection{Replacement forms and the polynomial $H$}
+Give each incidence $(f,v)$, $f\in\F$, $v\in I_f$, its own indeterminate
+$Y_{f,v}$, and suppose
+\begin{equation}\label{eq:degbound}
+  \deg_{\{Y_{f,v}\}}\prod_{f\in\F}\Phi_f\bigl((Y_{f,v})_{v\in I_f}\bigr)\le d .
+\end{equation}
+With $d$ as in \eqref{eq:M} this holds. Choose for every incidence a row
+$\PP_{f,v}(T)\in\Q[T]^{1\times n}$ with $\PP_{f,v}(0)=\e_v$ and $\deg\PP_{f,v}\le R$,
+and define
+\begin{equation}\label{eq:H}
+  H(T)=\sum_{x\in\{0,1\}^n}\ \prod_{f\in\F}\Phi_f\Bigl(\bigl(\ip{\PP_{f,v}(T)}{x}\bigr)_{v\in I_f}\Bigr)\in\A[T].
+\end{equation}
+At $T=0$ every input is restored, so $H(0)=Z$, and each input has degree at most
+$R$ in $T$, so
+\begin{equation}\label{eq:dH}
+  \deg_T H\le d_H:=dR .
+\end{equation}
+The algorithm computes $H$ at $T=0$ from information at the points $T=1,\dots,Q$.
+
+\subsection{The design}
+\begin{definition}[Design]\label{def:design}
+Let $r\ge2$, $D\ge1$ and $1\le R<Q$ be integers and $0<\tau\le1/2$. A design for
+the scopes $(I_f)_{f\in\F}$ consists of the following data.\footnote{Definition 3.1
+of \cite{OAI26}.}
+\begin{enumerate}[label=(D\arabic*),leftmargin=2.8em]
+\item\label{D1} For each $t\in[Q]$ a partition $[n]=S_{t,1}\sqcup\dots\sqcup S_{t,r}$, parts
+possibly empty, with $|S_{t,g}|\le 2n/r$.
+\item\label{D2} For each $f\in\F$ a sequence $\sigma_f\in[r]^{Q}$; the value
+$\sigma_f(t)$ is the group of $f$ at the point $t$.
+\item\label{D3} For each $t\in[Q]$ and $g\in[r]$ an integer matrix
+$C_{t,g}\in\Z^{c_{t,g}\times S_{t,g}}$ whose rows have sum of absolute values at
+most $D$, with $\sum_{g=1}^{r}c_{t,g}\le 2\tau n$. The entries of
+$C_{t,g}\,x|_{S_{t,g}}$ are the \emph{measurements} of $x$ on the group $g$ at
+$t$.
+\item\label{D4} For each incidence $(f,v)$ a row $\PP_{f,v}(T)\in\Q[T]^{1\times n}$
+with $\PP_{f,v}(0)=\e_v$ and $\deg\PP_{f,v}\le R$, such that for all $t\in[Q]$,
+$g\ne\sigma_f(t)$ and $\xi\in\Q^{S_{t,g}}$,
+\begin{equation}\label{eq:kernel}
+  C_{t,g}\,\xi=0\ \Longrightarrow\ \ip{\PP_{f,v}(t)}{\tilde\xi}=0 .
+\end{equation}
+\item\label{D5} With $d_{\mathrm{den}}=(R-1)!\,Q!$, every coefficient of
+$d_{\mathrm{den}}\PP_{f,v}$ is an integer of $O(Q\log Q+\log D)$ bits.
+\end{enumerate}
+\end{definition}
+
+The kernel condition \eqref{eq:kernel} has the following meaning. Fix $t$, $f$
+and $v\in I_f$, put $g=\sigma_f(t)$ and write $x_h=x|_{S_{t,h}}$. If $x,x'\in\Q^n$
+agree outside $S_{t,h}$ for some $h\ne g$ and $C_{t,h}x_h=C_{t,h}x'_h$, then
+$x'_h-x_h\in\ker C_{t,h}$ and \eqref{eq:kernel} gives
+$\ip{\PP_{f,v}(t)}{x'}=\ip{\PP_{f,v}(t)}{x}$. Applied one group at a time this
+shows that the tuple $(\ip{\PP_{f,v}(t)}{x})_{v\in I_f}$ is determined by $x_g$
+together with the measurements $(C_{t,h}x_h)_{h\ne g}$. Once all measurements are
+fixed, the factor $f$ at the point $t$ is a function of $x_g$ alone. The bound on
+the row sums in \ref{D3} ensures that a measurement of a Boolean vector lies in
+$[-D,D]\cap\Z$; a rank bound alone would not control the number of possible
+measurement values, as the single row $(1,2,4,\dots,2^{n-1})$ shows.
+
+\subsection{Separating the sum by fixing the measurements}
+\begin{lemma}[Separation]\label{lem:separation}
+Let $[n]=S_1\sqcup\dots\sqcup S_r$ be a partition, parts possibly empty, and
+for each $g\in[r]$ let $C_g$ be an integer matrix with $c_g$ rows and columns
+indexed by $S_g$, each row with sum of absolute values at most $D$; put
+$c=\sum_g c_g$. Let $A_g:\Q^n\to\A$ satisfy
+\begin{equation}\label{eq:invariance}
+  A_g(x+\tilde\xi)=A_g(x)\qquad(x\in\Q^n,\ \xi\in\ker C_h,\ h\ne g).
+\end{equation}
+For every $E\subseteq[n]$ the sum
+\[
+  Z_E=\sum_{\substack{x\in\{0,1\}^n\\ x_i=1\ (i\in E)}}\ \prod_{g=1}^{r}A_g(x)
+\]
+can be computed by examining at most $2(2D+1)^{c}\sum_{g}2^{|S_g|}$ Boolean
+vectors, with at most one evaluation of some $A_g$, $O(1)$ operations in $\A$ and
+$\poly(n,r,c,\log(D+2))$ bit operations per vector, and with $\poly(n,r,c,\log(D+2))$
+bits of storage beyond the evaluators' own and $O(1)$ elements of
+$\A$.\footnote{Lemma 3.2 of \cite{OAI26}.}
+\end{lemma}
+
+\begin{proof}
+For $y_g\in\Z^{c_g}$ let $X_g(y_g)=\{u\in\{0,1\}^{S_g}:C_gu=y_g\}$ and let
+$\mathcal Y=\prod_g\{-D,\dots,D\}^{c_g}$, a set of $(2D+1)^{c}$ tuples that
+contains the measurement tuple of every Boolean assignment. Fix
+$\vec y=(y_1,\dots,y_r)\in\mathcal Y$ with every $X_g(y_g)$ nonempty, choose
+representatives $\bar x_g\in X_g(y_g)$, and put
+$X_{g,E}(y_g)=\{u\in X_g(y_g):u_i=1\ (i\in E\cap S_g)\}$. If $x_h\in X_h(y_h)$
+for every $h$, then $x_h-\bar x_h\in\ker C_h$, and \eqref{eq:invariance} applied
+for each $h\ne g$ in turn gives
+\[
+  A_g\Bigl(\sum_{h}\tilde x_h\Bigr)=A_g\Bigl(\tilde x_g+\sum_{h\ne g}\tilde{\bar x}_h\Bigr).
+\]
+The assignments with measurement tuple $\vec y$ and $x_i=1$ for $i\in E$ are
+exactly the products $\prod_gX_{g,E}(y_g)$, so by distributivity they contribute
+$\prod_g\Sigma_g(\vec y)$ to $Z_E$, where
+\begin{equation}\label{eq:Sigma}
+  \Sigma_g(\vec y)=\sum_{x_g\in X_{g,E}(y_g)}A_g\Bigl(\tilde x_g+\sum_{h\ne g}\tilde{\bar x}_h\Bigr),
+\end{equation}
+an empty sum being zero. Every assignment has exactly one measurement tuple, hence
+\begin{equation}\label{eq:ZE}
+  Z_E=\sum_{\vec y\in\mathcal Y}\prod_{g=1}^{r}\Sigma_g(\vec y),
+\end{equation}
+where a product is zero when some $X_g(y_g)$ is empty. The representatives need
+not satisfy the conditions indexed by $E$.
+
+The algorithm runs through $\vec y\in\mathcal Y$ with an accumulator $Z\leftarrow 0$.
+For each $\vec y$ a first scan of each $\{0,1\}^{S_g}$ finds a representative
+$\bar x_g$, or shows that $X_g(y_g)$ is empty, in which case the tuple is skipped.
+Otherwise it sets $p\leftarrow 1$, and for each $g$ computes $\Sigma_g(\vec y)$ by a
+second scan of $\{0,1\}^{S_g}$, adding $A_g(\tilde u+\sum_{h\ne g}\tilde{\bar x}_h)$
+to a running sum $s$ for each $u$ with $C_gu=y_g$ and $u_i=1$ on $E\cap S_g$,
+then sets $p\leftarrow ps$; finally $Z\leftarrow Z+p$. By \eqref{eq:ZE} the final
+value is $Z_E$. The two scans examine at most $2\sum_g2^{|S_g|}$ vectors per
+tuple. Checking the measurements of a vector costs $\poly(n,r,c,\log(D+2))$
+bit operations, since each row sum has $O(\log(D+2))$ bits, and the retained
+state is $\vec y$, the representatives, the current $g$ and $u$, and $s,p,Z\in\A$.
+\end{proof}
+
+To evaluate $H(t)$ for a fixed $t\in[Q]$, group the transformed factors by
+$\sigma_f(t)$,
+\[
+  A_g(x)=\prod_{f:\sigma_f(t)=g}\Phi_f\bigl((\ip{\PP_{f,v}(t)}{x})_{v\in I_f}\bigr),
+\]
+and apply the lemma with the partition $(S_{t,g})_g$, the matrices $C_{t,g}$ and
+$E=\emptyset$; the kernel condition \eqref{eq:kernel} is the invariance
+\eqref{eq:invariance}. The two exponential costs are the number of measurement
+tuples and the number of assignments in one group.
+
+\subsection{Taylor coefficients from Boolean substitutions}
+The $Q$ values $H(1),\dots,H(Q)$ do not determine $H$ when $d_H\ge Q$. Put
+\begin{equation}\label{eq:qJ}
+  q=\lfloor d_H/Q\rfloor,\qquad J=q+1 ,
+\end{equation}
+so that $QJ>d_H$. It suffices to compute the truncated Taylor expansions
+\begin{equation}\label{eq:Ht}
+  H_t(z)=\sum_{j=0}^{J-1}\bigl([z^j]H(t+z)\bigr)z^j\qquad(t\in[Q]),
+\end{equation}
+since Hermite interpolation (Section~\ref{sec:prelim}) recovers $H$, and hence
+$Z=H(0)$, from these $QJ$ coefficients by rational linear combinations.
+
+Fix $t$. The rows at $t+z$ need not respect the design at $t$. Write
+$\Delta\PP_{f,v}(z)=\PP_{f,v}(t+z)-\PP_{f,v}(t)$; every entry is divisible by
+$z$. For a fixed $x\in\Q^n$ introduce indeterminates $\vec X=(X_1,\dots,X_n)$ and
+replace each input by $\ip{\PP_{f,v}(t)}{x}+\ip{\Delta\PP_{f,v}(z)}{\vec X}$. Let
+\begin{equation}\label{eq:Gx}
+  G_x(\vec X,z)=\prod_{f\in\F}\Phi_f\Bigl(\bigl(\ip{\PP_{f,v}(t)}{x}+\ip{\Delta\PP_{f,v}(z)}{\vec X}\bigr)_{v\in I_f}\Bigr).
+\end{equation}
+Setting $\vec X=x$ and summing over $x\in\{0,1\}^n$ gives $H(t+z)$. Holding
+$\vec X$ fixed instead makes every correction independent of $x$, so the design at
+$t$ still separates the factors; and every occurrence of $\vec X$ carries a factor
+$z$, so
+\begin{equation}\label{eq:degX}
+  \deg_{\vec X}\bigl([z^j]G_x(\vec X,z)\bigr)\le j .
+\end{equation}
+
+\begin{lemma}[Boolean substitution]\label{lem:moebius}
+Let $q\ge0$ and let $\A$ be a commutative ring with identity. For each
+$x\in\{0,1\}^n$ let $p_x\in\A[X_1,\dots,X_n]$ have degree at most $q$. Then
+\begin{equation}\label{eq:moebius}
+  \sum_{x\in\{0,1\}^n}p_x(x)=\sum_{\substack{E\subseteq[n]\\|E|\le q}}\ \sum_{U\subseteq E}(-1)^{|E|-|U|}
+  \sum_{\substack{x\in\{0,1\}^n\\ x_i=1\ (i\in E)}}p_x(\mathbf 1_U).\footnotemark
+\end{equation}
+\end{lemma}
+\footnotetext{Lemma 3.3 of \cite{OAI26}.}
+
+\begin{proof}
+Fix $x$ and replace each positive power of $X_i$ in $p_x$ by $X_i$. Boolean
+evaluations are unchanged and the degree does not increase, so the result is a
+multilinear polynomial $\tilde p_x=\sum_{E}c_{x,E}\prod_{i\in E}X_i$ of degree
+at most $q$. Evaluating at the indicator vectors and inverting on the Boolean
+lattice gives $c_{x,E}=\sum_{U\subseteq E}(-1)^{|E|-|U|}p_x(\mathbf 1_U)$, and
+$c_{x,E}=0$ when $|E|>q$. Setting $\vec X=x$ and summing over $x$, the monomial
+$\prod_{i\in E}x_i$ selects exactly the assignments with $x_i=1$ for $i\in E$.
+\end{proof}
+
+Apply the lemma to $[z^j]G_x$ for each $j<J$; by \eqref{eq:degX} the degree bound
+$q$ holds for all of them, so all coefficients use the same pairs $U\subseteq E$,
+$|E|\le q$, and may be computed together in the ring
+\begin{equation}\label{eq:Rring}
+  \mathcal R=\A[z]/(z^{J}).
+\end{equation}
+For a fixed pair $(E,U)$ let $\Phi_{f,U}(x;z)$ be the factor $f$ in
+\eqref{eq:Gx} after $\vec X=\mathbf 1_U$, and group by assigned groups,
+\begin{equation}\label{eq:AgU}
+  A_{g,U}(x;z)=\prod_{f:\sigma_f(t)=g}\Phi_{f,U}(x;z)\in\mathcal R .
+\end{equation}
+Their product over $g$ is $G_x(\mathbf 1_U,z)$. For $h\ne g$, changing $x$ by an
+element of $\ker C_{t,h}$ changes neither the original inputs of the factors in
+$A_{g,U}$ nor their fixed corrections, so Lemma~\ref{lem:separation} applies in
+$\mathcal R$ and computes $\sum_{x:\,x_i=1\,(i\in E)}G_x(\mathbf 1_U,z)$ by
+examining at most
+\begin{equation}\label{eq:pervectors}
+  2r(2D+1)^{2\tau n}2^{2n/r}
+\end{equation}
+Boolean vectors. Summing over the pairs with the signs of \eqref{eq:moebius},
+\begin{equation}\label{eq:Htsum}
+  H(t+z)\equiv\sum_{\substack{E\subseteq[n]\\|E|\le q}}\sum_{U\subseteq E}(-1)^{|E|-|U|}
+  \sum_{\substack{x\in\{0,1\}^n\\ x_i=1\ (i\in E)}}G_x(\mathbf 1_U,z)\pmod{z^{J}},
+\end{equation}
+which is $H_t(z)$. The algorithm never stores a polynomial in the $n$
+indeterminates: it substitutes $\vec X=\mathbf 1_U$ first and keeps only $J$
+coefficients in $\A$.
+
+\subsection{The three exponential costs}
+For each $t$, the number of pairs $U\subseteq E\subseteq[n]$ with $|E|\le q$ is
+\begin{equation}\label{eq:Cq}
+  C_q=\sum_{s=0}^{\min(q,n)}2^{s}\binom{n}{s},
+\end{equation}
+and for every $0<\eta\le1$,
+\begin{equation}\label{eq:Cqbound}
+  \eta^{q}C_q\le\sum_{s=0}^{n}(2\eta)^s\binom ns=(1+2\eta)^n ,
+\end{equation}
+because $\eta^q\le\eta^s$ for every retained $s\le q$.
+
+\begin{proposition}[Summation routine]\label{prop:routine}
+Let $\A$ be a commutative $\Q$-algebra, let the factor system satisfy
+\eqref{eq:degbound}, and let a design as in Definition~\ref{def:design} be given.
+With $q$ and $J$ as in \eqref{eq:qJ}, the routine above computes $Z$ by examining
+at most
+\begin{equation}\label{eq:routinecost}
+  2Qr\,C_q\,(2D+1)^{2\tau n}\,2^{2n/r}
+\end{equation}
+Boolean vectors; for each vector it evaluates at most $|\F|$ factors in
+$\A[z]/(z^J)$. The remaining operations per vector and the final interpolation
+are polynomially many operations in $\A$ and over $\Q$ in $n,|\F|,D,Q,R,J,r$ and
+$M$. Apart from the factor evaluators' own storage the routine keeps polynomially
+many elements of $\A$, rationals and index bits.\footnote{Proposition 3.4 of
+\cite{OAI26}.}
+\end{proposition}
+
+\begin{proof}
+There are $Q$ points, $C_q$ pairs per point, and at most \eqref{eq:pervectors}
+vectors per pair. Each group product uses at most $|\F|$ factor evaluations, and
+addition and multiplication in $\A[z]/(z^J)$ cost $O(J^2)$ operations in $\A$.
+Correctness is \eqref{eq:Htsum} together with Hermite interpolation. The points,
+pairs, measurement tuples and local assignments are processed sequentially with
+their current indices and accumulators, which with the $QJ$ interpolation data
+gives the storage bound.
+\end{proof}
+
+When $d\le\kappa n$ we have $q\le\kappa nR/Q$, and \eqref{eq:Cqbound} with
+$\eta=R/Q$ gives
+\begin{equation}\label{eq:logCq}
+  \log C_q\le q\log\frac QR+n\log\Bigl(1+\frac{2R}{Q}\Bigr)
+  \le \kappa n\,\frac RQ\log\frac QR+\frac{2nR}{Q}\cdot\frac{1}{\ln2}.
+\end{equation}
+If factor evaluation and coefficient arithmetic cost polynomially many bit
+operations, the running time is a polynomial factor times
+\begin{equation}\label{eq:threecosts}
+  2^{\,O\bigl(n\,[\,(\kappa+1)\frac RQ\log\frac{2Q}{R}+\tau\log(2D+1)+\frac1r\,]\bigr)} .
+\end{equation}
+The three summands are the costs of recovering the Taylor coefficients, of
+enumerating the measurement values, and of enumerating the assignments of one
+group. Section~\ref{sec:design} constructs a design for which all three are
+$O(\nu^2/\sqrt\lambda)$ up to constants depending on $\kappa$ and on the
+logarithmic exponent bounding $b$ and $w$.

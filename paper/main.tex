@@ -1,0 +1,89 @@
+\documentclass[11pt,reqno]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[kerning=true]{microtype}
+\usepackage{enumitem,booktabs,graphicx,xcolor}
+\usepackage[margin=1.12in]{geometry}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,
+urlcolor=blue!55!black]{hyperref}
+\hypersetup{pdftitle={Subexponential Weighted Counting and Exact Optimisation},pdfauthor={Deep Bhattacharjee}}
+\emergencystretch=2em
+\numberwithin{equation}{section}
+\raggedbottom
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\DeclareMathOperator{\Bin}{Bin}
+\DeclareMathOperator{\poly}{poly}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\cut}{cut}
+\DeclareMathOperator{\sat}{sat}
+\DeclareMathOperator{\SE}{SE}
+\DeclareMathOperator{\SNP}{SNP}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Ftwo}{\mathbb{F}_2}
+\newcommand{\e}{\mathbf{e}}
+\newcommand{\PP}{\vec{P}}
+\newcommand{\rhon}{\rho}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\oai}{OpenAI}
+\newcommand{\releaseline}{}
+\newcommand{\archiveline}{}
+
+\title[Subexponential weighted counting]{Subexponential Weighted Counting and Exact Optimisation}
+\author{Deep Bhattacharjee}
+\address{Formerly, Electro-Gravitational Space Propulsion Laboratory (EGSPL),
+Bhubaneswar, Odisha 751030, India}
+\address{Formerly, University of Calcutta (Heramba Chandra College), 23/49 Gariahat Road,
+Golpark, Kolkata 700029, West Bengal, India}
+\email{d.bhattacharjee@erl-forschung.de}
+\email{itsdeep@live.com}
+\email{egspl@proton.me}
+\urladdr{https://orcid.org/0000-0003-0466-750X}
+\subjclass[2020]{Primary 68Q25; Secondary 68Q17, 68W40, 05C31, 05C85, 82B20}
+\keywords{exponential time hypothesis, weighted counting, independence polynomial, vertex cover}
+\date{27 October 2026}
+
+\begin{document}
+
+\begin{abstract}
+\emph{The deterministic algorithm of \oai{} that counts the satisfying assignments of a
+$k$-CNF in time $2^{o(n)}$ is reproduced in full and extended from counting to
+sums of local weights with values in any commutative $\Q$-algebra. The extension gives
+deterministic $2^{o(n)}$ algorithms for exact Max-Cut and Max-$k$-SAT on sparse instances,
+for the independence polynomial and the maximum independent set of every graph, for Vertex
+Cover in time $2^{o(k)}+\poly(n)$, for the density of states of Ising and Potts models on
+bounded-degree graphs, and for every problem in $\SNP$.}
+\end{abstract}
+
+\maketitle
+
+\input{01_intro}
+\input{02_prelim}
+\input{03_routine}
+\input{04_design}
+\input{05_weighted}
+\input{06_applications}
+\input{07_snp}
+\input{08_scope}
+\appendix
+\input{A_check}
+\input{declarations}
+\input{bibliography}
+\end{document}

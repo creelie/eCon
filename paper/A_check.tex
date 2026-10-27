@@ -1,0 +1,35 @@
+%%==================================================================
+\section{An exact-arithmetic check}\label{app:check}
+%%==================================================================
+
+No statement of the paper depends on a computation. The program described here
+was written to confirm, on instances small enough to be summed directly, that
+the algebraic identities of Sections \ref{sec:routine} and \ref{sec:design}
+hold verbatim over a truncated polynomial ring, and it is supplied with the
+archive \cite{Bha26arch}.
+
+The program builds a design with the parameters $r=2$, $Q=3$, $R=2$, $A_0=0$,
+far below the asymptotic regime of Lemma~\ref{lem:params}, which is
+permissible because the identity $H(0)=Z$ of Proposition~\ref{prop:routine}
+needs only the five conditions of Definition~\ref{def:design} and not the size
+bounds. The auxiliary set has $D=r^{2Q}=64$ elements; the measurement tuples
+are drawn from $\{0,\dots,R-1\}^{\tau n}$ with $\tau n=2$; the labels of
+Lemma~\ref{lem:labels} are chosen at random from a fixed seed and the
+conditions \eqref{eq:balance} and \eqref{eq:kernel} are asserted, as is the
+fixed-point property of $M_0$ and the normalisation $P_u(0)=\e_u$ of
+Lemma~\ref{lem:rows}. Every number is a rational in lowest terms, every element
+of $\A_N$ a list of $N$ rationals, and every element of $\A_N[z]/(z^{J})$ a list
+of $J$ such lists; the Hermite system is solved by exact Gaussian elimination.
+
+Four sums were computed on $n=6$ variables and compared with the direct sum over
+the $64$ assignments: the number of satisfying assignments of a random $2$-CNF
+with seven clauses over $\A=\Q$; the Max-$2$-SAT profile of the same formula over
+$\Q[W]/(W^{8})$, which came out as
+$4W^{3}+8W^{4}+28W^{5}+16W^{6}+8W^{7}$; the independence polynomial
+$1+6W+8W^{2}+2W^{3}$ of the hexagon with one chord, over $\Q[W]/(W^{7})$, from
+the factor system of Theorem~\ref{thm:indep}; and the cut profile
+$2+12W^{2}+18W^{3}+18W^{4}+12W^{5}+2W^{7}$ of the same graph, from the factor
+system of Corollary~\ref{cor:maxcut} with $U=1$. All four agreed with the
+direct sums. The run took about ten minutes in exact arithmetic, almost all of
+it in the sums \eqref{eq:Htsum} over the pairs $(E,U)$, whose number is the
+quantity $C_q$ of \eqref{eq:Cq} with $q=9$ or $q=13$.

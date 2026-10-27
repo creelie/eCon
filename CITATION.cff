@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "Please cite this work using the metadata below."
+title: "Source and verification code for the paper Subexponential Weighted Counting and Exact Optimisation"
+type: software
+authors:
+  - family-names: Bhattacharjee
+    given-names: Deep
+    orcid: "https://orcid.org/0000-0003-0466-750X"
+version: 1.0.0
+date-released: 2026-10-27
+license: MIT
+url: "https://github.com/creelie/eCon/releases/tag/v1.0.0"
+repository-code: "https://github.com/creelie/eCon"
+abstract: >-
+  LaTeX source, figures and the exact-arithmetic check program of the paper
+  "Subexponential Weighted Counting and Exact Optimisation", which deduces
+  from the summation routine of OpenAI's preprint "The Exponential Time
+  Hypothesis is False" (25 October 2026), reproduced in full with credit,
+  deterministic 2^{o(n)} algorithms for weighted counting and exact
+  optimisation on sparse constraint systems: Max-k-SAT profiles, Max-Cut and
+  bisections, the independence polynomial of every graph, Vertex Cover in
+  2^{o(k)} + poly(n), partition functions on bounded-degree graphs, Ising and
+  Potts densities of states, sparse permanents, and SNP contained in SE.

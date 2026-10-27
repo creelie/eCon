@@ -1,0 +1,35 @@
+%%==================================================================
+\section{What the method does not give}\label{sec:scope}
+%%==================================================================
+
+The summation routine needs three things of a factor system: scopes of size
+$\lambda^{O(1)}$, occurrence numbers of size $\lambda^{O(1)}$ after the
+branching of Lemma~\ref{lem:frequent}, and total degree $O(n)$. The following
+problems fail one of them, and this paper proves nothing about them.
+
+\begin{enumerate}[label=(\alph*),leftmargin=2.2em]
+\item \emph{Dense objectives.} Max-Cut on a graph with $\Theta(n^2)$ edges has
+total degree $\Theta(n^2)$ and $\Theta(n)$ occurrences per variable; branching
+on frequent variables fixes $\Theta(n)$ of them. The chromatic and Tutte
+polynomials need connectivity, which is not a bounded sum of local factors.
+Section~\ref{ssec:indep} shows that the independence polynomial escapes this
+limit because a vertex of large degree forces many others; no such forcing is
+available for a cut.
+\item \emph{Problems in $\mathrm{P}$ with quadratic conjectured complexity.}
+The lower bounds for Orthogonal Vectors, $3$SUM, All-Pairs Shortest Paths and
+their relatives that were derived from the strong exponential time hypothesis
+lose their foundation, as \oai{} note; but the reductions that gave them run
+from CNF-SAT on $n$ variables to instances of size $2^{n/2}$, and an algorithm
+with exponent $o(n)$ for the former gives nothing below $N^{2-o(1)}$ for the
+latter.
+\item \emph{$\mathrm{P}$ versus $\mathrm{NP}$.} A polynomial-time reduction
+from an arbitrary problem in $\mathrm{NP}$ to $3$-SAT produces formulas with
+$n^{C}$ variables for some $C>1$, and $2^{o(n^{C})}$ is not polynomial.
+Nothing in this paper bears on the question.
+\end{enumerate}
+
+Each of the results of Sections \ref{sec:applications} and \ref{sec:snp} has
+been stated with the exact hypothesis under which it is proved. The constants
+in the exponents are explicit through Lemma~\ref{lem:params} and
+Theorem~\ref{thm:bounded-occ}, and the dependence on the weight bound $\Omega$
+is polynomial in every statement.
