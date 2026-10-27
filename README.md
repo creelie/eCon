@@ -88,7 +88,7 @@ proves nothing.
 
 | Release | DOI |
 | --- | --- |
-| v1.2.0 | to be recorded |
+| v1.2.0 | [10.5281/zenodo.23698450](https://doi.org/10.5281/zenodo.23698450) |
 | v1.1.0 | [10.5281/zenodo.23697614](https://doi.org/10.5281/zenodo.23697614) |
 | v1.0.0 | [10.5281/zenodo.23695836](https://doi.org/10.5281/zenodo.23695836) (concept DOI of all versions [10.5281/zenodo.23695835](https://doi.org/10.5281/zenodo.23695835)) |
 
