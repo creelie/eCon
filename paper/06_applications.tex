@@ -331,6 +331,89 @@ weighted polynomial. Its exponent is larger, by the factor
 $(\log n)^{1/4}\log\log n$, which is the price of the branching.
 \end{remark}
 
+The branching of Lemma~\ref{lem:branch} records the weight of the chosen
+vertices only through the monomial $W^{\omega_v}$ that multiplies the second
+child, and its proof uses nothing else about that monomial. Several weights can
+therefore be carried at once, with one generator for each, and a budget can be
+placed on each of them. No restriction is placed on the graph.
+
+\begin{theorem}[Independent sets under budgets]\label{thm:indepbudget}
+Fix $s\ge0$. There is a deterministic algorithm that, given a graph $G$ with $n$
+vertices and weight vectors $\omega^{(0)},\dots,\omega^{(s)}\in\{0,1,\dots,\Omega\}^{V}$,
+computes the numbers
+\[
+  a(j_0,\dots,j_s)=\#\bigl\{S\subseteq V\text{ independent}:\ \omega^{(i)}(S)=j_i\ (0\le i\le s)\bigr\}
+\]
+for all tuples $(j_0,\dots,j_s)$ in time
+\[
+  \poly\bigl(n,(1+n\Omega)^{s+1}\bigr)\,2^{O(n(\log\log n)^2/(\log n)^{1/4})}
+\]
+and polynomial space, the implied constant depending only on $s$.
+\end{theorem}
+
+\begin{proof}
+Put $N_i=1+\sum_v\omega^{(i)}_v\le1+n\Omega$ and $\A=\A_{N_0,\dots,N_s}$, of
+dimension $N=N_0\cdots N_s\le(1+n\Omega)^{s+1}$, and for a vertex $v$ write
+$\mathbf W^{v}=\prod_{i=0}^{s}W_i^{\omega^{(i)}_v}$, a basis monomial of $\A$ since
+$\omega^{(i)}_v<N_i$. The
+polynomial
+\[
+  I(G)=\sum_{S\text{ independent}}\ \prod_{v\in S}\mathbf W^{v}
+  =\sum_{(j_0,\dots,j_s)}a(j_0,\dots,j_s)\,W_0^{j_0}\cdots W_s^{j_s}
+\]
+loses no term to the truncation, because $\omega^{(i)}(S)<N_i$ for every $S$.
+It satisfies $I(G)=I(G-v)+\mathbf W^{v}\,I(G-N[v])$ for every vertex $v$, by the
+argument for \eqref{eq:indeprec}. The construction of the tree in
+Lemma~\ref{lem:branch} uses only this recursion, with the second child carrying
+the product of the monomials $\mathbf W^{v}$ of the vertices fixed to $1$ on the
+way, and the bound \eqref{eq:leaves} on the number of leaves uses only the
+numbers of vertices removed. So the lemma holds verbatim for $I(G)$, with leaf
+terms $\mathbf m_\ell\,I(H_\ell)$ in which $\mathbf m_\ell$ is a monomial.
+
+At a leaf $H=H_\ell$ with $n_H\ge\sqrt n$ vertices take, as in the proof of
+Theorem~\ref{thm:indep}, the factor $1-Y_uY_v$ for each edge $uv$ of $H$ and
+the factor $1+(\mathbf W^{v}-1)Y_v$ for each vertex $v$, the multilinear
+extension of $\prod_i W_i^{\omega^{(i)}_vx_v}$. The sum \eqref{eq:Z} of this
+system is $I(H)$. The occurrence numbers, the scopes and the total degree are
+those of the proof of Theorem~\ref{thm:indep}, since only the coefficient of
+$Y_v$ in the vertex factors has changed, and that coefficient is a polynomial
+in the generators with integer coefficients of absolute value at most $1$.
+Theorem~\ref{thm:bounded-occ} with $\beta=1$ and $\kappa=b+1$ gives
+$\poly(n)2^{O(n\nu^2/\lambda^{1/4})}$ operations in $\A$, and
+Lemma~\ref{lem:bits} with $L=1$ turns them into
+$\poly(n,N)2^{O(n\nu^2/\lambda^{1/4})}$ bit operations. Leaves with fewer than
+$\sqrt n$ vertices are summed directly, each of the at most $2^{\sqrt n}$
+subsets costing $\poly(n,N)$. The count of leaves, the depth-first traversal
+and the final estimate are those of the proof of Theorem~\ref{thm:indep}, with
+$\poly(n,\Omega)$ replaced by $\poly(n,N)$.
+\end{proof}
+
+The knapsack problem with a conflict graph \cite{PS09} asks for a set of items
+of largest value whose total weight is within a capacity and which contains no
+two items joined by an edge of a given graph. It contains the maximum
+independent set, and with several capacities it contains the multidimensional
+knapsack problem.
+
+\begin{corollary}[Knapsack with an arbitrary conflict graph]\label{cor:knapsack}
+Fix $s\ge1$. Given a graph $G$ on $n$ vertices, values $\omega^{(0)}_v$ and
+weights $\omega^{(1)}_v,\dots,\omega^{(s)}_v$ in $[0,\Omega]$, and capacities
+$B_1,\dots,B_s$, the largest value $\omega^{(0)}(S)$ of an independent set $S$
+of $G$ with $\omega^{(i)}(S)\le B_i$ for $1\le i\le s$, and the number of
+independent sets attaining it, are computed deterministically in time
+$\poly(n,\Omega^{s+1})\,2^{O(n(\log\log n)^2/(\log n)^{1/4})}$. The same holds
+with any of the inequalities replaced by equalities or by lower bounds, and
+with independent sets replaced by cliques.
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:indepbudget} compute all $a(j_0,\dots,j_s)$. The optimum is
+the largest $j_0$ for which $\sum a(j_0,j_1,\dots,j_s)>0$, the sum taken over
+the tuples with $j_i\le B_i$ for $1\le i\le s$, and that sum is the number of
+optimal sets; it has at most $(1+n\Omega)^{s}$ terms. Other relations between
+$j_i$ and $B_i$ change only the range of the sum. Cliques of $G$ are the
+independent sets of its complement.
+\end{proof}
+
 \subsection{Vertex Cover in time $2^{o(k)}$}\label{ssec:vc}
 The parameterised Vertex Cover problem asks, for a graph $G$ with $n$ vertices
 and an integer $k$, whether $G$ has a vertex cover with at most $k$ vertices.
