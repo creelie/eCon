@@ -63,6 +63,6 @@ the paper proves nothing.
 
 | Release | DOI |
 | --- | --- |
-| v1.0.0 | to be recorded when Zenodo mints it |
+| v1.0.0 | [10.5281/zenodo.23695836](https://doi.org/10.5281/zenodo.23695836) (concept DOI of all versions [10.5281/zenodo.23695835](https://doi.org/10.5281/zenodo.23695835)) |
 
 The code is under the MIT licence (see `LICENSE`); the paper is the author's.

@@ -21,3 +21,5 @@ abstract: >-
   bisections, the independence polynomial of every graph, Vertex Cover in
   2^{o(k)} + poly(n), partition functions on bounded-degree graphs, Ising and
   Potts densities of states, sparse permanents, and SNP contained in SE.
+
+doi: "10.5281/zenodo.23695836"
