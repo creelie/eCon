@@ -1,0 +1,143 @@
+%%==================================================================
+\section{Introduction}\label{sec:intro}
+%%==================================================================
+
+\subsection{The theorem of \oai{}}
+On 25 October 2026 \oai{} released a preprint \cite{OAI26} with a deterministic
+algorithm that, for every fixed $k\ge 2$, counts the satisfying assignments of a
+$k$-CNF formula with $n$ variables and $m$ clauses in time
+\begin{equation}\label{eq:oaitime}
+  (n+m)^{O_k(1)}\, 2^{O_k(n\log\log n/\sqrt{\log n})}
+\end{equation}
+and polynomial space. Since $2^{O(n\log\log n/\sqrt{\log n})}=2^{o(n)}$, the
+exponential time hypothesis of Impagliazzo and Paturi \cite{IP01}, which asserted
+that $3$-SAT needs time $2^{\Omega(n)}$, is false, and with it the strong
+hypothesis \cite{IPZ01}, the counting hypothesis $\#$ETH \cite{DHMTW14}, and the
+gap and nondeterministic variants. The algorithm is algebraic. It writes the
+count as a sum over the Boolean cube of a product of local polynomials, replaces
+every variable occurrence by a linear form in a parameter $T$ chosen so that at
+each of $Q$ sample points the factors separate into $r$ groups after a short
+list of integer measurements of the assignment has been fixed, recovers the
+Taylor coefficients of the resulting univariate polynomial at the sample points
+from Boolean substitutions, and interpolates back to $T=0$. The present paper
+owes its existence to that preprint, and every step of the algorithm that is used
+below is \oai{}'s.\footnote{The preprint is unrefereed. For this reason the
+algorithm and its analysis are reproduced here in full, in Sections
+\ref{sec:routine} and \ref{sec:design}, so that no statement of this paper
+depends on a text outside it. The reproduction follows the preprint closely, with
+the notation of this paper, and the reader will find the corresponding statements
+of \cite{OAI26} named in footnotes. The preprint also contains a Lean~4
+formalisation of its main theorem; it is not used here.}
+
+\subsection{What this paper adds}
+The counting routine of \cite{OAI26} is stated there for factors with rational
+coefficients, with the remark that it works over any commutative $\Q$-algebra.
+We take that remark seriously and run the algorithm over truncated polynomial
+rings $\Q[W]/(W^{N})$. A factor may then be $W^{\,w(x)}$ for an integer weight
+function $w$ of a few variables, and the sum over the cube becomes a generating
+polynomial: its coefficient of $W^{j}$ counts the assignments of total weight
+$j$. One number has turned into a profile, and the profile contains an optimum.
+The cost of the change is nil in the exponent, and polynomial in $N$ elsewhere.
+
+The technical statement is Theorem~\ref{thm:weighted}: for fixed $k$ and $c$, a
+system of at most $cn$ factors, each depending on at most $k$ of the $n$ Boolean
+variables and taking values in a commutative $\Q$-algebra $\A$, is summed over
+$\{0,1\}^n$ in
+\begin{equation}\label{eq:rho}
+  2^{O_{k,c}(\rhon(n))}\poly(n) \quad\text{operations in $\A$},\qquad
+  \rhon(n)=\frac{n(\log\log n)^2}{\sqrt{\log n}} .
+\end{equation}
+The exponent is the one \oai{} obtain in their Sections 3--6 before the
+refinement that removes one logarithmic factor; we do not reproduce that
+refinement, because none of the consequences below needs it.
+
+From Theorem~\ref{thm:weighted} we deduce, with complete proofs:
+\begin{enumerate}[label=(\roman*),leftmargin=2.2em]
+\item\label{it:profile} for every fixed $k$ and $c$, the \emph{profile} of a
+constraint satisfaction instance with $n$ Boolean variables and at most $cn$
+constraints of arity at most $k$, that is the number of assignments satisfying
+exactly $j$ constraints for every $j$, in time $2^{O_{k,c}(\rhon(n))}$
+(Theorem~\ref{thm:profile}); in particular the exact optimum of Max-$k$-SAT and
+of Max-Cut on sparse instances, together with the number of optimal solutions
+(Corollaries \ref{cor:maxsat} and \ref{cor:maxcut});
+\item\label{it:indep} the independence polynomial of \emph{every} graph on $n$
+vertices, hence its independence number, clique number, vertex cover number and the
+number of maximum independent sets, in time
+$2^{O(n(\log\log n)^2/(\log n)^{1/4})}$ (Theorem~\ref{thm:indep}); the proof
+combines Theorem~\ref{thm:weighted} with a branching rule on vertices of large
+degree whose cost we bound explicitly;
+\item\label{it:vc} Vertex Cover with parameter $k$ in time
+$2^{O(k(\log\log k)^2/(\log k)^{1/4})}+\poly(n)$, that is $2^{o(k)}$ up to a
+polynomial, through the kernel of Nemhauser and Trotter (Theorem~\ref{thm:vc});
+the lower bound $2^{\Omega(k)}$, which was a standard consequence of the
+exponential time hypothesis \cite[Theorem 14.6]{CFKLMPPS15}, therefore fails;
+\item\label{it:ising} for every fixed $\Delta$, the density of states of the
+Ising model with integer couplings and fields, and of the $q$-state Potts model,
+on graphs of maximum degree $\Delta$ with $n$ vertices, in time
+$2^{O_{\Delta,q}(\rhon(n))}$ (Theorem~\ref{thm:ising}); every partition function
+and every ground state follows;
+\item\label{it:bounded} the minimum dominating set and the matching polynomial of
+a bounded-degree graph, the permanent of a sparse integer matrix, and the
+minimum hitting set and the maximum split of a sparse set system with sets of
+bounded size, in time $2^{O(\rhon(n))}$ (Theorems \ref{thm:bounded} and
+\ref{thm:permanent});
+\item\label{it:domain} for fixed domain size and arity, every sparse constraint
+system over a finite domain, hence every partition function $Z_A(G)$ of a
+fixed symmetric rational matrix $A$ and the number of homomorphisms into a
+fixed graph, on bounded-degree graphs, in time $2^{O(\rhon(n))}$
+(Theorem~\ref{thm:domain}, Corollary~\ref{cor:hom});
+\item\label{it:global} the satisfying assignments of a sparse $k$-CNF formula
+of each Hamming weight, and those whose weight lies in a prescribed residue
+class, in time $2^{O(\rhon(n))}$ (Corollary~\ref{cor:hamming},
+Proposition~\ref{prop:modular});
+\item\label{it:snp} $k$-SAT lies in the class $\SE$ of problems solvable in
+time $2^{\varepsilon n}\poly$ for every $\varepsilon>0$, by the sparsification
+lemma of Impagliazzo, Paturi and Zane \cite{IPZ01}, and therefore every problem of
+the class $\SNP$ of Papadimitriou and Yannakakis \cite{PY91} lies in $\SE$
+(Theorem~\ref{thm:snp}).
+\end{enumerate}
+Items \ref{it:profile}--\ref{it:global} concern problems for which no
+$2^{o(n)}$ algorithm was known and for which such an algorithm was excluded under
+the exponential time hypothesis by standard reductions. The best exact algorithms
+for the maximum independent set run in time $2^{0.1996n}$ \cite{XN17}, for
+Max-Cut in time $2^{\omega n/3}$ where $\omega$ is the exponent of matrix
+multiplication \cite{Wil05}, and for the permanent and the perfect matchings of
+sparse graphs in time $2^{n-\Omega(n/\Delta)}$ \cite{CP15}; each of these bounds
+is exceeded here asymptotically.
+
+\subsection{What this paper does not claim}
+The algorithm counts sums of products of \emph{local} factors over a cube of
+dimension $n$ and its running time is subexponential in $n$. Two features limit
+its reach, and they are stated here so that no reader expects more.
+First, the exponent is $o(n)$ and not $n^{o(1)}$. A polynomial-time reduction
+from an NP-complete problem to $3$-SAT multiplies the number of variables by a
+polynomial, so the algorithm says nothing about $\mathrm{P}$ versus
+$\mathrm{NP}$, and nothing here bears on that question. Second, the number of
+factors and the total degree of their product must be $O(n)$, after a branching
+step that fixes $O(n/\log n)$ variables. Dense Max-Cut, the chromatic polynomial,
+the Tutte polynomial, Orthogonal Vectors, $3$SUM and All-Pairs Shortest Paths
+need either $\Theta(n^2)$ constraints or reductions that multiply the variable
+count, and they are untouched. The paper contains no partial result on any of
+these problems.
+
+\subsection{Organisation}
+Section~\ref{sec:prelim} fixes notation and the model of computation over an
+algebra. Sections \ref{sec:routine} and \ref{sec:design} reproduce the
+summation routine and the construction of the replacement forms. Section
+\ref{sec:weighted} proves Theorem~\ref{thm:weighted}, including the branching on
+frequent variables and the bit-complexity bound over $\Q[W]/(W^N)$. Section
+\ref{sec:applications} proves items \ref{it:profile}--\ref{it:global}, Section
+\ref{sec:snp} proves item \ref{it:snp}, and Section~\ref{sec:scope} records what
+the method does not give. Appendix~\ref{app:check} describes an exact-arithmetic
+check of the extended algorithm on small instances; no statement of the paper
+depends on it. The author's earlier work on algorithmic structures in geometric and
+topological settings \cite{Bha26a,Bha26b,Bha26c} is unrelated in method but
+shares the aim of making a computation explicit enough to be verified line by
+line.
+
+A word on the constants. The parameters of Lemma~\ref{lem:params} become
+admissible only when $\sqrt{\log n}$ exceeds a large multiple of
+$(\log\log n)^2$, that is for $n$ beyond any practical size; the same is true
+of \oai{}'s algorithm, and Figure~\ref{fig:costs} shows where the three costs
+of the routine settle. The theorems are statements about asymptotic complexity,
+and the paper does not present them as anything else.

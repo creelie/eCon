@@ -1,0 +1,135 @@
+%%==================================================================
+\section{Dense formulas and the class \texorpdfstring{$\SNP$}{SNP}}\label{sec:snp}
+%%==================================================================
+
+\subsection{Subexponential time and sparsification}
+Following Impagliazzo, Paturi and Zane \cite{IPZ01}, a decision problem is
+considered together with a \emph{complexity parameter} $\mu(x)\ge1$, a
+polynomial-time computable integer function of the instance $x$; for a
+formula it is the number of variables, for a graph the number of vertices. The
+class $\SE$ consists of the parameterised problems that admit, for every
+$\varepsilon>0$, a deterministic algorithm running in time
+$2^{\varepsilon\mu(x)}\poly(|x|)$ on every instance $x$. The exponential time
+hypothesis is the statement that $3$-SAT, with the number of variables as
+parameter, is not in $\SE$.
+
+We use the sparsification lemma in the following form.
+
+\begin{theorem}[Sparsification lemma, \cite{IPZ01}]\label{thm:sparsification}
+For every integer $k\ge2$ and every $\varepsilon>0$ there is a constant
+$C=C(k,\varepsilon)$ and a deterministic algorithm that, given a $k$-CNF formula
+$\varphi$ with $n$ variables and $m$ clauses, outputs in time
+$2^{\varepsilon n}\poly(n+m)$ a list of at most $2^{\varepsilon n}$ $k$-CNF
+formulas $\varphi_1,\dots,\varphi_t$ on the same $n$ variables, each with at most
+$Cn$ clauses, such that an assignment satisfies $\varphi$ if and only if it
+satisfies at least one $\varphi_i$. Quantitative forms of the dependence of $C$
+on $k$ and $\varepsilon$ are given in \cite{CIP06}.
+\end{theorem}
+
+\begin{theorem}[$k$-SAT is in $\SE$]\label{thm:ksatse}
+For every $k\ge2$, $k$-SAT with the number of variables as parameter lies in
+$\SE$. Explicitly, for every $\varepsilon>0$ there is $n_\varepsilon$ such that
+the satisfiability of a $k$-CNF formula with $n\ge n_\varepsilon$ variables and
+$m$ clauses is decided deterministically in time $2^{\varepsilon n}\poly(n+m)$.
+\end{theorem}
+
+\begin{proof}
+Given $\varepsilon$, apply Theorem~\ref{thm:sparsification} with
+$\varepsilon/2$ and $C=C(k,\varepsilon/2)$. For each $\varphi_i$ of the list,
+apply Theorem~\ref{thm:weighted} with $\A=\Q$, $c=C$ and the satisfaction
+indicators of the clauses as factors: it returns the number of satisfying
+assignments of $\varphi_i$ in time $\poly(n)2^{O_{k,C}(\rhon(n))}$. Since
+$\rhon(n)=o(n)$, there is $n_\varepsilon$ with
+$\poly(n)2^{O_{k,C}(\rhon(n))}\le2^{\varepsilon n/2}$ for $n\ge n_\varepsilon$.
+The formula $\varphi$ is satisfiable if and only if one of the counts is
+positive, and the total time is $2^{\varepsilon n/2}\cdot2^{\varepsilon n/2}\poly(n+m)$.
+\end{proof}
+
+\begin{remark}
+The decision of a dense formula through sparsification and the sparse routine
+loses the exact count, because the lists of satisfying assignments of the
+$\varphi_i$ overlap. \oai{} obtain the exact count of every $k$-CNF, with the
+exponent $n\log\log n/\sqrt{\log n}$, through the counting-preserving
+sparsification of Dell, Husfeldt, Marx, Taslaman and Wahl\'en
+\cite[Appendix A]{DHMTW14} and their Sections 5 and 6; that is their
+Theorem 1.1, and it is not reproduced here. Theorem~\ref{thm:ksatse} is the
+statement needed below.
+\end{remark}
+
+\subsection{Strict NP}
+Papadimitriou and Yannakakis \cite{PY91} define the class $\SNP$ of properties
+of finite relational structures expressible by a sentence
+\begin{equation}\label{eq:snp}
+  \exists S_1\cdots\exists S_t\ \forall y_1\cdots\forall y_r\ \ \psi(y_1,\dots,y_r;\ S_1,\dots,S_t;\ G_1,\dots,G_s),
+\end{equation}
+where the $G_j$ are the input relations on a universe $U$ of size $n$, the
+$S_i$ are relation variables of arities $a_i$, the $y_j$ range over $U$, and
+$\psi$ is quantifier-free, built from atoms $S_i(\bar y)$, $G_j(\bar y)$ and
+equalities between the $y_j$ by Boolean connectives. The problem associated
+with \eqref{eq:snp} asks whether a given structure satisfies the sentence.
+Following \cite{IPZ01} we take as complexity parameter the number
+\begin{equation}\label{eq:snpparam}
+  \mu=\sum_{i=1}^{t}n^{a_i}
+\end{equation}
+of Boolean choices in the second-order variables, which is $tn$ when every
+$S_i$ is unary. For $k$-SAT with the clauses given as relations, for
+$q$-colourability, for independent set, clique and vertex cover with a
+threshold, and for $k$-set cover, all arities are one and $\mu$ is a constant
+multiple of $n$, so that membership in $\SE$ with respect to $\mu$ is
+membership with respect to the natural parameter.
+
+\begin{theorem}[$\SNP\subseteq\SE$]\label{thm:snp}
+Every problem in $\SNP$, with the parameter \eqref{eq:snpparam}, lies in $\SE$.
+\end{theorem}
+
+\begin{proof}
+Fix the sentence \eqref{eq:snp} and let $k\ge 2$ be the number of atoms
+$S_i(\bar y)$ occurring in $\psi$, counted with their tuples of variables, or
+$2$ if that number is smaller. Given
+the structure, introduce a Boolean variable $z_{i,\bar u}$ for every $i\le t$
+and every $\bar u\in U^{a_i}$; there are $\mu$ of them. For each
+$\bar v\in U^{r}$ the formula $\psi(\bar v;S;G)$ becomes, after the input atoms
+and equalities are evaluated to constants and each atom $S_i(\bar w)$ with
+$\bar w$ a tuple of entries of $\bar v$ is replaced by $z_{i,\bar w}$, a Boolean
+formula $\psi_{\bar v}$ in at most $k$ of the variables $z$. Write
+$\psi_{\bar v}$ as a conjunction of at most $2^{k}$ clauses of width at most $k$
+by listing the falsifying assignments of its at most $k$ variables. The
+conjunction $\Phi$ of all $\psi_{\bar v}$ over $\bar v\in U^r$ is a $k$-CNF with
+$\mu$ variables and at most $2^kn^r$ clauses, computable in polynomial time,
+and the structure satisfies \eqref{eq:snp} exactly when $\Phi$ is satisfiable:
+a choice of relations $S_i$ is the same thing as an assignment of the $z$, and
+$\forall\bar y\,\psi$ holds exactly when every $\psi_{\bar v}$ is true.
+Theorem~\ref{thm:ksatse} decides $\Phi$ in time
+$2^{\varepsilon\mu}\poly(\mu+2^kn^r)=2^{\varepsilon\mu}\poly(n)$ for every
+$\varepsilon>0$ once $\mu\ge n_\varepsilon$, and the finitely many structures
+with $\mu<n_\varepsilon$ are decided in constant time.
+\end{proof}
+
+\begin{corollary}\label{cor:snpexamples}
+For every $\varepsilon>0$ and every fixed $k,q\ge 2$, the satisfiability of a
+$k$-CNF formula with $n$ variables and any number of clauses, and the
+$q$-colourability of a graph with $n$ vertices, are decided deterministically in
+time $2^{\varepsilon n}\poly$. More generally, every property expressed by a
+sentence \eqref{eq:snp} whose second-order variables are all unary is decided in
+time $2^{\varepsilon tn}\poly(n)$ for every $\varepsilon>0$.
+\end{corollary}
+
+\begin{proof}
+Both are in $\SNP$ with unary second-order variables \cite{PY91,IPZ01}. For
+$k$-SAT take the variables as the universe and, for each of the $2^k$ sign
+patterns $\sigma\in\{0,1\}^k$, a $k$-ary input relation $G_\sigma$ containing
+the tuples of variables of the clauses with that pattern; the sentence is
+$\exists T\,\forall y_1\cdots y_k\,\bigwedge_\sigma\bigl(G_\sigma(\bar y)\to
+\bigvee_{i}(T(y_i)\leftrightarrow\sigma_i=1)\bigr)$, with $T$ the set of true
+variables, and $\mu=n$. For $q$-colourability take the vertices as the universe,
+the edge relation $E$, and
+$\exists C_1\cdots\exists C_q\,\forall x\,\forall y\,\bigl(\bigvee_i C_i(x)\bigr)
+\wedge\bigl(E(x,y)\to\bigwedge_i\neg(C_i(x)\wedge C_i(y))\bigr)$, with $\mu=qn$.
+The general statement is Theorem~\ref{thm:snp} with $\mu=tn$.
+\end{proof}
+
+Independent set, clique and vertex cover with a given threshold are not
+expressed by \eqref{eq:snp} without an auxiliary ordering, and we do not pursue
+that encoding: Corollary~\ref{cor:indep} already decides them for every graph
+with the explicit exponent $n(\log\log n)^2/(\log n)^{1/4}$, which is sharper
+than membership in $\SE$.
