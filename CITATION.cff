@@ -24,4 +24,4 @@ abstract: >-
   hyperbolas (x-1)(y-1) = q, codes with sparse parity checks, hypergraphs,
   linear-size circuits, Max-Cut at average degree up to
   sqrt(log n)/(log log n)^3, and SNP contained in SE.
-
+doi: "10.5281/zenodo.23697614"
