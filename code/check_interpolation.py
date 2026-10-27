@@ -5,8 +5,8 @@
 The algorithm is the one of OpenAI's preprint "The Exponential Time
 Hypothesis is False" (October 25, 2026), Sections 3-4, run here with
 coefficients in the truncated polynomial ring A = Q[W]/(W^N) so that it
-returns generating polynomials (Max-SAT profile, independence polynomial)
-and not only counts.  Every number is a Python Fraction; nothing is
+returns generating polynomials (Max-SAT profile, independence polynomial,
+weight enumerator of a code) and not only counts.  Every number is a Python Fraction; nothing is
 floating point.  The design parameters are tiny (r = 2, Q = 3, R = 2,
 D = 64), far from the asymptotic regime, because correctness of the
 identity H(0) = Z needs only Definition 3.1, not the size bounds.
@@ -412,6 +412,50 @@ def main():
     def cb(xs):
         c = [Fr(0)] * Poly.N; c[int(xs[0] != xs[1])] = Fr(1); return Poly(c)
     results.append(run_case("Max-Cut profile of C6 plus chord", n, scopes, facs, [cb] * len(edges), len(edges) + 1, 2 * len(edges) * 2, 4))
+    # case 5: weight enumerator of the binary code of length 6 with parity checks
+    # {0,1,2}, {2,3,4}, {4,5,0} (Theorem 7.14): factor (1 + prod(1-2y))/2 per check,
+    # 1 + (W-1) y_v per bit, over Q[W]/(W^7)
+    checks = [[0, 1, 2], [2, 3, 4], [4, 5, 0]]
+    scopes = [list(c) for c in checks] + [[v] for v in range(n)]
+    def parity_even(ins):
+        p = ZPoly.lift(1)
+        for y in ins: p = p * (1 - 2 * y)
+        return (1 + p) * Fr(1, 2)
+    facs = [parity_even for _ in checks] + [(lambda ins: 1 + ins[0] * (Poly.W() - 1)) for _ in range(n)]
+    def pb(xs): return Poly.const(1 - (sum(xs) % 2))
+    facs_b = [pb] * len(checks) + [vb] * n
+    results.append(run_case("weight enumerator of a [6,3] code over Q[W]/(W^7)", n, scopes, facs, facs_b, n + 1, (3 * 3 + n) * 2, 5))
+    # case 6: nowhere-zero Z_3-flows of K_{2,3} (Lemma 7.10): edge e carries the value
+    # 1 + x_e in {1,2}, oriented from side {a0,a1} to side {b0,b1,b2}; a vertex factor is the
+    # multilinear extension of the indicator that the signed sum of its edge values is 0 mod 3
+    A, B = [0, 1], [2, 3, 4]
+    edges6 = [(a, b) for a in A for b in B]           # 6 edges, variable x_e per edge
+    def mle(size, func):
+        """multilinear extension of func: {0,1}^size -> Q, as a factor on ZPoly inputs"""
+        table = {U: Fr(func(U)) for U in product([0, 1], repeat=size)}
+        coeffs = {}
+        for S in product([0, 1], repeat=size):
+            tot = Fr(0)
+            for U in product([0, 1], repeat=size):
+                if all(u <= s for u, s in zip(U, S)):
+                    tot += (-1) ** (sum(S) - sum(U)) * table[U]
+            if tot: coeffs[S] = tot
+        def phi(ins):
+            out = ZPoly()
+            for S, cf in coeffs.items():
+                mono = ZPoly.lift(cf)
+                for y, sbit in zip(ins, S):
+                    if sbit: mono = mono * y
+                out = out + mono
+            return out
+        return phi, (lambda xs: Poly.const(table[tuple(xs)]))
+    scopes = []; facs = []; facs_b = []
+    for v in A + B:
+        inc = [e for e, (a, b) in enumerate(edges6) if v in (a, b)]
+        sign = 1 if v in A else -1
+        phi, fb = mle(len(inc), lambda U, sign=sign: int(sum(sign * (1 + u) for u in U) % 3 == 0))
+        scopes.append(inc); facs.append(phi); facs_b.append(fb)
+    results.append(run_case("nowhere-zero Z_3-flows of K_{2,3} over Q", n, scopes, facs, facs_b, 1, (3 + 3 + 2 + 2 + 2) * 2, 6))
     npass = sum(results)
     print(f"{npass} checks passed, {len(results) - npass} failed")
     sys.exit(0 if all(results) else 1)

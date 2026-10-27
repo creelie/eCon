@@ -90,13 +90,34 @@ fixed graph, on bounded-degree graphs, in time $2^{O(\rhon(n))}$
 of each Hamming weight, and those whose weight lies in a prescribed residue
 class, in time $2^{O(\rhon(n))}$ (Corollary~\ref{cor:hamming},
 Proposition~\ref{prop:modular});
+\item\label{it:more} further families worked out in Section~\ref{sec:more}:
+several linear statistics of the solutions of a sparse constraint system at
+once, with equations and congruences imposed (Theorem~\ref{thm:linear});
+Max-$k$-Lin modulo $p$, Max-$q$-Cut and balanced $q$-partitions
+(Corollary~\ref{cor:qcut}); on bounded-degree graphs, $f$-factors, even and
+odd subgraphs, orientations with prescribed indegrees, proper edge colourings
+and nowhere-zero flows by weight (Theorem~\ref{thm:edges}), and the Tutte
+polynomial on every hyperbola $(x-1)(y-1)=q$ with $q$ a positive integer,
+which contains the chromatic and flow polynomials at $q$ and the $q$-state
+Potts model (Theorem~\ref{thm:tutte}); the weight enumerator, the minimum
+distance and maximum-likelihood decoding of a binary code with sparse parity
+checks (Theorem~\ref{thm:codes}); matchings, transversals and colourings of
+bounded-degree hypergraphs (Theorem~\ref{thm:hypergraphs}); and the weighted
+output profile of a linear-size circuit of bounded fan-in
+(Theorem~\ref{thm:circuits}), all in time $2^{O(\rhon(n))}$;
+\item\label{it:density} the same for systems whose density grows with $n$:
+the constant in the exponent is linear in the ratio $c$ of factors to
+variables (Theorem~\ref{thm:density}), so that the maximum cut, the maximum
+bisection and the Ising and Potts ground states of a graph of average degree
+$d(n)$ are found in time $2^{o(n)}$ whenever
+$d(n)\le\sqrt{\log n}/(\log\log n)^3$ (Corollary~\ref{cor:density});
 \item\label{it:snp} $k$-SAT lies in the class $\SE$ of problems solvable in
 time $2^{\varepsilon n}\poly$ for every $\varepsilon>0$, by the sparsification
 lemma of Impagliazzo, Paturi and Zane \cite{IPZ01}, and therefore every problem of
 the class $\SNP$ of Papadimitriou and Yannakakis \cite{PY91} lies in $\SE$
 (Theorem~\ref{thm:snp}).
 \end{enumerate}
-Items \ref{it:profile}--\ref{it:global} concern problems for which no
+Items \ref{it:profile}--\ref{it:density} concern problems for which no
 $2^{o(n)}$ algorithm was known and for which such an algorithm was excluded under
 the exponential time hypothesis by standard reductions. The best exact algorithms
 for the maximum independent set run in time $2^{0.1996n}$ \cite{XN17}, for
@@ -113,12 +134,15 @@ First, the exponent is $o(n)$ and not $n^{o(1)}$. A polynomial-time reduction
 from an NP-complete problem to $3$-SAT multiplies the number of variables by a
 polynomial, so the algorithm says nothing about $\mathrm{P}$ versus
 $\mathrm{NP}$, and nothing here bears on that question. Second, the number of
-factors and the total degree of their product must be $O(n)$, after a branching
-step that fixes $O(n/\log n)$ variables. Dense Max-Cut, the chromatic polynomial,
-the Tutte polynomial, Orthogonal Vectors, $3$SUM and All-Pairs Shortest Paths
-need either $\Theta(n^2)$ constraints or reductions that multiply the variable
-count, and they are untouched. The paper contains no partial result on any of
-these problems.
+factors and the total degree of their product must be $O(n)$, or $o(n\sqrt{\log n}/(\log\log n)^2)$
+after Theorem~\ref{thm:density}, after a branching step that fixes $O(n/\log n)$
+variables. Max-Cut on graphs with $\Theta(n^2)$ edges, the chromatic and Tutte
+polynomials as polynomials in $q$ (as opposed to their values at a fixed
+positive integer $q$, which Theorem~\ref{thm:tutte} does give on bounded-degree
+graphs), Orthogonal Vectors, $3$SUM and All-Pairs Shortest Paths need either
+$\Theta(n^2)$ constraints or reductions that multiply the variable count, and
+they are untouched. The paper contains no partial result on any of these
+problems.
 
 \subsection{Organisation}
 Section~\ref{sec:prelim} fixes notation and the model of computation over an
@@ -127,6 +151,7 @@ summation routine and the construction of the replacement forms. Section
 \ref{sec:weighted} proves Theorem~\ref{thm:weighted}, including the branching on
 frequent variables and the bit-complexity bound over $\Q[W]/(W^N)$. Section
 \ref{sec:applications} proves items \ref{it:profile}--\ref{it:global}, Section
+\ref{sec:more} proves items \ref{it:more} and \ref{it:density}, Section
 \ref{sec:snp} proves item \ref{it:snp}, and Section~\ref{sec:scope} records what
 the method does not give. Appendix~\ref{app:check} describes an exact-arithmetic
 check of the extended algorithm on small instances; no statement of the paper
