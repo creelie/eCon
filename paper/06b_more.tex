@@ -1,0 +1,717 @@
+%%==================================================================
+\section{Further worked applications}\label{sec:more}\enlargethispage{4pt}
+%%==================================================================
+
+The applications of Section~\ref{sec:applications} used one Boolean variable
+per vertex or per clause variable, one algebra generator, and constraints of the
+simplest kind. This section works out seven further families in which one of
+these three choices is made differently: several generators record several
+linear statistics at once; the variables range over a finite domain and the
+objective is a cut into several classes; the variables sit on the edges of a
+bounded-degree graph and the constraints at the vertices; the algebra is $\Q$
+but the factor is the Fortuin--Kasteleyn weight of an edge, which reaches the
+Tutte polynomial on a hyperbola; the constraints are the parity checks of a
+linear code; the constraints are the incidences of a hypergraph; and the
+constraints are the gates of a circuit. In each case the proof consists of
+naming the variables, the factors and the algebra, checking the three
+hypotheses of Theorem~\ref{thm:weighted} or Theorem~\ref{thm:domain}, and
+reading the answer off the resulting element of the algebra. We use throughout
+that $\rhon$ is increasing on $[20,\infty)$,\footnote{With $u=\log x$ and
+$u'=1/(x\ln 2)$ the logarithmic derivative of $\rhon(x)=x(\log u)^2/\sqrt u$ is
+$1/x+2u'/(u\ln 2\,\log u)-u'/(2u)$, and the negative term is at most
+$1/(2x\,u\ln 2)<1/x$ for $u\ge 1$.} so that $\rhon(m)\le\rhon(Cn)\le 4C\rhon(n)$
+whenever $20\le m\le Cn$ and $n\ge C$, as in the proof of
+Theorem~\ref{thm:domain}.
+
+\subsection{Several linear side constraints}\label{ssec:linear}
+Corollary~\ref{cor:hamming} and Proposition~\ref{prop:modular} recorded one
+linear statistic of the assignment in the exponent of the single generator $W$.
+With the algebra $\A_{N_1,\dots,N_s}$ of \eqref{eq:ANs} one records $s$ of them
+at once, and a fixed number of linear equations or congruences may be imposed
+on the solutions of a sparse constraint system.
+
+\begin{theorem}[Linear statistics]\label{thm:linear}
+Fix integers $k,c,s\ge1$. Let $(\Phi_f)_{f\in\F}$ be a factor system on $n\ge20$
+Boolean variables with at most $cn$ factors of scope at most $k$, with values in
+$\A_{N_0}$ for some $N_0\ge1$ and coefficients that are polynomials in $W_0$ with
+integer coefficients of at most $L$ bits, and let
+$\omega^{(1)},\dots,\omega^{(s)}\in\{0,1,\dots,\Omega\}^n$ be weight vectors.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em]
+\item\label{it:lineq} The elements
+\[
+  r(j_1,\dots,j_s)=\sum_{x\in\{0,1\}^n:\ \sum_v\omega^{(i)}_vx_v=j_i\ (1\le i\le s)}
+  \ \prod_{f\in\F}\Phi_f(x)\ \in\A_{N_0}
+\]
+are computed, for all $(j_1,\dots,j_s)$ at once, in time
+$\poly\bigl(n,L,N_0,(1+n\Omega)^s\bigr)2^{O_{k,c}(\rhon(n))}$.
+\item\label{it:lincong} For moduli $M_1,\dots,M_s\ge1$ the same holds for the
+sums over the $x$ with $\sum_v\omega^{(i)}_vx_v\equiv j_i\pmod{M_i}$ for all $i$,
+in time $\poly(n,L,N_0,M_1\cdots M_s,\log\Omega)2^{O_{k,c}(\rhon(n))}$; equations
+and congruences may be mixed.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\ref{it:lineq} Put $N_i=1+\sum_v\omega^{(i)}_v\le 1+n\Omega$ for $1\le i\le s$ and
+$\A=\A_{N_0,N_1,\dots,N_s}$, of dimension $N=N_0N_1\cdots N_s$. Keep the given
+factors, now read in $\A$, and add for each variable $v$ the factor
+\[
+  \Psi_v=\prod_{i=1}^{s}\bigl(1+(W_i^{\omega^{(i)}_v}-1)Y_v\bigr),
+\]
+the multilinear extension of $\prod_iW_i^{\omega^{(i)}_vx_v}$ on the scope
+$\{v\}$; expanded, it is $1+(\prod_iW_i^{\omega^{(i)}_v}-1)Y_v$, a polynomial in
+the generators with integer coefficients of absolute value at most $2$. The new
+system has at most $(c+1)n$ factors of scope at most $k$, and its sum is
+\[
+  \sum_x\prod_f\Phi_f(x)\prod_{i=1}^{s}W_i^{\sum_v\omega^{(i)}_vx_v}
+  =\sum_{(j_1,\dots,j_s)}r(j_1,\dots,j_s)\,W_1^{j_1}\cdots W_s^{j_s},
+\]
+with nothing lost to the truncation because every exponent of $W_i$ is less than
+$N_i$. Theorem~\ref{thm:weighted} computes the sum with
+$\poly(n)2^{O_{k,c}(\rhon(n))}$ operations in $\A$, and Lemma~\ref{lem:bits},
+with $|\F|\le(c+1)n$ and the bound $\max(L,1)$ on the coefficient bits, turns
+this into $\poly(n,L,N)2^{O_{k,c}(\rhon(n))}$ bit operations.
+\ref{it:lincong} Replace $W_i^{N_i}=0$ by $W_i^{M_i}=1$, that is take
+$\A=\A_{N_0}\otimes\Q[W_1,\dots,W_s]/(W_1^{M_1}-1,\dots,W_s^{M_s}-1)$, with the
+exponents $\omega^{(i)}_v$ reduced modulo $M_i$ at a cost of $O(\log\Omega)$ bits
+each; the sum is then $\sum_jr(j)W^{j}$ with $j$ running over the residues. The
+proof of Lemma~\ref{lem:bits} used of the algebra only that the product of two
+basis monomials is a basis monomial or zero, which holds here, so the bit bound
+follows with $N=N_0M_1\cdots M_s$. A mixture of equations and congruences uses
+$W_i^{N_i}=0$ for the former and $W_i^{M_i}=1$ for the latter.
+\end{proof}
+
+\begin{corollary}\label{cor:linear}
+Fix $k,c,s\ge1$ and $\Delta\ge1$. Each of the following is computed
+deterministically in time $\poly(n,\Omega^s)2^{O(\rhon(n))}$, the implied
+constant depending on $k,c,s$ or $\Delta,s$.
+\begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.2em]
+\item For a $k$-CNF formula with $n$ variables and at most $cn$ clauses and
+weight vectors $\omega^{(1)},\dots,\omega^{(s)}\in[0,\Omega]^n$: the number of
+satisfying assignments $x$ with $\sum_v\omega^{(i)}_vx_v=j_i$ for all $i$, for
+every tuple $(j_1,\dots,j_s)$; in particular whether a satisfying assignment of
+prescribed weights exists.
+\item For a constraint system as in Theorem~\ref{thm:profile}: the number of
+assignments that satisfy constraints of total weight exactly $j$ and have Hamming
+weight exactly $i$, for all $(i,j)$.
+\item For a graph of maximum degree $\Delta$ with vertex weights
+$\omega^{(1)},\omega^{(2)}\in[0,\Omega]^V$ and a budget $B$: the maximum of
+$\omega^{(1)}(S)$ over the independent sets $S$ with $\omega^{(2)}(S)\le B$, and
+the number of independent sets attaining it.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+(a) is Theorem~\ref{thm:linear}\ref{it:lineq} with the clause indicators as
+factors and $N_0=1$. (b) is the theorem with the factors of the proof of
+Theorem~\ref{thm:profile}, which take values in $\A_{N_0}$ with
+$N_0=1+\sum_f\omega_f$ and have coefficients of at most $k$ bits, and the single
+weight vector $\omega^{(1)}=(1,\dots,1)$. (c) is the theorem with the edge
+factors $1-Y_uY_v$ of the proof of Theorem~\ref{thm:indep}, at most $\Delta n/2$
+factors of scope $2$, $N_0=1$, and the two weight vectors: the maximum is the
+largest $j_1$ with $\sum_{j_2\le B}r(j_1,j_2)>0$ and the count is that sum.
+\end{proof}
+
+\subsection{Finite domains: cuts into several classes}\label{ssec:qcut}
+Theorem~\ref{thm:profile} dealt with Boolean variables. Over a finite domain the
+same profile is obtained from Theorem~\ref{thm:domain}, and the extra generators
+of Theorem~\ref{thm:linear} record the sizes of the classes of a partition.
+
+\begin{theorem}[Profiles over a finite domain]\label{thm:domainprofile}
+Fix $D\ge2$ and $k,c\ge1$. Given $n\ge20$ variables with values in $[D]$ and
+$m\le cn$ constraints $C_f:[D]^{I_f}\to\{0,1\}$ with $|I_f|\le k$, given by
+their tables, with integer weights $\omega_f\in[0,\Omega]$, the numbers
+\[
+  p_j=\#\Bigl\{\sigma\in[D]^n:\ \sum_f\omega_fC_f(\sigma|_{I_f})=j\Bigr\},\qquad
+  0\le j\le\textstyle\sum_f\omega_f,
+\]
+are computed deterministically in time $\poly(n,\Omega)2^{O_{D,k,c}(\rhon(n))}$.
+\end{theorem}
+
+\begin{proof}
+Apply Theorem~\ref{thm:domain} with $\A=\A_N$, $N=1+\sum_f\omega_f\le 1+cn\Omega$,
+and the tables $\phi_f(\sigma)=W^{\omega_fC_f(\sigma)}$, whose entries are
+monomials with coefficient $1$, so $L=1$. The sum is
+$\sum_\sigma W^{\sum_f\omega_fC_f(\sigma|_{I_f})}=\sum_jp_jW^{j}$, with no term
+truncated.
+\end{proof}
+
+\begin{corollary}[Max-$k$-Lin, Max-$q$-Cut and balanced partitions]\label{cor:qcut}
+Fix $p,q,k,c\ge2$. The following are computed deterministically in time
+$\poly(n,\Omega)2^{O(\rhon(n))}$, the implied constant depending on the fixed
+parameters.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em]
+\item\label{it:klin} For a system of $m\le cn$ linear equations over $\Z/p\Z$ in
+$n$ unknowns, each equation involving at most $k$ unknowns, with weights
+$\omega_f\in[0,\Omega]$: the number of assignments satisfying equations of total
+weight exactly $j$, for every $j$; hence the maximum satisfiable weight and the
+number of optimal assignments.
+\item\label{it:qcut} For a graph $G$ with $n$ vertices and $m\le cn$ edges with
+weights $\omega_e\in[0,\Omega]$: the number of maps $\sigma:V\to[q]$ for which
+the edges $uv$ with $\sigma_u\ne\sigma_v$ have total weight exactly $j$, for
+every $j$; hence the maximum $q$-cut, and the minimum, which is the least
+weight of edges left monochromatic by a $q$-colouring, with the number of
+optimal maps.
+\item\label{it:balanced} In the situation of \ref{it:qcut}, the number of maps
+$\sigma$ with $|\sigma^{-1}(a)|=i_a$ for $a<q$ and cut weight $j$, for all
+$(i_1,\dots,i_{q-1},j)$; hence the maximum and the minimum $q$-cut over the
+partitions with prescribed class sizes, in particular over the balanced ones
+with every class of size $\lfloor n/q\rfloor$ or $\lceil n/q\rceil$, and the
+number of optimal partitions.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+\ref{it:klin} is Theorem~\ref{thm:domainprofile} with $D=p$ and the equations as
+constraints. \ref{it:qcut} is the theorem with $D=q$ and the constraint
+$C_e(a,b)=[a\ne b]$ of weight $\omega_e$ on the scope $\{u,v\}$ of each edge.
+For \ref{it:balanced} apply Theorem~\ref{thm:domain} with $D=q$ and
+$\A=\A_{N_0,n+1,\dots,n+1}$, with $q-1$ copies of $n+1$ and
+$N_0=1+\sum_e\omega_e$, of dimension $N=N_0(n+1)^{q-1}$, which is polynomial in
+$n$ and $\Omega$ for fixed $q$. Take for each edge the table
+$W^{\omega_e[a\ne b]}$ and for each vertex the table $U_a$ for $a<q$ and $1$ for
+$a=q$; all entries are monomials, $L=1$, and there are at most $(c+1)n$ factors
+of scope at most $2$. The sum is
+$\sum_\sigma W^{\cut_\omega(\sigma)}\prod_{a<q}U_a^{|\sigma^{-1}(a)|}$ and nothing
+is truncated, since $|\sigma^{-1}(a)|\le n$. The balanced optimum is read off
+from the coefficients with every $i_a$, and $n-\sum_{a<q}i_a$, in
+$\{\lfloor n/q\rfloor,\lceil n/q\rceil\}$.
+\end{proof}
+
+\subsection{Edge variables on bounded-degree graphs}\label{ssec:edges}
+In Theorem~\ref{thm:bounded}\ref{it:match} the variables sat on the edges of a
+graph and the constraints at its vertices. On a graph of maximum degree
+$\Delta$ every constraint of that shape has scope at most $\Delta$, so every
+counting problem whose feasibility is a condition at each vertex on its
+incident edges is within reach. We collect the classical ones.
+
+\begin{theorem}[Vertex conditions on edge variables]\label{thm:edges}
+Fix $\Delta\ge1$ and $q\ge2$. Let $G$ be a graph with $n$ vertices, $m$ edges and
+maximum degree $\Delta$. Each of the following is computed deterministically in
+time $\poly(n,\Omega)2^{O_{\Delta,q}(\rhon(n))}$.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em]
+\item\label{it:factors} For sets $F_v\subseteq\{0,1,\dots,\Delta\}$, $v\in V$, and
+integer edge weights $\omega_e\in[0,\Omega]$: the number of spanning subgraphs
+$H$ of $G$ with $\deg_H(v)\in F_v$ for every $v$ and $\omega(E(H))=j$, for every
+$j$. In particular the number of $f$-factors for any $f:V\to\{0,\dots,\Delta\}$,
+of $k$-regular spanning subgraphs for any $k$, of $2$-factors, and of spanning
+subgraphs with all degrees even or all degrees odd, each by weight, and the
+maximum weight of each.
+\item\label{it:orient} For a function $d:V\to\{0,\dots,\Delta\}$: the number of
+orientations of $G$ in which every vertex $v$ has indegree $d(v)$; for
+$d=\deg/2$ this is the number of Eulerian orientations.
+\item\label{it:edgecol} The number of proper edge colourings of $G$ with $q$
+colours, and more generally the number of maps $E\to[q]$ that satisfy at every
+vertex $v$ a prescribed condition, given by a table on $[q]^{\deg v}$, on the
+colours of the edges at $v$.
+\item\label{it:flows} For a fixed orientation of $G$: the number of nowhere-zero
+$\Z/q\Z$-flows, that is of maps $y:E\to\{1,\dots,q-1\}$ with
+$\sum_{e\text{ into }v}y_e\equiv\sum_{e\text{ out of }v}y_e\pmod q$ at every
+vertex; and the number of $\Z/q\Z$-flows with values in a prescribed subset of
+$\Z/q\Z$ and prescribed residues $b_v$ at the vertices.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+An isolated vertex contributes the factor $[0\in F_v]$ in \ref{it:factors},
+the factor $[d(v)=0]$ in \ref{it:orient}, the factor $1$ in \ref{it:edgecol} and
+the factor $[b_v=0]$ in \ref{it:flows}; so we may delete the isolated vertices,
+after which $n\le 2m$ and $m\le\Delta n/2$. If $m<20$ the count is obtained by
+listing the at most $2^{19}$ or $q^{19}$ assignments. Otherwise the variables are
+indexed by the edges, and $\rhon(m)\le\rhon(\Delta n/2)=O_\Delta(\rhon(n))$.
+
+\ref{it:factors} Boolean variables $y_e=[e\in E(H)]$. For each vertex $v$ take
+the multilinear extension of the indicator, on the scope $E(v)$ of the edges at
+$v$, that $\sum_{e\in E(v)}y_e\in F_v$; its coefficients are integers of absolute
+value at most $2^{\Delta}$. For each edge take $1+(W^{\omega_e}-1)Y_e$. There are
+$n+m\le 3m$ factors of scope at most $\Delta$ on $m$ variables, and the sum is
+$\sum_H[\deg_H(v)\in F_v\ \forall v]\,W^{\omega(E(H))}$ in $\A_N$,
+$N=1+\sum_e\omega_e$, with nothing truncated. Theorem~\ref{thm:weighted} with
+$k=\Delta$, $c=3$ and Lemma~\ref{lem:bits} with $L=\Delta$ give the bound. The
+special cases are $F_v=\{f(v)\}$, $F_v=\{k\}$, $F_v=\{2\}$, and $F_v$ the even or
+the odd numbers up to $\Delta$.
+
+\ref{it:orient} Fix a labelling of the vertices and let $y_e=1$ when $e$ is
+oriented towards its endpoint of larger label. The indegree of $v$ is
+$\sum_{e\in E(v)}[\text{$e$ is oriented into $v$}]$, a function of $y|_{E(v)}$.
+Take $\A=\Q$ and for each vertex the multilinear extension of the indicator
+that this function equals $d(v)$; the sum of the $n\le 2m$ factors of scope at
+most $\Delta$ is the number of orientations with the prescribed indegrees.
+
+\ref{it:edgecol} Apply Theorem~\ref{thm:domain} on the $m$ variables
+$y_e\in[q]$ with the $n\le 2m$ factors given by the tables at the vertices, of
+scope at most $\Delta$ and entries $0$ or $1$; for proper colourings the table
+at $v$ is the indicator that the colours of the edges at $v$ are distinct.
+
+\ref{it:flows} Apply Theorem~\ref{thm:domain} with $D=q-1$ for the nowhere-zero
+flows, the variable $y_e\in[q-1]$ being the flow value, or $D=|S|$ for values in
+a subset $S$, and at each vertex the table of the condition
+$\sum_{\text{in}}y_e-\sum_{\text{out}}y_e\equiv b_v\pmod q$ on $[D]^{\deg v}$.
+\end{proof}
+
+\begin{corollary}[Hafnians]\label{cor:hafnian}
+Fix $\Delta\ge1$. The hafnian
+$\operatorname{haf}(A)=\sum_{M}\prod_{\{i,j\}\in M}a_{ij}$ of a symmetric
+$2n\times 2n$ integer matrix $A$ with at most $\Delta$ nonzero entries in every
+row, the sum running over the perfect matchings $M$ of the complete graph on
+$[2n]$, with entries of absolute value at most $2^L$, is computed
+deterministically in time $\poly(n,L)2^{O_\Delta(\rhon(n))}$.
+\end{corollary}
+
+\begin{proof}
+Only matchings inside the support graph $G$ of $A$, of maximum degree $\Delta$,
+contribute. Take $\A=\Q$, one Boolean variable per edge of $G$, for each vertex
+the multilinear extension of the indicator that exactly one incident edge is
+chosen, and for each edge the factor $1+(a_e-1)Y_e$: the sum is
+$\operatorname{haf}(A)$, and the proof of Theorem~\ref{thm:permanent} applies
+word for word.
+\end{proof}
+
+\begin{remark}
+Counting Eulerian orientations is $\#$P-complete \cite{MW96}, deciding whether a
+$3$-regular graph has a proper $3$-edge-colouring is NP-complete \cite{Hol81},
+and the number of nowhere-zero $\Z/q\Z$-flows is the flow polynomial $F(G;q)$ of
+Tutte \cite{Tut54}, whose evaluation at every fixed integer $q\ge3$ is
+$\#$P-hard \cite{JVW90}. On graphs of bounded degree each of them is now
+computed in time $2^{o(n)}$. The flow polynomial is reached by a second route in
+the next subsection.
+\end{remark}
+
+\subsection{The Tutte polynomial on the hyperbolas $(x-1)(y-1)=q$}\label{ssec:tutte}
+Let $G=(V,E)$ be a graph, loops and multiple edges allowed, and for $A\subseteq E$
+let $c(A)$ be the number of connected components of the spanning subgraph
+$(V,A)$. The Tutte polynomial is
+\begin{equation}\label{eq:tutte}
+  T(G;x,y)=\sum_{A\subseteq E}(x-1)^{c(A)-c(E)}(y-1)^{c(A)+|A|-|V|},
+\end{equation}
+and the random-cluster, or multivariate Potts, partition function of
+Fortuin and Kasteleyn \cite{FK72} is
+\begin{equation}\label{eq:rc}
+  Z(G;q,v)=\sum_{A\subseteq E}q^{c(A)}v^{|A|}.
+\end{equation}
+Both are polynomials in their arguments, and a comparison of exponents gives,
+for $x\ne1$, $y\ne1$,
+\begin{equation}\label{eq:tutterc}
+  T(G;x,y)=(x-1)^{-c(E)}(y-1)^{-|V|}\,Z\bigl(G;(x-1)(y-1),\,y-1\bigr),
+\end{equation}
+since $(x-1)^{c(A)}(y-1)^{c(A)}(y-1)^{|A|}$ divided by $(x-1)^{c(E)}(y-1)^{|V|}$
+is the summand of \eqref{eq:tutte}. Thus the Tutte polynomial on the hyperbola
+$H_q=\{(x,y):(x-1)(y-1)=q\}$ is the function $v\mapsto Z(G;q,v)$ up to the
+explicit prefactor, and for a positive integer $q$ that function is a sum over
+colourings \cite{FK72,Sok05}.
+
+\begin{lemma}[Fortuin--Kasteleyn]\label{lem:fk}
+For every integer $q\ge1$ and every $v$,
+\[
+  Z(G;q,v)=\sum_{\sigma:V\to[q]}\ \prod_{uv\in E}\bigl(1+v[\sigma_u=\sigma_v]\bigr).
+\]
+\end{lemma}
+
+\begin{proof}
+Expand the product: it is $\sum_{A\subseteq E}v^{|A|}\prod_{uv\in A}[\sigma_u=\sigma_v]$.
+For fixed $A$ the product is $1$ exactly when $\sigma$ is constant on each
+component of $(V,A)$, and there are $q^{c(A)}$ such $\sigma$. Summing over
+$\sigma$ first gives \eqref{eq:rc}.
+\end{proof}
+
+\begin{lemma}[Flows]\label{lem:flows}
+Fix an orientation of $G$ and an integer $q\ge2$. For $A\subseteq E$ the number
+of $\Z/q\Z$-flows on $(V,A)$, that is of maps $y:A\to\Z/q\Z$ with
+$\sum_{e\in A\text{ into }v}y_e=\sum_{e\in A\text{ out of }v}y_e$ at every
+vertex, is $q^{|A|-|V|+c(A)}$. Consequently the number $F(G;q)$ of nowhere-zero
+$\Z/q\Z$-flows on $G$ satisfies
+\begin{equation}\label{eq:flowrc}
+  F(G;q)=\sum_{A\subseteq E}(-1)^{|E\setminus A|}q^{|A|-|V|+c(A)}
+  =(-1)^{|E|}q^{-|V|}\,Z(G;q,-q).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Let $\partial:(\Z/q\Z)^A\to(\Z/q\Z)^V$ send $y$ to the vector of net inflows
+$(\partial y)_v=\sum_{\text{into }v}y_e-\sum_{\text{out of }v}y_e$. The flows on
+$(V,A)$ form $\ker\partial$. Each edge contributes $+y_e$ at one endpoint and
+$-y_e$ at the other, both in the same component of $(V,A)$, so the image of
+$\partial$ lies in the group $B$ of vectors whose sum over each component is
+zero, of order $q^{|V|-c(A)}$. Conversely every $b\in B$ is attained: choose a
+spanning forest $T$ of $(V,A)$ and proceed by induction on $|V|$; if $|V|=1$ then
+$b=0$ and $y=0$ serves; otherwise pick a leaf $w$ of $T$ with pendant edge $e$
+to $w'$, or an isolated vertex $w$ of $T$, for which $b_w=0$. In the first case
+set $y_e=\pm b_w$ according to the orientation of $e$, so that $(\partial y)_w=b_w$,
+delete $w$, replace $b_{w'}$ by $b_{w'}+b_w$, which keeps the component sums
+zero, and apply the induction to $(V\setminus w,A\setminus e)$; in the second
+case delete $w$. Hence $|\ker\partial|=q^{|A|}/q^{|V|-c(A)}$.
+
+For \eqref{eq:flowrc}, the flows on $(V,E)$ that vanish on a set $S\subseteq E$
+correspond to the flows on $(V,E\setminus S)$. By inclusion and exclusion over
+the set of edges at which a flow vanishes,
+$F(G;q)=\sum_{S\subseteq E}(-1)^{|S|}q^{|E\setminus S|-|V|+c(E\setminus S)}$,
+which is the first expression with $A=E\setminus S$; and
+$(-1)^{|E|}q^{-|V|}Z(G;q,-q)=\sum_A(-1)^{|E|-|A|}q^{|A|+c(A)-|V|}$ is the same
+sum.
+\end{proof}
+
+\begin{theorem}[Tutte polynomial on bounded-degree graphs]\label{thm:tutte}
+Fix $\Delta\ge1$ and an integer $q\ge1$. Let $G$ be a graph with $n$ vertices and
+maximum degree $\Delta$, and let $v=a/b$ be a rational number with
+$|a|,|b|\le 2^{L}$. Then $Z(G;q,v)$ is computed deterministically in time
+$\poly(n,L)2^{O_{\Delta,q}(\rhon(n))}$. Consequently $T(G;x,y)$ is computed in
+that time at every rational point $(x,y)$ with $(x-1)(y-1)=q$ and $y\ne1$, and in
+particular
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em]
+\item the chromatic polynomial $P(G;q)=Z(G;q,-1)$, the number of proper
+$q$-colourings;
+\item the flow polynomial $F(G;q)=(-1)^{|E|}q^{-|V|}Z(G;q,-q)$, the number of
+nowhere-zero $\Z/q\Z$-flows;
+\item the partition function of the $q$-state Potts model with coupling $J$
+at inverse temperature $\beta$, $\sum_\sigma\exp(\beta J\sum_{uv}[\sigma_u=\sigma_v])
+=Z(G;q,e^{\beta J}-1)$, whenever $e^{\beta J}$ is rational, and more generally
+with any rational edge-dependent couplings $v_e$ in place of $v$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:fk}, $b^{m}Z(G;q,v)=\sum_{\sigma:V\to[q]}\prod_{uv\in E}(b+a[\sigma_u=\sigma_v])$,
+where $m\le\Delta n/2$ is the number of edges. This is the sum of
+Theorem~\ref{thm:domain} with $D=q$, $\A=\Q$, one factor of scope $\{u,v\}$ per
+edge with the table $(s,t)\mapsto b+a[s=t]$, whose entries are integers of at
+most $L+1$ bits, and no vertex factors; a loop at $u$ contributes the constant
+factor $a+b$. Theorem~\ref{thm:domain} with $k=2$ and $c=\Delta/2+1$ gives
+$b^mZ(G;q,v)$ in the stated time, and the division by $b^m$ is polynomial. For
+$T(G;x,y)$ use \eqref{eq:tutterc}, with $c(E)$ found by a graph search. For
+edge-dependent $v_e=a_e/b_e$ the table of the edge $e$ is $b_e+a_e[s=t]$ and the
+sum is $\prod_eb_e$ times $\sum_\sigma\prod_e(1+v_e[\sigma_u=\sigma_v])$.
+Item~(i) is Lemma~\ref{lem:fk} with $v=-1$, since $1-[\sigma_u=\sigma_v]$ is the
+indicator of a proper edge; item~(ii) is Lemma~\ref{lem:flows}; item~(iii) is
+Lemma~\ref{lem:fk} with $1+v=e^{\beta J}$, the factor $e^{\beta J[\sigma_u=\sigma_v]}$
+being $1+v[\sigma_u=\sigma_v]$.
+\end{proof}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.78\textwidth]{figures/fig_tutte.pdf}
+\caption{The random-cluster partition function $Z(G;q,v)$ of the Petersen graph
+over the $(q,v)$-plane, as $\operatorname{sign}(Z)\log_{10}(1+|Z|)$, computed from
+the $2^{15}$ edge subsets. Theorem~\ref{thm:tutte} evaluates it along the lines
+$q=1,2,3,\dots$ drawn on the surface, which are the hyperbolas $H_q$ of the
+Tutte plane; the marked points are the proper $q$-colourings ($v=-1$) and the
+nowhere-zero flows ($v=-q$).}
+\label{fig:tutte}
+\end{figure}
+
+\begin{remark}\label{rem:tutte}
+Evaluating the Tutte polynomial is $\#$P-hard at every point of the plane
+except on the hyperbola $H_1$ and at eight special points \cite{JVW90}; the
+points of $H_q$ for positive integers $q$ include the chromatic and flow
+polynomials at $q$, the Ising model ($q=2$) and the Potts models. On
+bounded-degree graphs Theorem~\ref{thm:tutte} evaluates all of them in time
+$2^{o(n)}$. The theorem does not evaluate $T$ off these hyperbolas: the number
+of acyclic orientations $T(G;2,0)$, which lies on $H_{-1}$, the number of
+forests $T(G;2,1)$ on $H_0$, and the reliability polynomial on $H_1$, trivial,
+are not covered, and neither is the chromatic polynomial as a polynomial in $q$,
+which would need the values at $n+1$ integers $q$ while the constant in the
+exponent grows with $q$.
+\end{remark}
+
+\subsection{Linear codes with sparse parity checks}\label{ssec:codes}
+A binary linear code of length $n$ given by a parity-check matrix
+$H\in\Ftwo^{m\times n}$ is $\mathcal C=\{x\in\Ftwo^n:Hx=0\}$. Its weight
+enumerator is the sequence $A_i=\#\{x\in\mathcal C:\operatorname{wt}(x)=i\}$,
+$0\le i\le n$, where $\operatorname{wt}$ is the Hamming weight, and its minimum
+distance is $d(\mathcal C)=\min\{i\ge1:A_i>0\}$. For a received word
+$y\in\Ftwo^n$ the distance distribution of $y$ is
+$A_i(y)=\#\{x\in\mathcal C:\operatorname{wt}(x+y)=i\}$, the weight enumerator of
+the coset $y+\mathcal C$; a codeword at distance $\min\{i:A_i(y)>0\}$ from $y$ is a
+maximum-likelihood decoding of $y$ on the binary symmetric channel. The codes
+whose parity-check matrix has rows of bounded weight are the low-density
+parity-check codes of Gallager \cite{Gal62}.
+
+\begin{theorem}[Sparse parity checks]\label{thm:codes}
+Fix $k,c\ge1$. Let $\mathcal C\subseteq\Ftwo^n$ be given by a parity-check matrix
+with $m\le cn$ rows, each of weight at most $k$.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em]
+\item\label{it:wenum} The weight enumerator $(A_i)_{0\le i\le n}$, and hence
+$d(\mathcal C)$ and the number of minimum-weight codewords, are computed
+deterministically in time $\poly(n)2^{O_{k,c}(\rhon(n))}$.
+\item\label{it:coset} For every $y\in\Ftwo^n$ the distance distribution
+$(A_i(y))_i$ is computed in the same time, and a codeword nearest to $y$ is
+found in $2n+1$ times that time.
+\item\label{it:qary} For a code over a finite field $\mathbb F_Q$, or over any
+alphabet of fixed size $Q$ with the checks given as tables on $[Q]^{k}$, given by
+$m\le cn$ checks each involving at most $k$ coordinates, the Hamming weight
+enumerator and the distance distribution of every received word are computed
+in time $\poly(n)2^{O_{Q,k,c}(\rhon(n))}$; so is the complete weight enumerator,
+the number of codewords with $i_s$ coordinates equal to $s$ for each symbol
+$s$, in time $\poly(n^{Q})2^{O_{Q,k,c}(\rhon(n))}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\ref{it:wenum} Boolean variables $x_1,\dots,x_n$ and $\A=\A_{n+1}$. For each row
+$h$ of $H$ take the multilinear extension of the indicator, on the scope
+$\operatorname{supp}(h)$ of size at most $k$, that $\sum_{v\in\operatorname{supp}(h)}x_v$
+is even; its coefficients are integers of absolute value at most $2^{k}$. For
+each coordinate take $1+(W-1)Y_v$. There are at most $(c+1)n$ factors of scope at
+most $k$, and the sum is $\sum_{x\in\mathcal C}W^{\operatorname{wt}(x)}=\sum_iA_iW^{i}$,
+with no truncation. Theorem~\ref{thm:weighted} and Lemma~\ref{lem:bits} with
+$N=n+1$, $L=k$ give the time; $d(\mathcal C)$ and $A_{d}$ are read off.
+
+\ref{it:coset} Replace the coordinate factor by the multilinear extension of
+$W^{[x_v\ne y_v]}$, which is $1+(W-1)Y_v$ if $y_v=0$ and $W+(1-W)Y_v$ if $y_v=1$;
+the sum is $\sum_{x\in\mathcal C}W^{\operatorname{wt}(x+y)}=\sum_iA_i(y)W^{i}$. For
+the nearest codeword let $i_0=\min\{i:A_i(y)>0\}$ and fix the coordinates one at
+a time: fixing $x_1=\epsilon$ replaces every row containing coordinate $1$ by
+the indicator that the remaining coordinates have parity $\epsilon h_1$, a
+factor of smaller scope, and leaves the system sparse; compute the two distance
+distributions, keep a value $\epsilon$ for which the coefficient of
+$W^{i_0}$ is positive, and continue with the next coordinate. After $n$ steps the
+assignment is a codeword at distance $i_0$ from $y$, and $2n+1$ distributions
+have been computed.
+
+\ref{it:qary} Apply Theorem~\ref{thm:domain} with $D=Q$: the variables take
+values in the alphabet, each check is a table on at most $k$ coordinates, and
+the coordinate factor has the table $s\mapsto W^{[s\ne0]}$, or
+$s\mapsto W^{[s\ne y_v]}$ for the distance to $y$, in $\A_{n+1}$; for the
+complete weight enumerator the table is $s\mapsto W_s$ in
+$\A_{n+1,\dots,n+1}$ with one generator per symbol, of dimension $(n+1)^{Q}$.
+\end{proof}
+
+\begin{remark}
+Computing the minimum distance of a binary linear code is NP-hard
+\cite{Var97}, and so is maximum-likelihood decoding \cite{BMT78}; both are
+posed with the code given by a generator or a parity-check matrix of
+unrestricted density. For the low-density codes of Gallager, with $m\le n$ rows
+of bounded weight, Theorem~\ref{thm:codes} gives the exact minimum distance, the
+complete weight enumerator and exact maximum-likelihood decoding of every
+received word in deterministic time $2^{o(n)}$, where the previously known
+exact methods are exponential in the dimension or the redundancy of the code.
+No bound on the column weights is needed, by Lemma~\ref{lem:frequent}.
+\end{remark}
+
+\subsection{Bounded-degree hypergraphs}\label{ssec:hypergraphs}
+A hypergraph $\mathcal H=(V,\mathcal E)$ has vertex set $V$, $|V|=n$, and a
+multiset $\mathcal E$ of edges $e\subseteq V$. A matching is a set of pairwise
+disjoint edges, a perfect matching or exact cover is a matching whose union is
+$V$, a transversal is a set of vertices meeting every edge, an independent set is
+a set of vertices containing no edge, and a strong independent set is a set of
+vertices no two of which lie in a common edge. A $q$-colouring of $V$ is proper
+if no edge of size at least two is monochromatic.
+
+\begin{theorem}[Hypergraphs]\label{thm:hypergraphs}
+Fix $k,\Delta,c\ge1$ and $q\ge2$, and let $\mathcal H$ have $n$ vertices and
+edges of size at most $k$.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em]
+\item\label{it:hmatch} If every vertex lies in at most $\Delta$ edges and the
+edges have integer weights in $[0,\Omega]$: the number of matchings of each
+weight and the number of exact covers of each weight, hence the maximum weight
+of a packing and the number of exact covers, in time
+$\poly(n,\Omega)2^{O_{k,\Delta}(\rhon(n))}$.
+\item\label{it:hindep} If $|\mathcal E|\le cn$ and the vertices have integer
+weights in $[0,\Omega]$: the number of transversals, of independent sets and of
+strong independent sets of each weight, in time
+$\poly(n,\Omega)2^{O_{k,c}(\rhon(n))}$.
+\item\label{it:hcol} If $|\mathcal E|\le cn$: the number of proper
+$q$-colourings, and the number of $q$-colourings with exactly $j$ monochromatic
+edges for every $j$, in time $\poly(n)2^{O_{q,k,c}(\rhon(n))}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\ref{it:hmatch} A vertex in no edge lies in no exact cover and in every matching
+trivially; delete such vertices, so that $n\le k|\mathcal E|$, and if
+$|\mathcal E|<20$ list the subsets. Boolean variables $y_e$, $e\in\mathcal E$;
+for each vertex $v$ the multilinear extension on the scope
+$\{e:v\in e\}$, of size at most $\Delta$, of the indicator that at most one
+(for matchings) or exactly one (for exact covers) incident edge is chosen; for
+each edge $1+(W^{\omega_e}-1)Y_e$. There are $n+|\mathcal E|\le(k+1)|\mathcal E|$
+factors of scope at most $\Delta$, the sum is
+$\sum_M W^{\omega(M)}$ over the matchings, or over the exact covers, in $\A_N$
+with $N=1+\sum_e\omega_e$, and Theorem~\ref{thm:weighted} on $|\mathcal E|\le\Delta n$
+variables with the constants $\Delta$ and $k+1$, with Lemma~\ref{lem:bits},
+$L=\Delta$, gives the bound; $\rhon(|\mathcal E|)=O_\Delta(\rhon(n))$.
+
+\ref{it:hindep} Boolean variables $x_v$; for each edge $e$ the multilinear
+extension, on the scope $e$, of the indicator that some $x_v$, $v\in e$, is $1$
+(transversals), that not all are $1$ (independent sets), or that at most one
+is $1$ (strong independent sets); for each vertex $1+(W^{\omega_v}-1)Y_v$. At most
+$(c+1)n$ factors of scope at most $k$; Theorem~\ref{thm:weighted} and
+Lemma~\ref{lem:bits} with $L=k$.
+
+\ref{it:hcol} Theorem~\ref{thm:domainprofile} with $D=q$ and, for each edge of
+size at least two, the constraint that it is monochromatic, of weight $1$: the
+coefficient $p_j$ counts the colourings with $j$ monochromatic edges and $p_0$
+the proper ones.
+\end{proof}
+
+\subsection{Circuits of linear size}\label{ssec:circuits}
+A Boolean circuit with $n$ inputs is a sequence of gates $g_1,\dots,g_s$, each
+computing a function of at most $k$ earlier gates or inputs given by its truth
+table, with $t$ of the gates designated as outputs. Its size is $s$.
+
+\begin{theorem}[Linear-size circuits of bounded fan-in]\label{thm:circuits}
+Fix $k,c\ge1$. Let $C$ be a circuit with $n\ge20$ inputs, $s\le cn$ gates of
+fan-in at most $k$, and outputs $o_1,\dots,o_t$ with integer weights
+$\omega_1,\dots,\omega_t\in[0,\Omega]$. The numbers
+\[
+  N_{i,j}=\#\Bigl\{x\in\{0,1\}^n:\ \operatorname{wt}(x)=i,\ \sum_{l=1}^{t}\omega_l\,o_l(x)=j\Bigr\}
+\]
+are computed deterministically, for all $(i,j)$, in time
+$\poly(n,\Omega)2^{O_{k,c}(\rhon(n))}$. In particular the number of inputs
+accepted by a single-output circuit, and the maximum over the inputs of a
+weighted sum of its output bits with the number of inputs attaining it, are
+computed in that time.
+\end{theorem}
+
+\begin{proof}
+Take the $n+s$ Boolean variables $x_1,\dots,x_n,g_1,\dots,g_s$ and
+$\A=\A_{n+1,\,1+\sum_l\omega_l}$ with generators $U$ and $W$. For each gate $g$
+take the multilinear extension, on the scope consisting of $g$ and its at most
+$k$ arguments, of the indicator that $g$ equals the value of its function at the
+arguments; for each input $1+(U-1)Y_{x_v}$; for each output $o_l$ the factor
+$1+(W^{\omega_l}-1)Y_{o_l}$. There are $s+n+t\le(2c+1)n\le(2c+1)(n+s)$ factors of
+scope at most $k+1$, with coefficients of absolute value at most $2^{k+1}$. For
+each input $x$ exactly one assignment of the gate variables makes every gate
+factor $1$, the one in which each $g$ carries its value at $x$, and every other
+assignment makes some gate factor $0$; so the sum over the cube is
+$\sum_xU^{\operatorname{wt}(x)}W^{\sum_l\omega_lo_l(x)}=\sum_{i,j}N_{i,j}U^{i}W^{j}$,
+with nothing truncated. Theorem~\ref{thm:weighted} on $n+s\le(c+1)n$ variables
+with the constants $k+1$ and $2c+1$, and Lemma~\ref{lem:bits} with $L=k+1$,
+give the time, since $\rhon(n+s)\le\rhon((c+1)n)=O_c(\rhon(n))$.
+\end{proof}
+
+\begin{remark}
+The count of the accepted inputs of a circuit with $s$ gates is, through the
+Tseitin encoding used in the proof, the count of the satisfying assignments of a
+$(k+1)$-CNF formula with $n+s$ variables, so for every $s$ it is contained in
+\oai{}'s Theorem~1.1 with the exponent $o(n+s)$; their Corollary~1.4 draws a
+circuit lower bound from exactly this fact. Theorem~\ref{thm:circuits} adds the
+Hamming weight of the input and the weighted output profile for the sparse
+case, which turns any objective computable by a linear-size circuit of bounded
+fan-in on $n$ Boolean variables into one that is maximised exactly in time
+$2^{o(n)}$, together with the number of maximisers. Theorems \ref{thm:profile},
+\ref{thm:edges} and \ref{thm:codes} are instances, since their constraints are
+computed by such circuits; the direct encodings given there avoid the gate
+variables and have smaller constants.
+\end{remark}
+
+\subsection{Growing density}\label{ssec:density}
+Every statement so far fixes the ratio $c$ of factors to variables. The
+constant in the exponent of Theorem~\ref{thm:weighted} is linear in $c$, and
+the proof of that theorem is valid as long as the branching of
+Lemma~\ref{lem:frequent} leaves occurrence numbers below $\lambda^{2}$. Making
+the dependence explicit gives a subexponential bound for systems whose density
+grows with $n$, slowly.
+
+\begin{theorem}[Growing density]\label{thm:density}
+There is an absolute constant $C_1$, and for every $k\ge1$ a threshold
+$n_1(k)$, with the following property. Let $n\ge n_1(k)$, let $c\ge1$ be a real
+number with $ck\le\lambda/2$, $\lambda=\lceil\log n\rceil$, and let a factor
+system on $n$ variables have at most $cn$ factors, each of scope at most $k$,
+with values in a commutative $\Q$-algebra $\A$. Then $Z$ in \eqref{eq:Z} is
+computed deterministically with at most
+\[
+  \poly(n)\,2^{\,C_1kc\,\rhon(n)}
+\]
+operations in $\A$, evaluations of the factors at inputs in $\Q[z]/(z^{J})$,
+$J\le ckn$, and bit operations on rationals, in polynomial space; the
+polynomial is absolute. If the coefficients of the factors are polynomials in
+the generators of $\A=\A_N$ or $\A_{N_1,\dots,N_s}$ with integer coefficients
+of at most $L$ bits, the bound holds for bit operations after multiplication
+by a polynomial in $n$, $N$ and $L$.
+\end{theorem}
+
+\begin{proof}
+We follow the proof of Theorem~\ref{thm:weighted} and keep track of $c$. Let
+$n_0=n_0(2)$ be the threshold of Theorem~\ref{thm:bounded-occ} with $\beta=2$,
+and let $n_1(k)\ge2n_0$ be so large that for $n\ge n_1(k)$ one has $\lambda\ge4$,
+$k\le(\lambda-1)^2$, and the inequality $n'\nu'^2/\sqrt{\lambda'}\le2n\nu^2/\sqrt\lambda$
+of that proof for every $n'\in[n/2,n]$. Since $\lambda\ge4$,
+$ck\lambda\le\lambda^2/2\le(\lambda-1)^2$. Apply Lemma~\ref{lem:frequent}: fewer
+than $2^{n/\lambda}$ assignments $y$, each leaving a system on $n'\ge n/2\ge n_0$
+variables with scopes at most $k\le\lambda'^2$, occurrence numbers at most
+$ck\lambda\le\lambda'^2$ (as $\lambda'\ge\lambda-1$), and total degree at most
+$kcn\le2ck\,n'$. Theorem~\ref{thm:bounded-occ} with $\beta=2$ and $\kappa=2ck$
+computes each $Z_y$ with $cn\,\poly(n)2^{5C_0(2ck+1)n'\nu'^2/\sqrt{\lambda'}}$
+operations, where the polynomial factor of that theorem is a polynomial in $n$,
+$|\F|\le n^2$, $J\le\kappa n\le n^2$ and the parameters of Lemma~\ref{lem:params}
+for $\beta=2$, all bounded by powers of $n$. Hence the total is at most
+\[
+  2^{n/\lambda}\cdot cn\poly(n)\,2^{10C_0(2ck+1)\,n\nu^2/\sqrt\lambda}
+  \le\poly(n)\,2^{\,(1+30C_0ck)\,n\nu^2/\sqrt\lambda},
+\]
+using $n/\lambda\le n\nu^2/\sqrt\lambda$, $2ck+1\le3ck$ and $cn\le n^2$. For
+$n\ge20$ one has $\lambda\le2\log n$, hence $\sqrt\lambda\ge\sqrt{\log n}$, and
+$\nu\le\log\lambda+1\le\log\log n+2\le3\log\log n$, so
+$n\nu^2/\sqrt\lambda\le9\rhon(n)$ and the exponent is at most
+$9(1+30C_0)\,kc\,\rhon(n)$; take $C_1=9(1+30C_0)$. The space bound and the
+bound $J\le ckn$ are those of Theorem~\ref{thm:bounded-occ}, and the bit
+complexity is Lemma~\ref{lem:bits}, whose polynomial depends on $|\F|\le n^2$
+and $k\le\lambda^2$ only through powers of $n$.
+\end{proof}
+
+The bound is $2^{o(n)}$ exactly when $c\,\rhon(n)=o(n)$, that is when
+$c=c(n)=o\bigl(\sqrt{\log n}/(\log\log n)^2\bigr)$; the hypothesis
+$ck\le\lambda/2$ is then satisfied for all large $n$. The corollaries of
+Sections \ref{sec:applications} and \ref{sec:more} that are proved by one
+application of Theorem~\ref{thm:weighted} to a factor system whose number of
+factors is bounded by the number of constraints or edges of the input, and whose
+scopes are bounded, therefore extend to inputs of growing density. We record
+the two for which the question of the dense case was raised in the introduction.
+
+\begin{corollary}[Cuts and spin systems at growing average degree]\label{cor:density}
+Let $d=d(n)\ge1$ satisfy $d(n)\le\sqrt{\log n}/(\log\log n)^3$ for all large
+$n$, and let $G$ be a graph with $n$ vertices and at most $d(n)\,n$ edges.
+\begin{enumerate}[label=(\roman*),leftmargin=2.2em]
+\item\label{it:densecut} The cut profile $\bigl(\#\{S\subseteq V:|S|=i,\
+e(S,V\setminus S)=j\}\bigr)_{i,j}$, in particular the maximum cut, the maximum
+bisection and their numbers of optimal solutions, is computed in time
+$\poly(n)\,2^{\,4C_1d(n)\rhon(n)}=2^{O(n/\log\log n)}$.
+\item\label{it:denseising} The density of states of an Ising system on $G$
+with integer couplings and fields, and that of the $q$-state Potts system on
+$G$ for fixed $q$, are computed in time
+$\poly(n,E_{\max})\,2^{\,O_q(d(n)\rhon(n))}=2^{O_q(n/\log\log n)}$.
+\end{enumerate}
+In particular the maximum cut and the ground-state energy of an Ising system on
+a graph of average degree $d(n)$ are found in time $2^{o(n)}$ whenever
+$d(n)\le\sqrt{\log n}/(\log\log n)^{3}$.
+\end{corollary}
+
+\begin{proof}
+\ref{it:densecut} The factor system of Corollary~\ref{cor:maxcut} has one factor
+of scope $2$ per edge and one of scope $1$ per vertex, with values in
+$\A_{n+1,\,m+1}$ and coefficients of absolute value at most $2$; so it has at
+most $(d(n)+1)n\le2d(n)n$ factors of scope at most $2$, and
+Theorem~\ref{thm:density} with $k=2$ and $c=2d(n)$, whose hypothesis
+$ck=4d(n)\le\lambda/2$ holds for large $n$, gives the operation count
+$\poly(n)2^{4C_1d(n)\rhon(n)}$, and Lemma~\ref{lem:bits} with
+$N=(n+1)(m+1)\le n^3$ and $L=1$ turns it into the time bound. Finally
+$d(n)\rhon(n)\le n/\log\log n$. The optimum and its multiplicity are read off the
+profile as in Corollary~\ref{cor:maxcut}.
+\ref{it:denseising} The factor system in the proof of Theorem~\ref{thm:ising}\ref{it:isingmodel}
+has one factor of scope $2$ per edge and one of scope $1$ per vertex, with values
+in $\A_N$, $N=2E_{\max}+1$, and coefficients of $O(\log E_{\max})$ bits; it has at
+most $2d(n)n$ factors, and Theorem~\ref{thm:density} with $k=2$, $c=2d(n)$ and
+Lemma~\ref{lem:bits} give the bound as in \ref{it:densecut}. The factor system
+in the proof of Theorem~\ref{thm:ising}\ref{it:potts} lives on $n'=qn$ variables
+and has $n$ factors of scope $q$ and at most $d(n)n$ of scope $2q$, with
+coefficients of $O(q+\log E_{\max})$ bits; so it has at most
+$(d(n)+1)n\le(d(n)+1)n'$ factors of scope at most $2q$, and
+Theorem~\ref{thm:density} on $n'$ variables with $k=2q$ and $c=d(n)+1$, whose
+hypothesis $2q(d(n)+1)\le\lceil\log n'\rceil/2$ holds for large $n$, gives
+$\poly(n)2^{2C_1q(d(n)+1)\rhon(qn)}$ operations, and $\rhon(qn)\le4q\rhon(n)$ as
+in that proof. Lemma~\ref{lem:bits} turns the counts into time bounds, and the
+ground-state energy and the partition functions follow as in
+Theorem~\ref{thm:ising}.
+\end{proof}
+
+\begin{remark}
+The regime of Corollary~\ref{cor:density} ends at average degree of order
+$\sqrt{\log n}$: there the exponent $d(n)\rhon(n)$ is of order $n(\log\log n)^2$
+and the bound is worse than enumeration. A graph with $\Theta(n^2)$ edges is
+beyond reach of the method for the reason given in Section~\ref{sec:scope}: the
+branching of Lemma~\ref{lem:frequent} fixes $n/\lambda$ variables, and the edges
+among the remaining ones still number $\Theta(n^2)$. The corollary is nonetheless
+the first bound of the form $2^{o(n)}$ for the exact maximum cut on graphs
+whose average degree tends to infinity; the algorithm of Williams \cite{Wil05}
+runs in time $2^{\omega n/3}$ on every graph, and under the exponential time
+hypothesis no bound $2^{o(n)}$ was possible even at bounded degree.
+\end{remark}

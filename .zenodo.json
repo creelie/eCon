@@ -1,6 +1,6 @@
 {
   "title": "Source and verification code for the paper Subexponential Weighted Counting and Exact Optimisation",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "upload_type": "software",
   "creators": [
     {
@@ -9,13 +9,14 @@
       "affiliation": "Formerly, Electro-Gravitational Space Propulsion Laboratory (EGSPL), Bhubaneswar, Odisha 751030, India"
     }
   ],
-  "description": "<p>LaTeX source, figures and the exact-arithmetic check program of the paper <em>Subexponential Weighted Counting and Exact Optimisation</em> by Deep Bhattacharjee.</p><p>The paper reproduces, with credit, the summation routine of OpenAI's preprint \"The Exponential Time Hypothesis is False\" (25 October 2026) for sparse formulas and proves from it, with complete proofs, deterministic algorithms of running time 2^{o(n)} for: the whole weight profile of a sparse weighted constraint system (Max-k-SAT, Min-k-SAT and the number of optimal assignments); the number of satisfying assignments of each Hamming weight; Max-Cut and the maximum and minimum bisection of a graph with O(n) edges; the weighted independence polynomial of every graph, hence the independence number, the clique number and their counts; Vertex Cover in time 2^{o(k)} + poly(n); partition functions and homomorphism counts on bounded-degree graphs; the density of states of Ising and Potts systems with polynomially bounded couplings; dominating sets, matchings, hitting sets and sparse permanents; counting under a congruence; k-SAT in SE and SNP contained in SE. The paper proves nothing about P versus NP, and says so.</p><p>The check program (Python, exact rational arithmetic) confirms the algebraic identities of the routine on small instances; no statement of the paper depends on it.</p>",
+  "description": "<p>LaTeX source, figures and the exact-arithmetic check program of the paper <em>Subexponential Weighted Counting and Exact Optimisation</em> by Deep Bhattacharjee.</p><p>The paper reproduces, with credit, the summation routine of OpenAI's preprint \"The Exponential Time Hypothesis is False\" (25 October 2026) for sparse formulas and proves from it, with complete proofs, deterministic algorithms of running time 2^{o(n)} for: the whole weight profile of a sparse weighted constraint system (Max-k-SAT, Min-k-SAT and the number of optimal assignments); the number of satisfying assignments of each Hamming weight; Max-Cut and the maximum and minimum bisection of a graph with O(n) edges; the weighted independence polynomial of every graph, hence the independence number, the clique number and their counts; Vertex Cover in time 2^{o(k)} + poly(n); partition functions and homomorphism counts on bounded-degree graphs; the density of states of Ising and Potts systems with polynomially bounded couplings; dominating sets, matchings, hitting sets and sparse permanents; counting under a congruence; several linear statistics at once; Max-q-Cut and balanced partitions; f-factors, orientations, edge colourings and nowhere-zero flows on bounded-degree graphs; the Tutte polynomial on every hyperbola (x-1)(y-1) = q with q a positive integer; the weight enumerator, minimum distance and maximum-likelihood decoding of codes with sparse parity checks; bounded-degree hypergraphs; linear-size circuits; Max-Cut and Ising ground states at average degree up to sqrt(log n)/(log log n)^3; k-SAT in SE and SNP contained in SE. The paper proves nothing about P versus NP, and says so.</p><p>The check program (Python, exact rational arithmetic) confirms the algebraic identities of the routine on small instances; no statement of the paper depends on it.</p>",
   "keywords": [
     "exponential time hypothesis",
     "weighted counting",
     "independence polynomial",
     "vertex cover",
     "Max-SAT",
+    "Tutte polynomial",
     "partition functions",
     "68Q25",
     "68Q17",

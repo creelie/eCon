@@ -100,7 +100,70 @@ def fig_costs():
     ax.view_init(elev=28, azim=-135)
     save(fig, "fig_costs")
 
+# ---------------------------------------------------------------- figure 4
+# The random-cluster partition function Z(G;q,v) of the Petersen graph over the
+# (q,v) plane, from its 2^15 edge subsets: Z = sum_A q^{c(A)} v^{|A|}. The
+# surface shows sign(Z) log10(1+|Z|); the lines are the hyperbolas
+# (x-1)(y-1) = q at integer q >= 1 evaluated by Theorem 7.9 (fixed q, every v),
+# the points the colourings (v=-1) and the nowhere-zero flows (v=-q).
+def fig_tutte():
+    n = 10
+    outer = [(i, (i + 1) % 5) for i in range(5)]
+    inner = [(5 + i, 5 + (i + 2) % 5) for i in range(5)]
+    spokes = [(i, 5 + i) for i in range(5)]
+    edges = outer + inner + spokes
+    m = len(edges)
+    # coefficients a[c][k] = number of edge subsets with k edges and c components
+    coef = np.zeros((n + 1, m + 1), dtype=np.int64)
+    for mask in range(1 << m):
+        parent = list(range(n))
+        def find(x):
+            while parent[x] != x:
+                parent[x] = parent[parent[x]]
+                x = parent[x]
+            return x
+        k = 0
+        for e in range(m):
+            if (mask >> e) & 1:
+                k += 1
+                a, b = find(edges[e][0]), find(edges[e][1])
+                if a != b:
+                    parent[a] = b
+        c = sum(1 for v in range(n) if find(v) == v)
+        coef[c][k] += 1
+    def Z(q, v):
+        tot = 0.0
+        for c in range(1, n + 1):
+            for k in range(m + 1):
+                if coef[c][k]:
+                    tot += coef[c][k] * q ** c * v ** k
+        return tot
+    qs = np.linspace(0.5, 6.0, 111)
+    vs = np.linspace(-6.0, 3.0, 181)
+    Q, V = np.meshgrid(qs, vs)
+    Zv = np.vectorize(Z)(Q, V)
+    S = np.sign(Zv) * np.log10(1 + np.abs(Zv))
+    fig = plt.figure(figsize=(7.4, 5.4))
+    ax = fig.add_subplot(111, projection="3d")
+    ax.plot_surface(Q, V, S, cmap=cm.coolwarm, linewidth=0, antialiased=True, alpha=0.85)
+    for q in range(1, 7):
+        vv = np.linspace(-6.0, 3.0, 200)
+        zz = np.array([Z(q, v) for v in vv])
+        ax.plot(np.full_like(vv, q), vv, np.sign(zz) * np.log10(1 + np.abs(zz)) + 0.05, color="k", lw=1.6)
+        for v, col, lab in ((-1.0, "crimson", "colourings"), (-float(q), "darkgreen", "flows")):
+            z = Z(q, v)
+            ax.scatter([q], [v], [np.sign(z) * np.log10(1 + abs(z)) + 0.1], color=col, s=28, zorder=20,
+                       label=lab if q == 1 else None)
+    ax.set_xlabel(r"$q$")
+    ax.set_ylabel(r"$v$")
+    ax.set_zlabel(r"$\mathrm{sign}(Z)\,\log_{10}(1+|Z|)$")
+    ax.view_init(elev=30, azim=-125)
+    ax.legend(loc="upper left")
+    save(fig, "fig_tutte")
+    return int(Z(3, -1)), int(Z(3, -3))
+
 if __name__ == "__main__":
     fig_branch()
     print("profile graph:", fig_profile())
     fig_costs()
+    print("Petersen P(3), F(3):", fig_tutte())

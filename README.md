@@ -1,7 +1,7 @@
 # Subexponential Weighted Counting and Exact Optimisation
 
 Author: Deep Bhattacharjee. Source and verification code for the paper of that
-title (31 pages, amsart). Release v1.0.0.
+title (41 pages, amsart). Release v1.1.0.
 
 ## What the paper proves
 
@@ -35,20 +35,37 @@ rule,
   the independence number, the clique number and their counts
   (Corollary 6.8), and Vertex Cover in time 2^{o(k)} + poly(n) (Theorem 6.11).
 
-Section 7 proves k-SAT ∈ SE from the sparsification lemma and SNP ⊆ SE.
-Section 8 lists what the method does not give: dense objectives, the
-quadratic-time problems of fine-grained complexity, and P versus NP, on which
-the paper proves nothing.
+Section 7 works out further families, each with a complete proof: several
+linear statistics at once with equations and congruences imposed (Theorem
+7.1), Max-k-Lin mod p, Max-q-Cut and balanced q-partitions (Corollary 7.4),
+f-factors, orientations with prescribed indegrees, proper edge colourings and
+nowhere-zero flows on bounded-degree graphs (Theorem 7.5), hafnians of sparse
+matrices (Corollary 7.6), the Tutte polynomial on every hyperbola
+(x-1)(y-1) = q with q a positive integer, including the chromatic and flow
+polynomials at q and the Potts model (Theorem 7.10), the weight enumerator,
+minimum distance and maximum-likelihood decoding of codes with sparse parity
+checks (Theorem 7.12), matchings, transversals and colourings of
+bounded-degree hypergraphs (Theorem 7.14), the output profile of linear-size
+circuits (Theorem 7.15), and growing density: the constant in the exponent is
+linear in the ratio of factors to variables (Theorem 7.17), so Max-Cut and the
+Ising and Potts ground states on graphs of average degree up to
+sqrt(log n)/(log log n)^3 run in time 2^{o(n)} (Corollary 7.18).
+
+Section 8 proves k-SAT ∈ SE from the sparsification lemma and SNP ⊆ SE.
+Section 9 lists what the method does not give: Max-Cut with Θ(n²) edges, the
+chromatic and Tutte polynomials as polynomials in q, the quadratic-time
+problems of fine-grained complexity, and P versus NP, on which the paper
+proves nothing.
 
 ## Layout
 
 - `paper/`: LaTeX source (`main.tex` and the section files), figures in
   `paper/figures/`.
-- `figures/make_figures.py`: regenerates the three figures (matplotlib).
+- `figures/make_figures.py`: regenerates the four figures (matplotlib).
 - `code/check_interpolation.py`: the exact-arithmetic check of Appendix A
-  (Python standard library only, `Fraction`; about ten minutes). Its recorded
-  output is `code/check_output.txt`; the expected last line is
-  `4 checks passed, 0 failed`.
+  (Python standard library only, `Fraction`; about eighteen minutes). Its
+  recorded output is `code/check_output.txt`; the expected last line is
+  `6 checks passed, 0 failed`.
 - `dist/`: the compiled paper, the TeX zip and the arXiv tarball attached to the
   release.
 - `.github/workflows/check.yml` runs the check program and compiles the paper;
@@ -63,6 +80,7 @@ the paper proves nothing.
 
 | Release | DOI |
 | --- | --- |
+| v1.1.0 | to be recorded when the release is archived |
 | v1.0.0 | [10.5281/zenodo.23695836](https://doi.org/10.5281/zenodo.23695836) (concept DOI of all versions [10.5281/zenodo.23695835](https://doi.org/10.5281/zenodo.23695835)) |
 
 The code is under the MIT licence (see `LICENSE`); the paper is the author's.

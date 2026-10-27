@@ -21,15 +21,21 @@ Lemma~\ref{lem:rows}. Every number is a rational in lowest terms, every element
 of $\A_N$ a list of $N$ rationals, and every element of $\A_N[z]/(z^{J})$ a list
 of $J$ such lists; the Hermite system is solved by exact Gaussian elimination.
 
-Four sums were computed on $n=6$ variables and compared with the direct sum over
+Six sums were computed on $n=6$ variables and compared with the direct sum over
 the $64$ assignments: the number of satisfying assignments of a random $2$-CNF
 with seven clauses over $\A=\Q$; the Max-$2$-SAT profile of the same formula over
 $\Q[W]/(W^{8})$, which came out as
 $4W^{3}+8W^{4}+28W^{5}+16W^{6}+8W^{7}$; the independence polynomial
 $1+6W+8W^{2}+2W^{3}$ of the hexagon with one chord, over $\Q[W]/(W^{7})$, from
-the factor system of Theorem~\ref{thm:indep}; and the cut profile
+the factor system of Theorem~\ref{thm:indep}; the cut profile
 $2+12W^{2}+18W^{3}+18W^{4}+12W^{5}+2W^{7}$ of the same graph, from the factor
-system of Corollary~\ref{cor:maxcut} with $U=1$. All four agreed with the
-direct sums. The run took about ten minutes in exact arithmetic, almost all of
-it in the sums \eqref{eq:Htsum} over the pairs $(E,U)$, whose number is the
-quantity $C_q$ of \eqref{eq:Cq} with $q=9$ or $q=13$.
+system of Corollary~\ref{cor:maxcut} with $U=1$; the weight enumerator
+$1+4W^{3}+3W^{4}$ of the binary code of length $6$ with the parity checks
+$\{1,2,3\}$, $\{3,4,5\}$, $\{5,6,1\}$, from the factor system of
+Theorem~\ref{thm:codes}; and the number $2$ of nowhere-zero $\Z_3$-flows of
+$K_{2,3}$, from the factor system of Theorem~\ref{thm:edges}\ref{it:flows} over
+$\Q$, which agrees with Lemma~\ref{lem:flows} since the flow polynomial of
+$K_{2,3}$ is $(q-1)(q-2)$. All six agreed with the direct sums. The run took
+about eighteen minutes in exact arithmetic, almost all of it in the sums
+\eqref{eq:Htsum} over the pairs $(E,U)$, whose number is the quantity $C_q$ of
+\eqref{eq:Cq} with $q$ between $8$ and $13$.

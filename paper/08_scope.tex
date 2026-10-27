@@ -10,11 +10,14 @@ problems fail one of them, and this paper proves nothing about them.
 \begin{enumerate}[label=(\alph*),leftmargin=2.2em]
 \item \emph{Dense objectives.} Max-Cut on a graph with $\Theta(n^2)$ edges has
 total degree $\Theta(n^2)$ and $\Theta(n)$ occurrences per variable; branching
-on frequent variables fixes $\Theta(n)$ of them. The chromatic and Tutte
-polynomials need connectivity, which is not a bounded sum of local factors.
-Section~\ref{ssec:indep} shows that the independence polynomial escapes this
-limit because a vertex of large degree forces many others; no such forcing is
-available for a cut.
+on frequent variables fixes $\Theta(n)$ of them. Theorem~\ref{thm:density}
+reaches average degree $\sqrt{\log n}/(\log\log n)^3$ and no further. The
+chromatic and Tutte polynomials as polynomials in $q$ need connectivity, which
+is not a bounded sum of local factors; Theorem~\ref{thm:tutte} gives their
+values at each fixed positive integer $q$ on bounded-degree graphs, and nothing
+off the hyperbolas $H_q$. Section~\ref{ssec:indep} shows that the independence
+polynomial escapes the density limit because a vertex of large degree forces
+many others; no such forcing is available for a cut.
 \item \emph{Problems in $\mathrm{P}$ with quadratic conjectured complexity.}
 The lower bounds for Orthogonal Vectors, $3$SUM, All-Pairs Shortest Paths and
 their relatives that were derived from the strong exponential time hypothesis
@@ -28,7 +31,7 @@ $n^{C}$ variables for some $C>1$, and $2^{o(n^{C})}$ is not polynomial.
 Nothing in this paper bears on the question.
 \end{enumerate}
 
-Each of the results of Sections \ref{sec:applications} and \ref{sec:snp} has
+Each of the results of Sections \ref{sec:applications}, \ref{sec:more} and \ref{sec:snp} has
 been stated with the exact hypothesis under which it is proved. The constants
 in the exponents are explicit through Lemma~\ref{lem:params} and
 Theorem~\ref{thm:bounded-occ}, and the dependence on the weight bound $\Omega$

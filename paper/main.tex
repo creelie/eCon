@@ -43,8 +43,8 @@ urlcolor=blue!55!black]{hyperref}
 \newcommand{\rhon}{\rho}
 \newcommand{\ip}[2]{\langle #1,#2\rangle}
 \newcommand{\oai}{OpenAI}
-\newcommand{\releaseline}{, release v1.0.0, archived at \href{https://doi.org/10.5281/zenodo.23695836}{doi:10.5281/zenodo.23695836}}
-\newcommand{\archiveline}{, release v1.0.0 (2026). \href{https://doi.org/10.5281/zenodo.23695836}{doi:10.5281/zenodo.23695836}}
+\newcommand{\releaseline}{, release v1.1.0, archived at \href{https://doi.org/10.5281/zenodo.23695835}{doi:10.5281/zenodo.23695835}}
+\newcommand{\archiveline}{, release v1.1.0 (2026). \href{https://doi.org/10.5281/zenodo.23695835}{doi:10.5281/zenodo.23695835}}
 
 \title[Subexponential weighted counting]{Subexponential Weighted Counting and Exact Optimisation}
 \author{Deep Bhattacharjee}
@@ -69,7 +69,9 @@ sums of local weights with values in any commutative $\Q$-algebra. The extension
 deterministic $2^{o(n)}$ algorithms for exact Max-Cut and Max-$k$-SAT on sparse instances,
 for the independence polynomial and the maximum independent set of every graph, for Vertex
 Cover in time $2^{o(k)}+\poly(n)$, for the density of states of Ising and Potts models on
-bounded-degree graphs, and for every problem in $\SNP$.}
+bounded-degree graphs, for the Tutte polynomial on the hyperbolas $(x-1)(y-1)=q$, for the
+minimum distance and the maximum-likelihood decoding of codes with sparse parity checks,
+for Max-Cut at average degree up to $\sqrt{\log n}/(\log\log n)^3$, and for every problem in $\SNP$.}
 \end{abstract}
 
 \maketitle
@@ -80,6 +82,7 @@ bounded-degree graphs, and for every problem in $\SNP$.}
 \input{04_design}
 \input{05_weighted}
 \input{06_applications}
+\input{06b_more}
 \input{07_snp}
 \input{08_scope}
 \appendix

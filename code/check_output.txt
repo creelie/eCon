@@ -10,8 +10,14 @@
 [PASS] Max-Cut profile of C6 plus chord: n=6 m=7 h=2 c=20 Q=3 R=2 D=64 q=9
        algorithm: 2*W^0 + 12*W^2 + 18*W^3 + 18*W^4 + 12*W^5 + 2*W^7
        brute    : 2*W^0 + 12*W^2 + 18*W^3 + 18*W^4 + 12*W^5 + 2*W^7
-4 checks passed, 0 failed
+[PASS] weight enumerator of a [6,3] code over Q[W]/(W^7): n=6 m=9 h=2 c=20 Q=3 R=2 D=64 q=10
+       algorithm: 1*W^0 + 4*W^3 + 3*W^4
+       brute    : 1*W^0 + 4*W^3 + 3*W^4
+[PASS] nowhere-zero Z_3-flows of K_{2,3} over Q: n=6 m=5 h=3 c=30 Q=3 R=2 D=64 q=8
+       algorithm: 2*W^0
+       brute    : 2*W^0
+6 checks passed, 0 failed
 
-real	9m40.837s
-user	9m34.238s
-sys	0m0.016s
+real	17m34.867s
+user	17m19.431s
+sys	0m0.080s
