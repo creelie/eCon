@@ -216,7 +216,31 @@ and for every $0<\eta\le1$,
 \begin{equation}\label{eq:Cqbound}
   \eta^{q}C_q\le\sum_{s=0}^{n}(2\eta)^s\binom ns=(1+2\eta)^n ,
 \end{equation}
-because $\eta^q\le\eta^s$ for every retained $s\le q$.
+because $\eta^q\le\eta^s$ for every retained $s\le q$. The choice of $\eta$
+that minimises the right-hand side gives the bound that will be used when the
+ratio $q/n$ is allowed to vary with $n$. Write
+$H(u)=-u\log u-(1-u)\log(1-u)$ for the binary entropy, with $H(0)=0$.
+
+\begin{lemma}[Entropy bound]\label{lem:entropy}
+For integers $0\le q\le n/2$,
+\begin{equation}\label{eq:Cqentropy}
+  \log C_q\le q+n\,H(q/n)\le q\log\frac{2en}{q},
+\end{equation}
+the last expression read as $0$ when $q=0$.
+\end{lemma}
+
+\begin{proof}
+For $q=0$ both sides vanish. For $q\ge1$ take $\eta=q/(2(n-q))$, which lies in
+$(0,1]$ since $q\le n/2$. Then $1+2\eta=n/(n-q)$, and \eqref{eq:Cqbound} gives
+\[
+  C_q\le\eta^{-q}\Bigl(\frac{n}{n-q}\Bigr)^{n}
+  =\frac{2^q\,n^n}{q^q\,(n-q)^{n-q}} ,
+\]
+whose logarithm is $q+n\log n-q\log q-(n-q)\log(n-q)=q+nH(q/n)$. For the second
+inequality, $-(1-u)\ln(1-u)\le u$ for $0\le u<1$, because the derivative of
+$u+(1-u)\ln(1-u)$ is $-\ln(1-u)\ge0$; hence $H(u)\le u\log(e/u)$, and with $u=q/n$
+this gives $q+nH(q/n)\le q+q\log(en/q)$.
+\end{proof}
 
 \begin{proposition}[Summation routine]\label{prop:routine}
 Let $\A$ be a commutative $\Q$-algebra, let the factor system satisfy
