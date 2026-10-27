@@ -1,7 +1,7 @@
 name: check
 
-# Runs the exact-arithmetic check of Appendix A (Python, Fractions only, about
-# ten minutes) and compiles the paper.
+# Runs the exact-arithmetic checks of Appendix A (Python, Fractions only, about
+# twenty minutes) and compiles the paper.
 
 on:
   push:
@@ -19,6 +19,8 @@ jobs:
           cd code
           python3 -I check_interpolation.py | tee check_run.txt
           grep -q "7 checks passed, 0 failed" check_run.txt
+          python3 -I check_density.py | tee density_run.txt
+          grep -q "6 checks passed, 0 failed" density_run.txt
   paper:
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,7 @@
+ok    (A) entropy bound for 1 <= n <= 200, 0 <= q <= n/2 (10200 cases)
+ok    (B1) cut profile of every graph on at most 6 vertices from its complement (33868 graphs)
+ok    (B2) weighted form of the identity on 200 random instances
+ok    (C) parameter inequalities of Theorem 7.19 at 32 sample points
+ok    (D) degree 2m and top coefficient (-2)^m (W-1)^m for m <= 5
+ok    (E) product 3 and Psi_v 7/2 at W1=2, W2=3, Y=1/2
+6 checks passed, 0 failed

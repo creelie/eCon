@@ -11,7 +11,10 @@ problems fail one of them, and this paper proves nothing about them.
 \item \emph{Dense objectives.} Max-Cut on a graph with $\Theta(n^2)$ edges has
 total degree $\Theta(n^2)$ and $\Theta(n)$ occurrences per variable; branching
 on frequent variables fixes $\Theta(n)$ of them. Theorem~\ref{thm:density}
-reaches average degree $\sqrt{\log n}/(\log\log n)^3$ and no further. The
+reaches average degree $o(\sqrt{\log n/\log\log n})$, and by
+Remark~\ref{rem:densityend} no design for the routine reaches total degree
+$\frac14(n+1)\log n$. Corollary~\ref{cor:complement} covers the dense graphs whose
+complement is sparse, and no other dense graphs. The
 chromatic and Tutte polynomials as polynomials in $q$ need connectivity, which
 is not a bounded sum of local factors; Theorem~\ref{thm:tutte} gives their
 values at each fixed positive integer $q$ on bounded-degree graphs, and nothing
@@ -33,6 +36,6 @@ Nothing in this paper bears on the question.
 
 Each of the results of Sections \ref{sec:applications}, \ref{sec:more} and \ref{sec:snp} has
 been stated with the exact hypothesis under which it is proved. The constants
-in the exponents are explicit through Lemma~\ref{lem:params} and
-Theorem~\ref{thm:bounded-occ}, and the dependence on the weight bound $\Omega$
+in the exponents are explicit through Lemma~\ref{lem:params},
+Theorem~\ref{thm:bounded-occ} and Theorem~\ref{thm:explicit}, and the dependence on the weight bound $\Omega$
 is polynomial in every statement.

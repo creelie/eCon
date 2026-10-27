@@ -57,11 +57,15 @@ and congruences may be mixed.
 $\A=\A_{N_0,N_1,\dots,N_s}$, of dimension $N=N_0N_1\cdots N_s$. Keep the given
 factors, now read in $\A$, and add for each variable $v$ the factor
 \[
-  \Psi_v=\prod_{i=1}^{s}\bigl(1+(W_i^{\omega^{(i)}_v}-1)Y_v\bigr),
+  \Psi_v=1+\Bigl(\prod_{i=1}^{s}W_i^{\omega^{(i)}_v}-1\Bigr)Y_v ,
 \]
 the multilinear extension of $\prod_iW_i^{\omega^{(i)}_vx_v}$ on the scope
-$\{v\}$; expanded, it is $1+(\prod_iW_i^{\omega^{(i)}_v}-1)Y_v$, a polynomial in
-the generators with integer coefficients of absolute value at most $2$. The new
+$\{v\}$, of degree one in $Y_v$ and with coefficients that are polynomials in
+the generators with integer coefficients of absolute value at most
+$1$.\footnote{The product $\prod_i\bigl(1+(W_i^{\omega^{(i)}_v}-1)Y_v\bigr)$ takes
+the same values at $Y_v\in\{0,1\}$, but it has degree $s$ in $Y_v$ and differs from
+$\Psi_v$ at the non-Boolean inputs $\ip{\PP_{f,v}(t)}{x}$ of the routine; at
+$W_1=2$, $W_2=3$, $Y_v=\frac12$ and unit weights it equals $3$, while $\Psi_v=\frac72$.} The new
 system has at most $(c+1)n$ factors of scope at most $k$, and its sum is
 \[
   \sum_x\prod_f\Phi_f(x)\prod_{i=1}^{s}W_i^{\sum_v\omega^{(i)}_vx_v}
@@ -722,97 +726,212 @@ are Theorem~\ref{thm:ip}\ref{it:ip01}.
 
 \subsection{Growing density}\label{ssec:density}
 Every statement so far fixes the ratio $c$ of factors to variables. The
-constant in the exponent of Theorem~\ref{thm:weighted} is linear in $c$, and
-the proof of that theorem is valid as long as the branching of
-Lemma~\ref{lem:frequent} leaves occurrence numbers below $\lambda^{2}$. Making
-the dependence explicit gives a subexponential bound for systems whose density
-grows with $n$, slowly.
+parameters of Lemma~\ref{lem:params} do not depend on the degree ratio
+$\kappa$, and the exponent of Theorem~\ref{thm:bounded-occ} is linear in it.
+When $\kappa$ grows with $n$ it pays to let the parameters follow it: fewer
+groups, and so a smaller $Q/R$ in the Taylor count, in exchange for a larger
+share of the cost spent on one group. With the entropy bound of
+Lemma~\ref{lem:entropy} in place of \eqref{eq:logCq}, this extends the
+subexponential regime to every ratio $\kappa=o(\sqrt{\log n/\log\log n})$.
 
-\begin{theorem}[Growing density]\label{thm:density}
-There is an absolute constant $C_1$, and for every $k\ge1$ a threshold
-$n_1(k)$, with the following property. Let $n\ge n_1(k)$, let $c\ge1$ be a real
-number with $ck\le\lambda/2$, $\lambda=\lceil\log n\rceil$, and let a factor
-system on $n$ variables have at most $cn$ factors, each of scope at most $k$,
-with values in a commutative $\Q$-algebra $\A$. Then $Z$ in \eqref{eq:Z} is
-computed deterministically with at most
+Throughout, $\lambda=\lceil\log n\rceil$, $\nu=\lceil\log\lambda\rceil$, and
 \[
-  \poly(n)\,2^{\,C_1kc\,\rhon(n)}
+  g(x)=x\,\bigl(\log(1/x)\bigr)^{3/2}\qquad(0<x<1),
 \]
-operations in $\A$, evaluations of the factors at inputs in $\Q[z]/(z^{J})$,
-$J\le ckn$, and bit operations on rationals, in polynomial space; the
-polynomial is absolute. If the coefficients of the factors are polynomials in
-the generators of $\A=\A_N$ or $\A_{N_1,\dots,N_s}$ with integer coefficients
-of at most $L$ bits, the bound holds for bit operations after multiplication
-by a polynomial in $n$, $N$ and $L$.
+which is increasing on $(0,2^{-3}]$ and tends to $0$ with $x$.
+
+\begin{theorem}[Bounded occurrences at a growing degree ratio]\label{thm:explicit}
+There is an absolute constant $\lambda_0$ with the following property. Let $\A$
+be a commutative $\Q$-algebra, and let a factor system on $n$ variables with
+$\lambda\ge\lambda_0$ have largest scope $w\le\lambda^2$, largest occurrence
+number $b\le\lambda^2-1$ and total degree $d\le an$, where $a\ge1$ is a
+real number with
+\[
+  \theta:=a\sqrt{\nu/\lambda}\le2^{-15}.
+\]
+Then $Z$ in \eqref{eq:Z} is computed deterministically with at most
+\begin{equation}\label{eq:explicit}
+  |\F|\,\poly(n)\,2^{\,790\,n\,g(\theta)}
+\end{equation}
+operations in $\A$, evaluations of factors at inputs in $\Q[z]/(z^{J})$ with
+$J\le n$, and bit operations on rational numbers, using polynomially many
+elements of $\A$ and polynomially many bits of storage in addition to the
+factors' own. The polynomial is absolute.
 \end{theorem}
 
 \begin{proof}
-We follow the proof of Theorem~\ref{thm:weighted} and keep track of $c$. Let
-$n_0=n_0(2)$ be the threshold of Theorem~\ref{thm:bounded-occ} with $\beta=2$,
-and let $n_1(k)\ge2n_0$ be so large that for $n\ge n_1(k)$ one has $\lambda\ge4$,
-$k\le(\lambda-1)^2$, and the inequality $n'\nu'^2/\sqrt{\lambda'}\le2n\nu^2/\sqrt\lambda$
-of that proof for every $n'\in[n/2,n]$. Since $\lambda\ge4$,
-$ck\lambda\le\lambda^2/2\le(\lambda-1)^2$. Apply Lemma~\ref{lem:frequent}: fewer
-than $2^{n/\lambda}$ assignments $y$, each leaving a system on $n'\ge n/2\ge n_0$
-variables with scopes at most $k\le\lambda'^2$, occurrence numbers at most
-$ck\lambda\le\lambda'^2$ (as $\lambda'\ge\lambda-1$), and total degree at most
-$kcn\le2ck\,n'$. Theorem~\ref{thm:bounded-occ} with $\beta=2$ and $\kappa=2ck$
-computes each $Z_y$ with $cn\,\poly(n)2^{5C_0(2ck+1)n'\nu'^2/\sqrt{\lambda'}}$
-operations, where the polynomial factor of that theorem is a polynomial in $n$,
-$|\F|\le n^2$, $J\le\kappa n\le n^2$ and the parameters of Lemma~\ref{lem:params}
-for $\beta=2$, all bounded by powers of $n$. Hence the total is at most
+Adjoin the constant-one factors of Section~\ref{sec:design}, so that
+\eqref{eq:nMb} holds with $b\le\lambda^2$ and $d$ unchanged. Replacing $a$ by
+$\max(1,d/n)$, which is rational, computed from the input and not larger than $a$,
+decreases $\theta$ and, as $g$ is increasing, the bound \eqref{eq:explicit}; so we
+may assume $a=\max(1,d/n)$. Put
+$L=\log(1/\theta)\ge15$ and choose
 \[
-  2^{n/\lambda}\cdot cn\poly(n)\,2^{10C_0(2ck+1)\,n\nu^2/\sqrt\lambda}
-  \le\poly(n)\,2^{\,(1+30C_0ck)\,n\nu^2/\sqrt\lambda},
+  t=\lfloor L\rfloor,\quad r=2^{t},\quad Q=\Bigl\lfloor\frac{\lambda}{128t}\Bigr\rfloor,\quad
+  R=32+\bigl\lceil16\sqrt{Q\nu}\,\bigr\rceil,\quad \tau=\frac1{r\lambda},\quad D=r^{2Q}.
 \]
-using $n/\lambda\le n\nu^2/\sqrt\lambda$, $2ck+1\le3ck$ and $cn\le n^2$. For
-$n\ge20$ one has $\lambda\le2\log n$, hence $\sqrt\lambda\ge\sqrt{\log n}$, and
-$\nu\le\log\lambda+1\le\log\log n+2\le3\log\log n$, so
-$n\nu^2/\sqrt\lambda\le9\rhon(n)$ and the exponent is at most
-$9(1+30C_0)\,kc\,\rhon(n)$; take $C_1=9(1+30C_0)$. The space bound and the
-bound $J\le ckn$ are those of Theorem~\ref{thm:bounded-occ}, and the bit
-complexity is Lemma~\ref{lem:bits}, whose polynomial depends on $|\F|\le n^2$
-and $k\le\lambda^2$ only through powers of $n$.
+Thus $t$ is the largest integer with $4^ta^2\nu\le\lambda$, and $1/(2\theta)<r\le1/\theta$.
+Since $a\ge1$ and $\lambda\le2^{\nu}$, $L\le\frac12\log(\lambda/\nu)\le\nu/2$, so
+$t\le\nu/2$ and $r^2\le2^{\nu}\le2\lambda$.
+
+We check the hypotheses of Lemma~\ref{lem:complete}. First, $\lambda\ge256t$, so
+$Q\ge\lambda/(256t)$, and $\log D=2Qt\le\lambda/64$. Since $Q\nu\ge1$,
+$R\le33+16\sqrt{Q\nu}\le49\sqrt{Q\nu}$, hence
+\begin{equation}\label{eq:RQexplicit}
+  \frac RQ\le49\sqrt{\frac\nu Q}\le784\sqrt{\frac{t\nu}{\lambda}}
+  \le784\,\frac{\nu}{\sqrt{2\lambda}} ,
+\end{equation}
+which is at most $1/6$ once $\lambda\ge(6\cdot784)^2\nu^2/2$; so $R\ge32$, $6R\le Q$
+and $R<Q$ for $\lambda\ge\lambda_0$. The balance conditions \eqref{eq:balance}
+hold: $2(b+w)D^2\le4\lambda^2\,2^{\lambda/32}\le2^{\lambda-1}<n\le M$ and
+$2Qr^2\le(\lambda/64t)\cdot2\lambda<n$ for $\lambda\ge\lambda_0$. For the interval
+take $\mu=Q(r-1)/(2r)$, $A_0=\lfloor\mu-(R-1)/2\rfloor$ and
+$\mathcal J=\{A_0,\dots,A_0+R-1\}$ as in the proof of Lemma~\ref{lem:params}; since
+$R\le Q/6$ it lies in $\{0,\dots,Q\}$, and since $R\ge32$ it contains every integer
+within $R/4$ of $\mu$. Hoeffding's inequality \eqref{eq:hoeffding} with $s=R/4$
+and $R^2\ge256Q\nu$ gives
+\[
+  \Pr\Bigl[\Bin\Bigl(Q,\tfrac{r-1}{2r}\Bigr)\notin\mathcal J\Bigr]\le2e^{-R^2/(8Q)}
+  \le2e^{-32\nu}\le2^{-4\nu}\le\frac1{r^2\,b\,\lambda}=\frac{\tau}{rb},
+\]
+because $r^2\le2^{\nu}$, $b\le\lambda^2\le2^{2\nu}$ and $\lambda\le2^{\nu}$. This is
+\eqref{eq:tailreq}, and $0<\tau\le1/2$. Lemma~\ref{lem:complete} constructs the
+design in polynomial time.
+
+Now the costs of Proposition~\ref{prop:routine}. By \eqref{eq:degbound} with
+$d\le an$, $q=\lfloor dR/Q\rfloor\le\chi n$ with $\chi=aR/Q$. Since
+$\sqrt{\nu/\lambda}=\theta/a\le\theta$ and $t\le L$, \eqref{eq:RQexplicit} gives
+\[
+  \chi\le784\,a\sqrt{\frac{t\nu}{\lambda}}\le784\,\theta\sqrt L=:\bar\chi ,
+\]
+and $\bar\chi\le784\cdot2^{-15}\sqrt{15}<\frac1{10}$ because $x\sqrt{\log(1/x)}$
+increases on $(0,2^{-15}]$. In particular $q\le n/2$ and $J=q+1\le n$.
+Lemma~\ref{lem:entropy} and the monotonicity of $x\log(2en/x)$ in $x\le n$ give
+\[
+  \log C_q\le\bar\chi n\log\frac{2e}{\bar\chi}
+  =784\,\theta\sqrt L\,n\Bigl(L+\log\frac{2e}{784\sqrt L}\Bigr)\le784\,n\,\theta L^{3/2}
+  =784\,n\,g(\theta).
+\]
+The measurement count contributes
+$2\tau n\log(2D+1)\le\frac{2n}{r\lambda}\bigl(\frac\lambda{64}+2\bigr)\le\frac nr$
+and one group $\frac{2n}r$, together $\frac{3n}{r}<6n\theta\le6\,n\,g(\theta)$.
+The logarithm of \eqref{eq:routinecost} is therefore at most
+$\log(2Qr)+790\,n\,g(\theta)$. Each vector costs at most $|\F|$ factor evaluations
+and a number of further operations polynomial in $n$, $|\F|$, $D$, $Q$, $R$, $J$,
+$r$ and $M\le\lambda^2 n$, all of which are bounded by powers of $n$ and $|\F|$
+since $D\le2^{\lambda/64}\le2n^{1/64}$. The storage bound is that of
+Proposition~\ref{prop:routine}.
+
+The parameters are computed from $n$ and $d$ with integer square roots and
+exact rational comparisons, in $\poly(\log n,\log d)$ bit operations,
+and the conditions of Lemma~\ref{lem:complete} are checked exactly as in the proof
+of Lemma~\ref{lem:params}; the estimates above show that every check passes.
 \end{proof}
 
-The bound is $2^{o(n)}$ exactly when $c\,\rhon(n)=o(n)$, that is when
-$c=c(n)=o\bigl(\sqrt{\log n}/(\log\log n)^2\bigr)$; the hypothesis
-$ck\le\lambda/2$ is then satisfied for all large $n$. The corollaries of
-Sections \ref{sec:applications} and \ref{sec:more} that are proved by one
-application of Theorem~\ref{thm:weighted} to a factor system whose number of
-factors is bounded by the number of constraints or edges of the input, and whose
-scopes are bounded, therefore extend to inputs of growing density. We record
-the two for which the question of the dense case was raised in the introduction.
+For a fixed ratio $a$ one has $\theta=a\sqrt{\nu/\lambda}$ and $\log(1/\theta)\le\nu/2$,
+so $g(\theta)\le a\nu^2/(2\sqrt{2\lambda})$, and \eqref{eq:explicit} is the bound of
+Theorem~\ref{thm:bounded-occ} with $\beta=2$ up to the constant. The gain is in the
+dependence on $a$: the exponent of Theorem~\ref{thm:bounded-occ} is
+$a\,n\nu^2/\sqrt\lambda$, which is $o(n)$ only for $a=o(\sqrt\lambda/\nu^2)$, while
+$n\,g(\theta)$ is $o(n)$ for every $a=o(\sqrt{\lambda/\nu})$. Two changes produce the
+gain. The entropy bound \eqref{eq:Cqentropy} charges the Taylor count
+$\log C_q\approx q\log(n/q)$, whereas \eqref{eq:logCq} charges $q\log(Q/R)$, larger by
+the factor $\log(Q/R)/\log(Q/(aR))$, which grows with $a$. And the number of groups
+$r=2^{\lfloor\log(1/\theta)\rfloor}$ shrinks as $a$ grows, which makes $Q$ larger and
+$R/Q$ smaller at the price of the cost $3n/r$ of the groups, balanced against the
+Taylor count.
+
+\begin{theorem}[Growing density]\label{thm:density}
+There are absolute constants $n_1$ and $\theta_1>0$ with the following property.
+Let $n\ge n_1$, let $k\ge1$ be an integer and $c\ge1$ a real number with
+\[
+  \theta_n:=ck\sqrt{\frac{\log\log n}{\log n}}\le\theta_1,
+\]
+and let a factor system on $n$ variables have at most $cn$ factors, each of scope
+at most $k$, with values in a commutative $\Q$-algebra $\A$. Then $Z$ in
+\eqref{eq:Z} is computed deterministically with at most
+\[
+  \poly(n)\,2^{\,4800\,n\,g(\theta_n)}\ \le\ \poly(n)\,2^{\,1700\,ck\,\rhon(n)}
+\]
+operations in $\A$, evaluations of the factors at inputs in $\Q[z]/(z^{J})$,
+$J\le n$, and bit operations on rationals, in polynomial space; the polynomial is
+absolute. In particular the bound is $2^{o(n)}$ whenever
+$ck=o\bigl(\sqrt{\log n/\log\log n}\bigr)$. If the coefficients of the factors are
+polynomials in the generators of $\A=\A_N$ or $\A_{N_1,\dots,N_s}$ with integer
+coefficients of at most $L$ bits, the bound holds for bit operations after
+multiplication by a polynomial in $n$, $N$ and $L$.
+\end{theorem}
+
+\begin{proof}
+Put $\theta_1=2^{-18}$ and $\varepsilon_n=\sqrt{\log\log n/\log n}$, so that
+$\theta_n=ck\,\varepsilon_n\ge\varepsilon_n$. Let $n_1$ be so large that for
+$n\ge n_1$ one has $\lambda-1\ge\lambda_0$, the absolute constant of
+Theorem~\ref{thm:explicit}, and $\theta_1\sqrt{\log n/\log\log n}\le\lambda/2$, so
+that $ck\le\lambda/2$. Apply Lemma~\ref{lem:frequent}: fewer than $2^{n/\lambda}$
+assignments $y$, each leaving a system on $n'\ge n-n/\lambda\ge n/2$ variables with
+$\lambda'=\lceil\log n'\rceil\in\{\lambda-1,\lambda\}$, $\nu'\le\nu$, scopes at most
+$k\le\lambda'^2$, occurrence numbers at most $ck\lambda\le\lambda^2/2\le\lambda'^2-1$,
+and total degree at most $kcn\le2ck\,n'$. Theorem~\ref{thm:explicit} applies with
+$a=2ck$ and
+\[
+  \theta'=2ck\sqrt{\nu'/\lambda'}\le2ck\sqrt{2\nu/\lambda}\le6\,ck\,\varepsilon_n=6\theta_n\le2^{-15},
+\]
+where $\nu\le\log\log n+2\le3\log\log n$ and $\lambda\ge\log n$ were used for $n\ge20$.
+As $g$ is increasing on $(0,2^{-3}]$,
+$g(\theta')\le g(6\theta_n)\le6\theta_n\log^{3/2}(1/\theta_n)=6\,g(\theta_n)$.
+Each $Z_y$ costs at most $cn\,\poly(n)\,2^{4740\,n\,g(\theta_n)}$ operations, and
+$cn\le n^2$. The branching adds the factor $2^{n/\lambda}\le2^{n\varepsilon_n}\le2^{n\,g(\theta_n)}$,
+since $1/\lambda\le1/\log n\le\varepsilon_n\le\theta_n$ and $\log(1/\theta_n)\ge18$. The total is
+at most $\poly(n)2^{4741\,n\,g(\theta_n)}$, which gives the first bound. For the second,
+$\log(1/\theta_n)\le\log(1/\varepsilon_n)\le\frac12\log\log n$, so
+$g(\theta_n)\le ck\,\varepsilon_n(\log\log n)^{3/2}/2^{3/2}=ck\,\rhon(n)/(2^{3/2}n)$,
+and $4800/2^{3/2}<1700$. If $ck=o(\sqrt{\log n/\log\log n})$ then $\theta_n\to0$ and
+$g(\theta_n)\to0$. The space bound and $J\le n'\le n$ come from
+Theorem~\ref{thm:explicit}, and the bit complexity is Lemma~\ref{lem:bits}: its
+proof uses of the parameters only $Q,\lambda=O(\log n)$, $R<Q$ and $D\le2^{\lambda}$,
+which hold here, and its polynomial depends on $|\F|\le n^2$ and $k\le\lambda^2$ only
+through powers of $n$.
+\end{proof}
+
+The corollaries of Sections \ref{sec:applications} and \ref{sec:more} that are
+proved by one application of Theorem~\ref{thm:weighted} to a factor system whose
+number of factors is bounded by the number of constraints or edges of the input,
+and whose scopes are bounded, therefore extend to inputs of growing density. For a
+function $d(n)\ge1$ write
+\[
+  \delta_n=d(n)\sqrt{\frac{\log\log n}{\log n}} ;
+\]
+the condition $\delta_n\to0$ means $d(n)=o(\sqrt{\log n/\log\log n})$. We record the
+two for which the question of the dense case was raised in the introduction.
 
 \begin{corollary}[Cuts and spin systems at growing average degree]\label{cor:density}
-Let $d=d(n)\ge1$ satisfy $d(n)\le\sqrt{\log n}/(\log\log n)^3$ for all large
-$n$, and let $G$ be a graph with $n$ vertices and at most $d(n)\,n$ edges.
+Let $d=d(n)\ge1$ satisfy $\delta_n\to0$, and let $G$ be a graph with $n$ vertices and
+at most $d(n)\,n$ edges.
 \begin{enumerate}[label=(\roman*),leftmargin=2.2em]
 \item\label{it:densecut} The cut profile $\bigl(\#\{S\subseteq V:|S|=i,\
 e(S,V\setminus S)=j\}\bigr)_{i,j}$, in particular the maximum cut, the maximum
 bisection and their numbers of optimal solutions, is computed in time
-$\poly(n)\,2^{\,4C_1d(n)\rhon(n)}=2^{O(n/\log\log n)}$.
+$\poly(n)\,2^{\,20000\,n\,g(\delta_n)}=2^{o(n)}$.
 \item\label{it:denseising} The density of states of an Ising system on $G$
 with integer couplings and fields, and that of the $q$-state Potts system on
 $G$ for fixed $q$, are computed in time
-$\poly(n,E_{\max})\,2^{\,O_q(d(n)\rhon(n))}=2^{O_q(n/\log\log n)}$.
+$\poly(n,E_{\max})\,2^{\,O_q(n\,g(\delta_n))}=\poly(E_{\max})\,2^{o(n)}$.
 \end{enumerate}
 In particular the maximum cut and the ground-state energy of an Ising system on
 a graph of average degree $d(n)$ are found in time $2^{o(n)}$ whenever
-$d(n)\le\sqrt{\log n}/(\log\log n)^{3}$.
+$d(n)=o(\sqrt{\log n/\log\log n})$.
 \end{corollary}
 
 \begin{proof}
 \ref{it:densecut} The factor system of Corollary~\ref{cor:maxcut} has one factor
 of scope $2$ per edge and one of scope $1$ per vertex, with values in
 $\A_{n+1,\,m+1}$ and coefficients of absolute value at most $2$; so it has at
-most $(d(n)+1)n\le2d(n)n$ factors of scope at most $2$, and
-Theorem~\ref{thm:density} with $k=2$ and $c=2d(n)$, whose hypothesis
-$ck=4d(n)\le\lambda/2$ holds for large $n$, gives the operation count
-$\poly(n)2^{4C_1d(n)\rhon(n)}$, and Lemma~\ref{lem:bits} with
-$N=(n+1)(m+1)\le n^3$ and $L=1$ turns it into the time bound. Finally
-$d(n)\rhon(n)\le n/\log\log n$. The optimum and its multiplicity are read off the
-profile as in Corollary~\ref{cor:maxcut}.
+most $(d(n)+1)n\le2d(n)n$ factors of scope at most $2$. Theorem~\ref{thm:density}
+with $k=2$ and $c=2d(n)$ applies once $4\delta_n\le\theta_1$, and gives
+$\poly(n)2^{4800\,n\,g(4\delta_n)}$ operations; $g(4\delta_n)\le4g(\delta_n)$, and
+Lemma~\ref{lem:bits} with $N=(n+1)(m+1)\le n^3$ and $L=1$ turns the count into the
+time bound. The optimum and its multiplicity are read off the profile as in
+Corollary~\ref{cor:maxcut}.
 \ref{it:denseising} The factor system in the proof of Theorem~\ref{thm:ising}\ref{it:isingmodel}
 has one factor of scope $2$ per edge and one of scope $1$ per vertex, with values
 in $\A_N$, $N=2E_{\max}+1$, and coefficients of $O(\log E_{\max})$ bits; it has at
@@ -821,31 +940,71 @@ Lemma~\ref{lem:bits} give the bound as in \ref{it:densecut}. The factor system
 in the proof of Theorem~\ref{thm:ising}\ref{it:potts} lives on $n'=qn$ variables
 and has $n$ factors of scope $q$ and at most $d(n)n$ of scope $2q$, with
 coefficients of $O(q+\log E_{\max})$ bits; so it has at most
-$(d(n)+1)n\le(d(n)+1)n'$ factors of scope at most $2q$, and
-Theorem~\ref{thm:density} on $n'$ variables with $k=2q$ and $c=d(n)+1$, whose
-hypothesis $2q(d(n)+1)\le\lceil\log n'\rceil/2$ holds for large $n$, gives
-$\poly(n)2^{2C_1q(d(n)+1)\rhon(qn)}$ operations, and $\rhon(qn)\le4q\rhon(n)$ as
-in that proof. Lemma~\ref{lem:bits} turns the counts into time bounds, and the
-ground-state energy and the partition functions follow as in
-Theorem~\ref{thm:ising}.
+$(d(n)+1)n\le(d(n)+1)n'$ factors of scope at most $2q$. Theorem~\ref{thm:density}
+on $n'$ variables with $k=2q$ and $c=d(n)+1$ has
+$\theta_{n'}\le4q\,d(n)\sqrt{\log\log n'/\log n'}\le4q\,\delta_n$ for large $n$,
+because $\log\log x/\log x$ decreases for $x\ge16$; it gives
+$\poly(n)2^{4800\,qn\,g(4q\delta_n)}$ operations, and $g(4q\delta_n)\le4q\,g(\delta_n)$.
+Lemma~\ref{lem:bits} turns the counts into time bounds, and the ground-state energy
+and the partition functions follow as in Theorem~\ref{thm:ising}.
+\end{proof}
+
+At $d(n)=\sqrt{\log n}/(\log\log n)^3$, for instance, $\delta_n=(\log\log n)^{-5/2}$
+and the exponent in \ref{it:densecut} is $O(n/(\log\log n)^2)$.
+
+The cut function of a graph and that of its complement determine each other, so the
+corollary also reaches graphs with $\Theta(n^2)$ edges whose complement is sparse.
+
+\begin{corollary}[Graphs with sparse complements]\label{cor:complement}
+Let $d=d(n)\ge1$ satisfy $\delta_n\to0$ and let $\Omega_0\ge1$ be an integer. Let
+$H$ be a graph on a vertex set $V$ of size $n$ with at most $d(n)\,n$ edges, and let
+$\omega$ be a weighting of the pairs of distinct vertices with $\omega_{uv}=\Omega_0$
+for $uv\notin E(H)$ and $\omega_{uv}\in\{0,1,\dots,\Omega_0\}$ for $uv\in E(H)$. Then
+the numbers
+\[
+  p_{i,j}=\#\Bigl\{S\subseteq V:\ |S|=i,\ \sum_{u\in S,\,v\notin S}\omega_{uv}=j\Bigr\}
+\]
+are computed for all $i,j$ in time $\poly(n,\Omega_0)\,2^{\,O(n\,g(\delta_n))}=\poly(\Omega_0)\,2^{o(n)}$.
+In particular, for every graph $G$ on $n$ vertices whose complement has at most
+$d(n)\,n$ edges, the cut profile of $G$, the maximum cut, the maximum and the
+minimum bisection, and the numbers of optimal solutions, are computed in time
+$2^{o(n)}$.
+\end{corollary}
+
+\begin{proof}
+Put $\eta_{uv}=\Omega_0-\omega_{uv}\in\{0,\dots,\Omega_0\}$ for $uv\in E(H)$. Every pair
+$\{u,v\}$ with $u\in S$ and $v\notin S$ carries the weight $\Omega_0$, less
+$\eta_{uv}$ when it is an edge of $H$, and there are $|S|(n-|S|)$ such pairs; hence
+\begin{equation}\label{eq:complementcut}
+  \sum_{u\in S,\,v\notin S}\omega_{uv}=\Omega_0\,|S|\,(n-|S|)-\mathrm{cut}_\eta(S),
+\end{equation}
+where $\mathrm{cut}_\eta(S)$ is the total $\eta$-weight of the edges of $H$ between $S$
+and $V\setminus S$. Corollary~\ref{cor:maxcut}, with Theorem~\ref{thm:density} in place
+of Theorem~\ref{thm:weighted} as in the proof of Corollary~\ref{cor:density}\ref{it:densecut},
+computes the numbers $q_{i,j}$ of sets $S$ of size $i$ with $\mathrm{cut}_\eta(S)=j$ in
+the stated time; the algebra is $\A_{n+1,\,\Omega_0m+1}$ with $m=|E(H)|$, of dimension
+polynomial in $n$ and $\Omega_0$. By \eqref{eq:complementcut},
+$p_{i,j}=q_{i,\,\Omega_0i(n-i)-j}$, read as $0$ when the index is negative or exceeds
+$\Omega_0 m$. For a graph $G$ take $H$ its complement, $\Omega_0=1$ and $\omega=0$ on
+$E(H)$; then $\omega$ is the indicator of $E(G)$, and the maximum cut and the bisections
+are read off the numbers $p_{i,j}$.
 \end{proof}
 
 The same bookkeeping applies to the profiles of Theorem~\ref{thm:profile} and
 to the programs of Theorem~\ref{thm:ip}.
 
 \begin{corollary}[Max-$k$-SAT and integer programs at growing density]\label{cor:densitysat}
-Let $d=d(n)\ge1$ satisfy $d(n)\le\sqrt{\log n}/(\log\log n)^3$ for all large
-$n$, and fix $k\ge1$ and $s\ge0$.
+Let $d=d(n)\ge1$ satisfy $\delta_n\to0$, and fix $k\ge1$ and $s\ge0$.
 \begin{enumerate}[label=(\roman*),leftmargin=2.2em]
 \item\label{it:densesat} For a $k$-CNF formula with $n$ variables and at most
 $d(n)\,n$ clauses with integer weights in $[0,\Omega]$, the profile
 \eqref{eq:csprofile}, and with it the maximum satisfiable weight and the
 number of assignments attaining it, is computed in time
-$\poly(n,\Omega)\,2^{O_k(d(n)\rhon(n))}=\poly(\Omega)\,2^{O_k(n/\log\log n)}$.
+$\poly(n,\Omega)\,2^{O_k(n\,g(\delta_n))}=\poly(\Omega)\,2^{o(n)}$.
 \item\label{it:denseip} For a program as in Theorem~\ref{thm:ip} with at most
 $d(n)\,n$ sparse rows, each involving at most $k$ variables, the numbers
 $p(j_0,\dots,j_s)$ of Theorem~\ref{thm:ip}\ref{it:ip01} are computed in time
-$\poly\bigl(\ell,(1+2n\Omega)^{s+2}\bigr)\,2^{O_{k,s}(d(n)\rhon(n))}$.
+$\poly\bigl(\ell,(1+2n\Omega)^{s+2}\bigr)\,2^{O_{k}(n\,g(\delta_n))}$.
 \end{enumerate}
 \end{corollary}
 
@@ -853,9 +1012,9 @@ $\poly\bigl(\ell,(1+2n\Omega)^{s+2}\bigr)\,2^{O_{k,s}(d(n)\rhon(n))}$.
 \ref{it:densesat} The factor system of the proof of Theorem~\ref{thm:profile}
 has at most $d(n)n$ factors of scope at most $k$, with values in $\A_N$,
 $N=1+\sum_f\omega_f\le1+d(n)n\Omega$, and coefficients of at most $k$ bits.
-Theorem~\ref{thm:density} with $c=d(n)$, whose hypothesis $kd(n)\le\lambda/2$
-holds for large $n$, gives $\poly(n)2^{C_1kd(n)\rhon(n)}$ operations, and
-Lemma~\ref{lem:bits} the time bound; finally $d(n)\rhon(n)\le n/\log\log n$.
+Theorem~\ref{thm:density} with $c=d(n)$ applies once $k\delta_n\le\theta_1$ and gives
+$\poly(n)2^{4800\,n\,g(k\delta_n)}$ operations, with $g(k\delta_n)\le k\,g(\delta_n)$;
+Lemma~\ref{lem:bits} gives the time bound.
 \ref{it:denseip} The factor system of the proof of Theorem~\ref{thm:ip}, through
 that of Theorem~\ref{thm:linear}, consists of the at most $d(n)n$ indicator
 factors of the sparse rows and the $n$ factors $\Psi_v$ of scope $1$, at most
@@ -866,15 +1025,27 @@ sum, and the numbers $p(j_0,\dots,j_s)$ are read off as in the proof of
 Theorem~\ref{thm:ip}.
 \end{proof}
 
-\begin{remark}
-The regime of Corollary~\ref{cor:density} ends at average degree of order
-$\sqrt{\log n}$: there the exponent $d(n)\rhon(n)$ is of order $n(\log\log n)^2$
-and the bound is worse than enumeration. A graph with $\Theta(n^2)$ edges is
-beyond reach of the method for the reason given in Section~\ref{sec:scope}: the
-branching of Lemma~\ref{lem:frequent} fixes $n/\lambda$ variables, and the edges
-among the remaining ones still number $\Theta(n^2)$. The corollary is nonetheless
-the first bound of the form $2^{o(n)}$ for the exact maximum cut on graphs
-whose average degree tends to infinity; the algorithm of Williams \cite{Wil05}
-runs in time $2^{\omega n/3}$ on every graph, and under the exponential time
-hypothesis no bound $2^{o(n)}$ was possible even at bounded degree.
+\begin{remark}\label{rem:densityend}
+The regime of Theorem~\ref{thm:density} ends at $ck$ of order
+$\sqrt{\log n/\log\log n}$. Below that order the exponent is $o(n)$; at that order
+$\theta_n$ is bounded away from $0$ and \eqref{eq:explicit} is no better than
+enumeration. The routine of Proposition~\ref{prop:routine} cannot reach quadratic
+density with any design at all. The balance condition \eqref{eq:balance} and
+$M\le bn$ give $D^2\le M/(2(b+w))<n/2$, and $D=r^{2Q}\ge2^{2Q}$, so every admissible
+design has $Q<\frac14\log n$. Consequently $q=\lfloor dR/Q\rfloor\ge\lfloor4d/\log n\rfloor$,
+and $q\ge n$ as soon as the total degree satisfies $d\ge\frac14(n+1)\log n$; then
+$C_q=\sum_{s=0}^n2^s\binom ns=3^n$, and the Taylor count \eqref{eq:Cq} alone is
+exponential. For the cut factors $1+(W-1)(Y_u+Y_v-2Y_uY_v)$ of a graph with $m$ edges
+the product over the edges has degree exactly $2m$ in the incidence indeterminates,
+its top coefficient being $(-2)^m(W-1)^m\ne0$ in $\A_{m+1}$, so the degree bound
+\eqref{eq:degbound} cannot be lowered and a graph with $m\ge\frac18(n+1)\log n$
+edges already gives $q\ge n$. Branching on $h$ vertices costs $2^h$ and removes at
+most $hn$ edges, so for a graph with $\Theta(n^2)$ edges any subexponential branching
+leaves $\Theta(n^2)$ edges. This is a limitation of the routine, not a lower bound for
+Max-Cut. The theorem is nonetheless a bound of the form $2^{o(n)}$ for the exact
+maximum cut on graphs whose average degree tends to infinity, and
+Corollary~\ref{cor:complement} gives one for a class of graphs with $\Theta(n^2)$
+edges; the algorithm of Williams \cite{Wil05} runs in time $2^{\omega n/3}$ on every
+graph, and under the exponential time hypothesis no bound $2^{o(n)}$ was possible
+even at bounded degree.
 \end{remark}

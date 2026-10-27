@@ -116,13 +116,16 @@ which contains exact cover with bounded element frequency and the partially
 ordered knapsack problem (Theorem~\ref{thm:ip}, Corollary~\ref{cor:ip}), all
 in time $2^{O(\rhon(n))}$;
 \item\label{it:density} the same for systems whose density grows with $n$:
-the constant in the exponent is linear in the ratio $c$ of factors to
-variables (Theorem~\ref{thm:density}), so that the maximum cut, the maximum
-bisection and the Ising and Potts ground states of a graph of average degree
-$d(n)$, the exact optimum of Max-$k$-SAT with $d(n)n$ clauses and that of an
-integer program with $d(n)n$ sparse rows are found in time $2^{o(n)}$ whenever
-$d(n)\le\sqrt{\log n}/(\log\log n)^3$ (Corollaries \ref{cor:density} and
-\ref{cor:densitysat});
+with parameters that follow the ratio $c$ of factors to variables, the exponent
+is $O(n\,g(\theta))$ with $\theta=ck\sqrt{\log\log n/\log n}$ and
+$g(x)=x\log^{3/2}(1/x)$ (Theorems \ref{thm:explicit} and \ref{thm:density}), so
+that the maximum cut, the maximum bisection and the Ising and Potts ground states
+of a graph of average degree $d(n)$, the exact optimum of Max-$k$-SAT with $d(n)n$
+clauses and that of an integer program with $d(n)n$ sparse rows are found in time
+$2^{o(n)}$ whenever $d(n)=o(\sqrt{\log n/\log\log n})$ (Corollaries
+\ref{cor:density} and \ref{cor:densitysat}); and, through the complement, the cut
+profile of every graph whose complement has that many edges, a class that contains
+graphs with $\Theta(n^2)$ edges (Corollary~\ref{cor:complement});
 \item\label{it:snp} $k$-SAT lies in the class $\SE$ of problems solvable in
 time $2^{\varepsilon n}\poly$ for every $\varepsilon>0$, by the sparsification
 lemma of Impagliazzo, Paturi and Zane \cite{IPZ01}, and therefore every problem of
@@ -146,9 +149,11 @@ First, the exponent is $o(n)$ and not $n^{o(1)}$. A polynomial-time reduction
 from an NP-complete problem to $3$-SAT multiplies the number of variables by a
 polynomial, so the algorithm says nothing about $\mathrm{P}$ versus
 $\mathrm{NP}$, and nothing here bears on that question. Second, the number of
-factors and the total degree of their product must be $O(n)$, or $o(n\sqrt{\log n}/(\log\log n)^2)$
-after Theorem~\ref{thm:density}, after a branching step that fixes $O(n/\log n)$
-variables. Max-Cut on graphs with $\Theta(n^2)$ edges, the chromatic and Tutte
+factors and the total degree of their product must be $O(n)$, or
+$o(n\sqrt{\log n/\log\log n})$ after Theorem~\ref{thm:density}, after a branching
+step that fixes $O(n/\log n)$ variables; Remark~\ref{rem:densityend} shows that the
+routine itself cannot go beyond total degree of order $n\log n$. Max-Cut on general
+graphs with $\Theta(n^2)$ edges, the chromatic and Tutte
 polynomials as polynomials in $q$ (as opposed to their values at a fixed
 positive integer $q$, which Theorem~\ref{thm:tutte} does give on bounded-degree
 graphs), Orthogonal Vectors, $3$SUM and All-Pairs Shortest Paths need either
@@ -165,9 +170,9 @@ frequent variables and the bit-complexity bound over $\Q[W]/(W^N)$. Section
 \ref{sec:applications} proves items \ref{it:profile}--\ref{it:global}, Section
 \ref{sec:more} proves items \ref{it:more} and \ref{it:density}, Section
 \ref{sec:snp} proves item \ref{it:snp}, and Section~\ref{sec:scope} records what
-the method does not give. Appendix~\ref{app:check} describes an exact-arithmetic
-check of the extended algorithm on small instances; no statement of the paper
-depends on it. The author's earlier work on algorithmic structures in geometric and
+the method does not give. Appendix~\ref{app:check} describes exact-arithmetic
+checks of the extended algorithm on small instances and of the finite inequalities
+behind Section~\ref{ssec:density}; no statement of the paper depends on them. The author's earlier work on algorithmic structures in geometric and
 topological settings \cite{Bha26a,Bha26b,Bha26c} is unrelated in method but
 shares the aim of making a computation explicit enough to be verified line by
 line.
@@ -176,5 +181,6 @@ A word on the constants. The parameters of Lemma~\ref{lem:params} become
 admissible only when $\sqrt{\log n}$ exceeds a large multiple of
 $(\log\log n)^2$, that is for $n$ beyond any practical size; the same is true
 of \oai{}'s algorithm, and Figure~\ref{fig:costs} shows where the three costs
-of the routine settle. The theorems are statements about asymptotic complexity,
+of the routine settle; Theorem~\ref{thm:explicit} asks for
+$\log n\ge2^{30}\log\log n$ at the least. The theorems are statements about asymptotic complexity,
 and the paper does not present them as anything else.

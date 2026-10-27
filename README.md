@@ -1,7 +1,7 @@
 # Subexponential Weighted Counting and Exact Optimisation
 
 Author: Deep Bhattacharjee. Source and verification code for the paper of that
-title (45 pages, amsart). Release v1.2.0.
+title (48 pages, amsart). Release v1.3.0.
 
 ## What the paper proves
 
@@ -54,13 +54,18 @@ circuits (Theorem 7.15), 0-1 and bounded integer programs with O(n) rows of
 boundedly many variables (coefficients of any size) and a fixed number of dense
 rows (Theorem 7.17), including exact cover with bounded element frequency and
 the partially ordered knapsack problem (Corollary 7.18), and growing density:
-the constant in the exponent is linear in the ratio of factors to variables
-(Theorem 7.19), so Max-Cut, the Ising and Potts ground states, Max-k-SAT and
-sparse integer programs at average degree up to sqrt(log n)/(log log n)^3 run
-in time 2^{o(n)} (Corollaries 7.20, 7.21).
+with parameters that follow the degree ratio and the entropy bound for the
+Taylor count (Lemma 3.4), the exponent is O(n g(θ)) with
+θ = ck sqrt(log log n / log n) and g(x) = x log^{3/2}(1/x) (Theorems 7.19,
+7.20), so Max-Cut, the Ising and Potts ground states, Max-k-SAT and sparse
+integer programs at every average degree o(sqrt(log n / log log n)) run in time
+2^{o(n)} (Corollaries 7.21, 7.23), and so does the cut profile of every graph
+whose complement has that many edges, which includes graphs with Θ(n²) edges
+(Corollary 7.22). Remark 7.24 shows that no design for the routine reaches
+total degree (n+1) log n / 4.
 
 Section 8 proves k-SAT ∈ SE from the sparsification lemma and SNP ⊆ SE.
-Section 9 lists what the method does not give: Max-Cut with Θ(n²) edges, the
+Section 9 lists what the method does not give: Max-Cut on general graphs with Θ(n²) edges, the
 chromatic and Tutte polynomials as polynomials in q, the quadratic-time
 problems of fine-grained complexity, and P versus NP, on which the paper
 proves nothing.
@@ -74,6 +79,11 @@ proves nothing.
   (Python standard library only, `Fraction`; about twenty minutes). Its
   recorded output is `code/check_output.txt`; the expected last line is
   `7 checks passed, 0 failed`.
+- `code/check_density.py`: the exact checks of the growing-density section
+  (entropy bound, complement transfer on all graphs with at most six vertices,
+  the parameter inequalities of Theorem 7.19, Remark 7.24 and the footnote to
+  Theorem 7.1; a few seconds). Recorded output `code/check_density_output.txt`,
+  expected last line `6 checks passed, 0 failed`.
 - `dist/`: the compiled paper, the TeX zip and the arXiv tarball attached to the
   release.
 - `.github/workflows/check.yml` runs the check program and compiles the paper;
@@ -82,12 +92,13 @@ proves nothing.
 ## Build
 
     cd paper && latexmk -pdf main.tex
-    cd code && python3 check_interpolation.py
+    cd code && python3 check_interpolation.py && python3 check_density.py
 
 ## Archive
 
 | Release | DOI |
 | --- | --- |
+| v1.3.0 | DOI_V130 |
 | v1.2.0 | [10.5281/zenodo.23698450](https://doi.org/10.5281/zenodo.23698450) |
 | v1.1.0 | [10.5281/zenodo.23697614](https://doi.org/10.5281/zenodo.23697614) |
 | v1.0.0 | [10.5281/zenodo.23695836](https://doi.org/10.5281/zenodo.23695836) (concept DOI of all versions [10.5281/zenodo.23695835](https://doi.org/10.5281/zenodo.23695835)) |
