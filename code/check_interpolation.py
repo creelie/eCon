@@ -6,7 +6,8 @@ The algorithm is the one of OpenAI's preprint "The Exponential Time
 Hypothesis is False" (October 25, 2026), Sections 3-4, run here with
 coefficients in the truncated polynomial ring A = Q[W]/(W^N) so that it
 returns generating polynomials (Max-SAT profile, independence polynomial,
-weight enumerator of a code) and not only counts.  Every number is a Python Fraction; nothing is
+weight enumerator of a code, objective profile of a sparse 0-1
+program) and not only counts.  Every number is a Python Fraction; nothing is
 floating point.  The design parameters are tiny (r = 2, Q = 3, R = 2,
 D = 64), far from the asymptotic regime, because correctness of the
 identity H(0) = Z needs only Definition 3.1, not the size bounds.
@@ -413,7 +414,7 @@ def main():
         c = [Fr(0)] * Poly.N; c[int(xs[0] != xs[1])] = Fr(1); return Poly(c)
     results.append(run_case("Max-Cut profile of C6 plus chord", n, scopes, facs, [cb] * len(edges), len(edges) + 1, 2 * len(edges) * 2, 4))
     # case 5: weight enumerator of the binary code of length 6 with parity checks
-    # {0,1,2}, {2,3,4}, {4,5,0} (Theorem 7.14): factor (1 + prod(1-2y))/2 per check,
+    # {0,1,2}, {2,3,4}, {4,5,0} (Theorem 7.12): factor (1 + prod(1-2y))/2 per check,
     # 1 + (W-1) y_v per bit, over Q[W]/(W^7)
     checks = [[0, 1, 2], [2, 3, 4], [4, 5, 0]]
     scopes = [list(c) for c in checks] + [[v] for v in range(n)]
@@ -425,7 +426,7 @@ def main():
     def pb(xs): return Poly.const(1 - (sum(xs) % 2))
     facs_b = [pb] * len(checks) + [vb] * n
     results.append(run_case("weight enumerator of a [6,3] code over Q[W]/(W^7)", n, scopes, facs, facs_b, n + 1, (3 * 3 + n) * 2, 5))
-    # case 6: nowhere-zero Z_3-flows of K_{2,3} (Lemma 7.10): edge e carries the value
+    # case 6: nowhere-zero Z_3-flows of K_{2,3} (Lemma 7.9): edge e carries the value
     # 1 + x_e in {1,2}, oriented from side {a0,a1} to side {b0,b1,b2}; a vertex factor is the
     # multilinear extension of the indicator that the signed sum of its edge values is 0 mod 3
     A, B = [0, 1], [2, 3, 4]
@@ -456,6 +457,29 @@ def main():
         phi, fb = mle(len(inc), lambda U, sign=sign: int(sum(sign * (1 + u) for u in U) % 3 == 0))
         scopes.append(inc); facs.append(phi); facs_b.append(fb)
     results.append(run_case("nowhere-zero Z_3-flows of K_{2,3} over Q", n, scopes, facs, facs_b, 1, (3 + 3 + 2 + 2 + 2) * 2, 6))
+    # case 7: objective profile of a 0-1 program (Theorem 7.17): sparse rows
+    # 2x0 - x1 + 3x2 <= 3, x2 + x3 + x4 = 1, x0 + x4 - x5 >= 0 as indicator factors,
+    # objective gamma = (1,2,1,3,1,2) through the factors 1 + (W^gamma_v - 1) y_v
+    rows = [([0, 1, 2], lambda U: int(2 * U[0] - U[1] + 3 * U[2] <= 3)),
+            ([2, 3, 4], lambda U: int(U[0] + U[1] + U[2] == 1)),
+            ([0, 4, 5], lambda U: int(U[0] + U[1] - U[2] >= 0))]
+    gamma = [1, 2, 1, 3, 1, 2]
+    scopes = []; facs = []; facs_b = []
+    for I, rule in rows:
+        phi, fb = mle(len(I), rule)
+        scopes.append(I); facs.append(phi); facs_b.append(fb)
+    def wpow(g):
+        p = Poly.const(1)
+        for _ in range(g): p = p * Poly.W()
+        return p
+    def objf(g): return lambda ins: 1 + ins[0] * (wpow(g) - 1)
+    def objb(g):
+        def fb(xs):
+            c = [Fr(0)] * Poly.N; c[g * xs[0]] = Fr(1); return Poly(c)
+        return fb
+    for v in range(n):
+        scopes.append([v]); facs.append(objf(gamma[v])); facs_b.append(objb(gamma[v]))
+    results.append(run_case("objective profile of a sparse 0-1 program over Q[W]/(W^11)", n, scopes, facs, facs_b, sum(gamma) + 1, (3 * 3 + n) * 2, 7))
     npass = sum(results)
     print(f"{npass} checks passed, {len(results) - npass} failed")
     sys.exit(0 if all(results) else 1)

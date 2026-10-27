@@ -4,15 +4,16 @@
 
 The applications of Section~\ref{sec:applications} used one Boolean variable
 per vertex or per clause variable, one algebra generator, and constraints of the
-simplest kind. This section works out seven further families in which one of
+simplest kind. This section works out eight further families in which one of
 these three choices is made differently: several generators record several
 linear statistics at once; the variables range over a finite domain and the
 objective is a cut into several classes; the variables sit on the edges of a
 bounded-degree graph and the constraints at the vertices; the algebra is $\Q$
 but the factor is the Fortuin--Kasteleyn weight of an edge, which reaches the
 Tutte polynomial on a hyperbola; the constraints are the parity checks of a
-linear code; the constraints are the incidences of a hypergraph; and the
-constraints are the gates of a circuit. In each case the proof consists of
+linear code; the constraints are the incidences of a hypergraph; the
+constraints are the gates of a circuit; and the constraints are the rows of
+an integer program, linear inequalities with coefficients of arbitrary size. In each case the proof consists of
 naming the variables, the factors and the algebra, checking the three
 hypotheses of Theorem~\ref{thm:weighted} or Theorem~\ref{thm:domain}, and
 reading the answer off the resulting element of the algebra. We use throughout
@@ -593,6 +594,132 @@ computed by such circuits; the direct encodings given there avoid the gate
 variables and have smaller constants.
 \end{remark}
 
+\subsection{Integer programs with sparse rows}\label{ssec:ip}
+A $0$-$1$ integer program asks for a vector $x\in\{0,1\}^n$ satisfying a system
+of linear inequalities and maximising a linear objective. Its rows need not
+be clauses, cuts or parity checks: a row is an arbitrary linear form with
+integer coefficients, compared with an integer by $\le$, $=$ or $\ge$. When
+every row involves at most $k$ variables and there are $O(n)$ of them, each row
+is a local constraint, and Theorem~\ref{thm:linear} adds a fixed number of
+dense rows and the objective as linear statistics.
+
+\begin{theorem}[Sparse integer programs]\label{thm:ip}
+Fix integers $k,c\ge1$ and $s\ge0$. Consider $n\ge20$ variables, $m\le cn$
+sparse rows
+\[
+  \sum_{v\in I_f}a_{f,v}x_v\ \bowtie_f\ b_f,\qquad |I_f|\le k,\quad
+  {\bowtie_f}\in\{\le,=,\ge\},\quad a_{f,v},b_f\in\Z,
+\]
+with coefficients of arbitrary size, a cost vector $\gamma$ and dense rows
+$\alpha^{(1)},\dots,\alpha^{(s)}$ in $\{-\Omega,\dots,\Omega\}^n$, $\Omega\ge1$,
+and let $P\subseteq\{0,1\}^n$ be the set of vectors satisfying the sparse rows.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em]
+\item\label{it:ip01} The numbers
+\[
+  p(j_0,\dots,j_s)=\#\bigl\{x\in P:\ \gamma\cdot x=j_0,\ \alpha^{(i)}\cdot x=j_i\ (1\le i\le s)\bigr\}
+\]
+are computed for all tuples in time
+$\poly\bigl(\ell,(1+2n\Omega)^{s+2}\bigr)\,2^{O_{k,c,s}(\rhon(n))}$, where $\ell$
+is the bit length of the input. Hence the largest and the smallest value of
+$\gamma\cdot x$ over the $x\in P$ with $\alpha^{(i)}\cdot x\bowtie_i\beta_i$ for
+prescribed relations $\bowtie_i$ and integers $\beta_i$, and the number of
+vectors attaining each, are computed within the same time.
+\item\label{it:ipD} For a fixed $D\ge1$ the same holds for vectors
+$x\in\{0,1,\dots,D\}^n$, with time
+$\poly\bigl(\ell,(1+4Dn\Omega)^{s+2}\bigr)\,2^{O_{D,k,c,s}(\rhon(n))}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\ref{it:ip01} For each sparse row let $\phi_f:\{0,1\}^{I_f}\to\{0,1\}$ be the
+indicator that the row holds, and let $\Phi_f$ be its multilinear extension
+\eqref{eq:multilinear}. The table of $\phi_f$ has at most $2^k$ entries, each
+found by one evaluation of the row, at a cost of $\poly(\ell)$ bit operations;
+the coefficients of $\Phi_f$ are integers of absolute value at most $2^k$. So
+$(\Phi_f)$ is a factor system with at most $cn$ factors of scope at most $k$
+and values in $\Q$, and its product at $x\in\{0,1\}^n$ is the indicator of $P$.
+To bring the statistics to nonnegative weights, put
+$\omega^{(0)}_v=\gamma_v+\Omega$, $\omega^{(i)}_v=\alpha^{(i)}_v+\Omega$ for
+$1\le i\le s$, and $\omega^{(s+1)}_v=1$, all in $[0,2\Omega]$. For every $x$,
+\[
+  \gamma\cdot x=\omega^{(0)}\cdot x-\Omega\,|x|,\qquad
+  \alpha^{(i)}\cdot x=\omega^{(i)}\cdot x-\Omega\,|x|,\qquad |x|=\omega^{(s+1)}\cdot x .
+\]
+Theorem~\ref{thm:linear}\ref{it:lineq} with $N_0=1$, the $s+2$ weight vectors
+$\omega^{(0)},\dots,\omega^{(s+1)}$ and the weight bound $2\Omega$ computes the
+numbers $r(j'_0,\dots,j'_{s+1})$ of $x\in P$ with $\omega^{(i)}\cdot x=j'_i$ for
+all $i$, in time $\poly(n,(1+2n\Omega)^{s+2})2^{O_{k,c,s}(\rhon(n))}$, to which
+the cost $cn2^k\poly(\ell)$ of the tables is added. Then
+\[
+  p(j_0,\dots,j_s)=\sum_{t=0}^{n}r\bigl(j_0+\Omega t,\ j_1+\Omega t,\dots,\ j_s+\Omega t,\ t\bigr),
+\]
+because a vector with $|x|=t$ has $\omega^{(i)}\cdot x=\alpha^{(i)}\cdot x+\Omega t$.
+The optimum over the $x\in P$ with $\alpha^{(i)}\cdot x\bowtie_i\beta_i$ is the
+largest, or smallest, $j_0$ for which $\sum p(j_0,j_1,\dots,j_s)>0$, the sum
+taken over the tuples with $j_i\bowtie_i\beta_i$, and that sum counts the
+optimal vectors.
+
+\ref{it:ipD} Let $T=\lceil\log_2(D+1)\rceil$ and replace each $x_v$ by $T$
+Boolean variables $x_{v,0},\dots,x_{v,T-1}$ with $x_v=\sum_t2^tx_{v,t}$. A sparse
+row becomes a sparse row in the new variables, with the coefficients
+$2^ta_{f,v}$ and at most $kT$ variables; add for each $v$ the row
+$\sum_t2^tx_{v,t}\le D$, which involves $T$ variables. The cost and the dense
+rows become vectors with entries $2^t\gamma_v$ and $2^t\alpha^{(i)}_v$, of
+absolute value at most $2^T\Omega\le2(D+1)\Omega\le4D\Omega$. The new program
+has $n'=Tn$ variables and at most $(c+1)n\le(c+1)n'$ sparse rows of at most $kT$
+variables, and its feasible vectors correspond bijectively to the vectors of
+$\{0,\dots,D\}^n$ satisfying the original sparse rows, with the same values of
+$\gamma\cdot x$ and $\alpha^{(i)}\cdot x$. Part \ref{it:ip01} applies, with
+$\rhon(Tn)\le4T\rhon(n)$ for $n\ge T$.
+\end{proof}
+
+The theorem places no bound on the coefficients of the sparse rows, only on
+their number of variables; the polynomial bound $\Omega$ is needed only for the
+objective and the dense rows, which enter through the exponents of the
+generators. Three classical problems that are NP-hard in the strong sense fall
+under it.
+
+\begin{corollary}\label{cor:ip}
+Fix $k,c,s\ge1$. Each of the following is computed deterministically in time
+$\poly(\ell,\Omega^{s+2})\,2^{O(\rhon(n))}$, where $\ell$ is the length of the
+input, together with the number of optimal solutions, the implied constant
+depending on $k,c,s$.
+\begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.2em]
+\item\label{it:exactcover} For $n$ sets over a universe of at most $cn$
+elements, each element lying in at most $k$ of the sets, with costs in
+$[0,\Omega]$: the least cost of an exact cover, of a set cover and the largest
+cost of a set packing. Exact cover by $3$-sets is NP-complete already when
+every element lies in exactly three sets \cite{Gon85}.
+\item\label{it:poknap} For $n$ items with values and $s$ weight vectors in
+$[0,\Omega]$, capacities $B_1,\dots,B_s$ and a partial order given by at most
+$cn$ relations $u\prec v$: the largest value of a set of items within the
+capacities that contains, with each item, every item below it. For $s=1$ this
+is the partially ordered knapsack problem, which is NP-complete in the strong
+sense \cite{JN83}.
+\item\label{it:exactsat} For a system of at most $cn$ linear equations
+$\sum_{v\in I_f}a_{f,v}x_v=b_f$ with integer coefficients, $|I_f|\le k$, and a
+cost vector in $[-\Omega,\Omega]^n$: the number of its $0$-$1$ solutions of
+each cost, and the least and largest cost; in particular the number of
+solutions of a $1$-in-$k$-SAT instance with at most $cn$ clauses, and its
+solutions with the fewest true variables.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+\ref{it:exactcover} Take a variable for each set and, for each element, the
+row $\sum_{S\ni e}x_S=1$, $\ge1$ or $\le1$; each row involves at most $k$
+variables, and there are at most $cn$ rows. The cost is $\gamma$, with $s=0$.
+\ref{it:poknap} Take a variable for each item, the row $x_v-x_u\le0$, which
+says that $x_v=1$ forces $x_u=1$, for each relation $u\prec v$, and the weight
+vectors as dense rows with $\beta_i=B_i$ and $\bowtie_i$ the relation $\le$;
+the downward closure of the chosen set under the given relations is
+equivalent to its closure under the order they generate. \ref{it:exactsat}
+The equations are the sparse rows; for $1$-in-$k$-SAT a clause on the
+literals $\ell_1,\dots,\ell_k$ is the equation $\sum_i\ell_i=1$, where a
+negated literal $1-x_v$ moves the constant $1$ to the right side. All three
+are Theorem~\ref{thm:ip}\ref{it:ip01}.
+\end{proof}
+
 \subsection{Growing density}\label{ssec:density}
 Every statement so far fixes the ratio $c$ of factors to variables. The
 constant in the exponent of Theorem~\ref{thm:weighted} is linear in $c$, and
@@ -701,6 +828,42 @@ $\poly(n)2^{2C_1q(d(n)+1)\rhon(qn)}$ operations, and $\rhon(qn)\le4q\rhon(n)$ as
 in that proof. Lemma~\ref{lem:bits} turns the counts into time bounds, and the
 ground-state energy and the partition functions follow as in
 Theorem~\ref{thm:ising}.
+\end{proof}
+
+The same bookkeeping applies to the profiles of Theorem~\ref{thm:profile} and
+to the programs of Theorem~\ref{thm:ip}.
+
+\begin{corollary}[Max-$k$-SAT and integer programs at growing density]\label{cor:densitysat}
+Let $d=d(n)\ge1$ satisfy $d(n)\le\sqrt{\log n}/(\log\log n)^3$ for all large
+$n$, and fix $k\ge1$ and $s\ge0$.
+\begin{enumerate}[label=(\roman*),leftmargin=2.2em]
+\item\label{it:densesat} For a $k$-CNF formula with $n$ variables and at most
+$d(n)\,n$ clauses with integer weights in $[0,\Omega]$, the profile
+\eqref{eq:csprofile}, and with it the maximum satisfiable weight and the
+number of assignments attaining it, is computed in time
+$\poly(n,\Omega)\,2^{O_k(d(n)\rhon(n))}=\poly(\Omega)\,2^{O_k(n/\log\log n)}$.
+\item\label{it:denseip} For a program as in Theorem~\ref{thm:ip} with at most
+$d(n)\,n$ sparse rows, each involving at most $k$ variables, the numbers
+$p(j_0,\dots,j_s)$ of Theorem~\ref{thm:ip}\ref{it:ip01} are computed in time
+$\poly\bigl(\ell,(1+2n\Omega)^{s+2}\bigr)\,2^{O_{k,s}(d(n)\rhon(n))}$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+\ref{it:densesat} The factor system of the proof of Theorem~\ref{thm:profile}
+has at most $d(n)n$ factors of scope at most $k$, with values in $\A_N$,
+$N=1+\sum_f\omega_f\le1+d(n)n\Omega$, and coefficients of at most $k$ bits.
+Theorem~\ref{thm:density} with $c=d(n)$, whose hypothesis $kd(n)\le\lambda/2$
+holds for large $n$, gives $\poly(n)2^{C_1kd(n)\rhon(n)}$ operations, and
+Lemma~\ref{lem:bits} the time bound; finally $d(n)\rhon(n)\le n/\log\log n$.
+\ref{it:denseip} The factor system of the proof of Theorem~\ref{thm:ip}, through
+that of Theorem~\ref{thm:linear}, consists of the at most $d(n)n$ indicator
+factors of the sparse rows and the $n$ factors $\Psi_v$ of scope $1$, at most
+$2d(n)n$ factors of scope at most $k$, with values in an algebra of dimension
+at most $(1+2n\Omega)^{s+2}$ and coefficients of at most $k+1$ bits.
+Theorem~\ref{thm:density} with $c=2d(n)$ and Lemma~\ref{lem:bits} compute its
+sum, and the numbers $p(j_0,\dots,j_s)$ are read off as in the proof of
+Theorem~\ref{thm:ip}.
 \end{proof}
 
 \begin{remark}

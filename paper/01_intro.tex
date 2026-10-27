@@ -65,7 +65,11 @@ vertices, hence its independence number, clique number, vertex cover number and 
 number of maximum independent sets, in time
 $2^{O(n(\log\log n)^2/(\log n)^{1/4})}$ (Theorem~\ref{thm:indep}); the proof
 combines Theorem~\ref{thm:weighted} with a branching rule on vertices of large
-degree whose cost we bound explicitly;
+degree whose cost we bound explicitly; the same branching carries any fixed
+number of vertex weights at once, which solves the knapsack problem with an
+arbitrary conflict graph and polynomially bounded weights, and its
+multidimensional form, exactly (Theorem~\ref{thm:indepbudget},
+Corollary~\ref{cor:knapsack});
 \item\label{it:vc} Vertex Cover with parameter $k$ in time
 $2^{O(k(\log\log k)^2/(\log k)^{1/4})}+\poly(n)$, that is $2^{o(k)}$ up to a
 polynomial, through the kernel of Nemhauser and Trotter (Theorem~\ref{thm:vc});
@@ -102,15 +106,23 @@ which contains the chromatic and flow polynomials at $q$ and the $q$-state
 Potts model (Theorem~\ref{thm:tutte}); the weight enumerator, the minimum
 distance and maximum-likelihood decoding of a binary code with sparse parity
 checks (Theorem~\ref{thm:codes}); matchings, transversals and colourings of
-bounded-degree hypergraphs (Theorem~\ref{thm:hypergraphs}); and the weighted
+bounded-degree hypergraphs (Theorem~\ref{thm:hypergraphs}); the weighted
 output profile of a linear-size circuit of bounded fan-in
-(Theorem~\ref{thm:circuits}), all in time $2^{O(\rhon(n))}$;
+(Theorem~\ref{thm:circuits}); and the optimum and the number of optimal
+solutions of a $0$-$1$ or bounded integer program with $O(n)$ rows, each
+involving a bounded number of variables with coefficients of any size, and a
+fixed number of further dense rows with polynomially bounded coefficients,
+which contains exact cover with bounded element frequency and the partially
+ordered knapsack problem (Theorem~\ref{thm:ip}, Corollary~\ref{cor:ip}), all
+in time $2^{O(\rhon(n))}$;
 \item\label{it:density} the same for systems whose density grows with $n$:
 the constant in the exponent is linear in the ratio $c$ of factors to
 variables (Theorem~\ref{thm:density}), so that the maximum cut, the maximum
 bisection and the Ising and Potts ground states of a graph of average degree
-$d(n)$ are found in time $2^{o(n)}$ whenever
-$d(n)\le\sqrt{\log n}/(\log\log n)^3$ (Corollary~\ref{cor:density});
+$d(n)$, the exact optimum of Max-$k$-SAT with $d(n)n$ clauses and that of an
+integer program with $d(n)n$ sparse rows are found in time $2^{o(n)}$ whenever
+$d(n)\le\sqrt{\log n}/(\log\log n)^3$ (Corollaries \ref{cor:density} and
+\ref{cor:densitysat});
 \item\label{it:snp} $k$-SAT lies in the class $\SE$ of problems solvable in
 time $2^{\varepsilon n}\poly$ for every $\varepsilon>0$, by the sparsification
 lemma of Impagliazzo, Paturi and Zane \cite{IPZ01}, and therefore every problem of
