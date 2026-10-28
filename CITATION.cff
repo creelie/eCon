@@ -25,4 +25,4 @@ abstract: >-
   hyperbolas (x-1)(y-1) = q, codes with sparse parity checks, hypergraphs,
   linear-size circuits, Max-Cut and Max-k-SAT at every average degree
   o(sqrt(log n / log log n)), Max-Cut on dense graphs that differ in few pairs from a graph of bounded rank, such as a blow-up of a graph on o(n/log n) vertices, and SNP contained in SE.
-doi: "10.5281/zenodo.23706145"
+doi: "10.5281/zenodo.23718560"

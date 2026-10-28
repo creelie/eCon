@@ -104,7 +104,7 @@ proves nothing.
 
 | Release | DOI |
 | --- | --- |
-| v1.4.0 | DOI_V140 |
+| v1.4.0 | [10.5281/zenodo.23718560](https://doi.org/10.5281/zenodo.23718560) |
 | v1.3.0 | [10.5281/zenodo.23706145](https://doi.org/10.5281/zenodo.23706145) |
 | v1.2.0 | [10.5281/zenodo.23698450](https://doi.org/10.5281/zenodo.23698450) |
 | v1.1.0 | [10.5281/zenodo.23697614](https://doi.org/10.5281/zenodo.23697614) |
