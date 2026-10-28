@@ -1,6 +1,6 @@
 """Exact checks for the growing-density part of the paper (Section 7.9).
 
-Five groups, all in integer or rational arithmetic:
+Six groups, all in integer or rational arithmetic:
   (A) the entropy bound of Lemma 3.4 in the form C_q q^q (n-q)^(n-q) <= 2^q n^n;
   (B) the complement identity (7.7) behind Corollary 7.22, on every graph with
       at most six vertices and on weighted instances;
@@ -8,7 +8,10 @@ Five groups, all in integer or rational arithmetic:
       of lambda and of the degree ratio a, in the logarithmic domain;
   (D) the top coefficient (-2)^m (W-1)^m of the cut-factor product in
       Remark 7.24;
-  (E) the two values in the footnote to the proof of Theorem 7.1.
+  (E) the two values in the footnote to the proof of Theorem 7.1;
+  (F) the cut identity (7.8) of Theorem 7.23 and the profile read off its
+      generating function, on random weighted instances and on perturbed
+      blow-ups (Corollary 7.24).
 The asymptotic statements rest on their written proofs, not on these checks.
 """
 from fractions import Fraction
@@ -174,11 +177,73 @@ def check_footnote():
     report("(E) product 3 and Psi_v 7/2 at W1=2, W2=3, Y=1/2", product == 3 and psi == Fraction(7, 2))
 
 
+# (F) Theorem 7.25 and Corollary 7.26
+def lowrank_instance(rng, n, s, omega, signed=True):
+    w = [[rng.randint(0, omega) for _ in range(n)] for _ in range(s)]
+    C = [[0] * s for _ in range(s)]
+    for a in range(s):
+        for b in range(a, s):
+            C[a][b] = C[b][a] = rng.randint(-omega, omega) if signed else rng.randint(0, 1)
+    pairs = list(combinations(range(n), 2))
+    eta = {e: rng.randint(-omega, omega) for e in pairs if rng.random() < 0.3}
+    return w, C, eta
+
+
+def base_weight(w, C, u, v):
+    s = len(w)
+    return sum(C[a][b] * w[a][u] * w[b][v] for a in range(s) for b in range(s))
+
+
+def check_lowrank():
+    rng = random.Random(20261028)
+    ok = True
+    for trial in range(300):
+        n = rng.randint(2, 7)
+        s = rng.randint(1, 3)
+        omega = rng.randint(1, 3)
+        w, C, eta = lowrank_instance(rng, n, s, omega)
+        sig = [sum(wa) for wa in w]
+        direct = {}
+        via = {}
+        for mask in range(1 << n):
+            S = [v for v in range(n) if (mask >> v) & 1]
+            T = [v for v in range(n) if not (mask >> v) & 1]
+            cut = sum(base_weight(w, C, u, v) + eta.get((min(u, v), max(u, v)), 0) for u in S for v in T)
+            key = (len(S), cut)
+            direct[key] = direct.get(key, 0) + 1
+            # generating-function side: (h+, h-, i, j_1..j_s) and P(j)
+            hp = sum(max(x, 0) for (u, v), x in eta.items() if ((mask >> u) & 1) != ((mask >> v) & 1))
+            hm = sum(max(-x, 0) for (u, v), x in eta.items() if ((mask >> u) & 1) != ((mask >> v) & 1))
+            j = [sum(w[a][v] for v in S) for a in range(s)]
+            P = sum(C[a][b] * j[a] * (sig[b] - j[b]) for a in range(s) for b in range(s))
+            k2 = (len(S), hp - hm + P)
+            via[k2] = via.get(k2, 0) + 1
+        ok &= direct == via
+    report("(F1) cut identity and profile of Theorem 7.23 on 300 random instances", ok)
+    ok = True
+    for trial in range(200):
+        n = rng.randint(2, 7)
+        s = rng.randint(1, 4)
+        part = [rng.randrange(s) for _ in range(n)]
+        F = {(a, b) for a in range(s) for b in range(a, s) if rng.random() < 0.5}
+        adj = lambda u, v: (min(part[u], part[v]), max(part[u], part[v])) in F
+        pairs = list(combinations(range(n), 2))
+        flips = {e for e in pairs if rng.random() < 0.2}
+        G = {e for e in pairs if adj(*e) != (e in flips)}
+        w = [[1 if part[v] == a else 0 for v in range(n)] for a in range(s)]
+        C = [[1 if (min(a, b), max(a, b)) in F else 0 for b in range(s)] for a in range(s)]
+        eta = {e: (1 if e in G else -1) for e in flips}
+        rep = all(base_weight(w, C, u, v) + eta.get((u, v), 0) == (1 if (u, v) in G else 0) for (u, v) in pairs)
+        ok &= rep and cut_profile(n, {e: 1 for e in G}) == cut_profile(n, {e: base_weight(w, C, *e) + eta.get(e, 0) for e in pairs})
+    report("(F2) perturbed blow-ups represented as in Corollary 7.24 (200 instances)", ok)
+
+
 if __name__ == "__main__":
     check_entropy()
     check_complement()
     check_params()
     check_topcoeff()
     check_footnote()
+    check_lowrank()
     print("%d checks passed, %d failed" % (passed, failed))
     sys.exit(1 if failed else 0)

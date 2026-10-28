@@ -4,4 +4,6 @@ ok    (B2) weighted form of the identity on 200 random instances
 ok    (C) parameter inequalities of Theorem 7.19 at 32 sample points
 ok    (D) degree 2m and top coefficient (-2)^m (W-1)^m for m <= 5
 ok    (E) product 3 and Psi_v 7/2 at W1=2, W2=3, Y=1/2
-6 checks passed, 0 failed
+ok    (F1) cut identity and profile of Theorem 7.23 on 300 random instances
+ok    (F2) perturbed blow-ups represented as in Corollary 7.24 (200 instances)
+8 checks passed, 0 failed

@@ -990,7 +990,120 @@ $E(H)$; then $\omega$ is the indicator of $E(G)$, and the maximum cut and the bi
 are read off the numbers $p_{i,j}$.
 \end{proof}
 
-The same bookkeeping applies to the profiles of Theorem~\ref{thm:profile} and
+Corollary~\ref{cor:complement} rests on the fact that the cut of the complete graph
+depends on $|S|$ alone. More generally, the cut of a graph whose adjacency is a
+fixed quadratic expression in a few vertex weights depends only on the values of
+those weights on $S$, and these values are linear statistics in the sense of
+Theorem~\ref{thm:linear}. A sparse perturbation of such a graph is then within reach.
+
+\begin{theorem}[Sparse perturbations of graphs of bounded rank]\label{thm:lowrank}
+Let $d=d(n)\ge1$ satisfy $\delta_n\to0$, and let $s\ge1$ and $\Omega\ge1$ be integers.
+Let $V$ be a set of size $n$, let $w_1,\dots,w_s:V\to\{0,1,\dots,\Omega\}$ and let
+$C=(c_{ab})$ be a symmetric $s\times s$ integer matrix with entries in
+$[-\Omega,\Omega]$. Put
+\[
+  \omega_{uv}=\sum_{a,b=1}^{s}c_{ab}\,w_a(u)\,w_b(v)\qquad(u\ne v),
+\]
+let $H$ be a graph on $V$ with at most $d(n)\,n$ edges and let
+$\eta:E(H)\to\{-\Omega,\dots,\Omega\}$, extended by $0$ to the other pairs. For
+$S\subseteq V$ let $\mathrm{cut}(S)=\sum_{u\in S,\,v\notin S}(\omega_{uv}+\eta_{uv})$.
+Then the numbers
+\[
+  p_{i,j}=\#\{S\subseteq V:\ |S|=i,\ \mathrm{cut}(S)=j\}\qquad(i\ge0,\ j\in\Z)
+\]
+are computed for all $i,j$ in deterministic time
+\[
+  \poly\bigl(n,\Omega,(1+n\Omega)^{s}\bigr)\,2^{\,O(n\,g(\delta_n))},
+\]
+which is $2^{o(n)}$ whenever $s\log(n\Omega)=o(n)$.
+\end{theorem}
+
+\begin{proof}
+Encode $S$ by its indicator $x\in\{0,1\}^V$, and put $j_a=\sum_vw_a(v)x_v$ and
+$\Sigma_a=\sum_vw_a(v)$. Every ordered pair $(u,v)$ with $u\in S$ and $v\notin S$
+has $u\ne v$, so
+\begin{equation}\label{eq:lowrankcut}
+  \sum_{u\in S,\,v\notin S}\omega_{uv}
+  =\sum_{a,b}c_{ab}\Bigl(\sum_{u\in S}w_a(u)\Bigr)\Bigl(\sum_{v\notin S}w_b(v)\Bigr)
+  =\sum_{a,b}c_{ab}\,j_a(\Sigma_b-j_b)=:P(j_1,\dots,j_s),
+\end{equation}
+and $\mathrm{cut}(S)=P(j_1,\dots,j_s)+\mathrm{cut}_{\eta^+}(S)-\mathrm{cut}_{\eta^-}(S)$,
+where $\eta^{\pm}=\max(\pm\eta,0)$ and $\mathrm{cut}_{\eta^\pm}(S)$ is the
+$\eta^\pm$-weight of the edges of $H$ between $S$ and $V\setminus S$. Let
+$N_\pm=1+\sum_e\eta^\pm_e\le1+d(n)n\Omega$, $N_a=1+\Sigma_a\le1+n\Omega$, and
+\[
+  \A=\Q[W_+,W_-,U,T_1,\dots,T_s]\big/\bigl(W_+^{N_+},W_-^{N_-},U^{n+1},T_1^{N_1},\dots,T_s^{N_s}\bigr),
+\]
+of dimension $N\le(1+d(n)n\Omega)^2(n+1)(1+n\Omega)^s$. For an edge $e=\{u,v\}$ of $H$
+take the factor $1+(W_+^{\eta^+_e}W_-^{\eta^-_e}-1)(Y_u+Y_v-2Y_uY_v)$, the multilinear
+extension of $W_+^{\eta^+_e[x_u\ne x_v]}W_-^{\eta^-_e[x_u\ne x_v]}$, and for a vertex $v$
+the factor $1+(U\,T_1^{w_1(v)}\cdots T_s^{w_s(v)}-1)Y_v$, of degree one in $Y_v$ as in
+the proof of Theorem~\ref{thm:linear}. There are at most $(d(n)+1)n\le2d(n)n$ factors
+of scope at most $2$, with coefficients that are polynomials in the generators with
+integer coefficients of absolute value at most $2$, and their sum is
+\[
+  Z=\sum_xW_+^{\mathrm{cut}_{\eta^+}(x)}W_-^{\mathrm{cut}_{\eta^-}(x)}U^{|x|}T_1^{j_1}\cdots T_s^{j_s}
+  =\sum r(h_+,h_-,i,j_1,\dots,j_s)\,W_+^{h_+}W_-^{h_-}U^{i}T_1^{j_1}\cdots T_s^{j_s},
+\]
+with no term truncated. Theorem~\ref{thm:density} with $c=2d(n)$ and $k=2$ applies
+once $4\delta_n\le\theta_1$ and computes $Z$ with $\poly(n)2^{4800\,n\,g(4\delta_n)}$
+operations in $\A$, and $g(4\delta_n)\le4g(\delta_n)$; the bit bound of that theorem
+gives the stated time. Finally
+$p_{i,j}=\sum r(h_+,h_-,i,j_1,\dots,j_s)$ over the tuples with
+$h_+-h_-+P(j_1,\dots,j_s)=j$, a sum over at most $N$ coefficients.
+\end{proof}
+
+\begin{corollary}[Blow-ups with few changes]\label{cor:blowup}
+Let $d=d(n)$ satisfy $\delta_n\to0$ and let $s=s(n)=o(n/\log n)$. Let $F$ be a graph
+on $\{1,\dots,s\}$, loops allowed, and let $V=V_1\cup\dots\cup V_s$ be a partition of a
+set of size $n$. The blow-up $F[V_1,\dots,V_s]$ joins $u\in V_a$ and $v\in V_b$,
+$u\ne v$, exactly when $ab\in E(F)$. For every graph $G$ on $V$ that differs from
+the blow-up in at most $d(n)\,n$ pairs, the cut profile of $G$, its maximum cut, its
+maximum and minimum bisection, and the numbers of optimal solutions, are computed in
+time $2^{o(n)}$. This holds in particular for every graph that differs in at most
+$d(n)\,n$ pairs from a complete multipartite graph with $o(n/\log n)$ parts.
+\end{corollary}
+
+\begin{proof}
+Take $\Omega=1$, $w_a$ the indicator of $V_a$ and $c_{ab}=1$ for $ab\in E(F)$ and $0$
+otherwise; then $\omega_{uv}$ is the adjacency of the blow-up, since exactly one
+term of the sum is nonzero. Let $H$ be the graph of the pairs where $G$ and the
+blow-up differ, with $\eta=+1$ on the pairs that are edges of $G$ only and $\eta=-1$ on
+the others; then $\omega+\eta$ is the adjacency of $G$. Theorem~\ref{thm:lowrank} applies
+with $s\log(n+1)=o(n)$, and the optima are read off the numbers $p_{i,j}$ as in
+Corollary~\ref{cor:maxcut}.
+\end{proof}
+
+Corollary~\ref{cor:complement} is the case $s=1$, $w_1=1$, $c_{11}=\Omega_0$ of the
+theorem. Without the perturbation the cut is the polynomial $P$ of the linear statistics
+$j_a$, and its maximisation needs no part of the routine: the $s$-tuples $(j_a)$ that occur
+are counted in time $\poly(n\Omega)^s$ by dynamic programming over the vertices, and
+for a positive semidefinite objective of fixed rank Allemand, Fukuda, Liebling and
+Steiner \cite{AFLS01} solve unconstrained $0$-$1$ quadratic optimisation in polynomial
+time. The perturbation $\eta$ is what requires Theorem~\ref{thm:density}: for $s=1$ and
+$\omega=0$ it is Max-Cut on a graph of average degree $d(n)$.
+
+\begin{remark}\label{rem:lowrankcount}
+The graphs reached by Theorem~\ref{thm:lowrank} in time $2^{o(n)}$ form a vanishingly
+small part of all graphs. Fix $\varepsilon>0$ and parameters with
+$s\log(n\Omega)\le\varepsilon n$. A graph $G$ covered by the theorem is determined by
+$w_1,\dots,w_s$, $C$, the edge set of $H$ and the restriction of the adjacency of $G$ to
+$E(H)$, since $\eta$ is then the difference of that restriction and $\omega$. There
+are at most
+\[
+  (\Omega+1)^{ns}(2\Omega+1)^{s^2}\,n^{2d(n)n}\,2^{d(n)n}
+\]
+such choices. Because $s\le n$, both $ns\log(\Omega+1)$ and $s^2\log(2\Omega+1)$ are at
+most $2n\,s\log(n\Omega)\le2\varepsilon n^2$, and $d(n)n(2\log n+1)=o(n^2)$, so the count
+is at most $2^{5\varepsilon n^2}$ for $n$ large, while there are $2^{n(n-1)/2}$ graphs on
+$V$. As $\varepsilon$ is arbitrary, the proportion of graphs on $V$ covered by the
+theorem with parameters for which its bound is $2^{o(n)}$ tends to $0$, and the random
+graph $G(n,\frac12)$ is covered with probability tending to $0$. The exact maximum cut
+of every graph in time $2^{o(n)}$ is therefore not a consequence of the theorem, and it
+is not proved in this paper.
+\end{remark}
+
+The bookkeeping of Corollary~\ref{cor:complement} applies as well to the profiles of Theorem~\ref{thm:profile} and
 to the programs of Theorem~\ref{thm:ip}.
 
 \begin{corollary}[Max-$k$-SAT and integer programs at growing density]\label{cor:densitysat}
@@ -1044,8 +1157,9 @@ most $hn$ edges, so for a graph with $\Theta(n^2)$ edges any subexponential bran
 leaves $\Theta(n^2)$ edges. This is a limitation of the routine, not a lower bound for
 Max-Cut. The theorem is nonetheless a bound of the form $2^{o(n)}$ for the exact
 maximum cut on graphs whose average degree tends to infinity, and
-Corollary~\ref{cor:complement} gives one for a class of graphs with $\Theta(n^2)$
-edges; the algorithm of Williams \cite{Wil05} runs in time $2^{\omega n/3}$ on every
+Corollary~\ref{cor:complement} and Theorem~\ref{thm:lowrank} give one for classes of
+graphs with $\Theta(n^2)$ edges, though not for almost every graph
+(Remark~\ref{rem:lowrankcount}); the algorithm of Williams \cite{Wil05} runs in time $2^{\omega n/3}$ on every
 graph, and under the exponential time hypothesis no bound $2^{o(n)}$ was possible
 even at bounded degree.
 \end{remark}

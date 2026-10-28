@@ -125,7 +125,12 @@ clauses and that of an integer program with $d(n)n$ sparse rows are found in tim
 $2^{o(n)}$ whenever $d(n)=o(\sqrt{\log n/\log\log n})$ (Corollaries
 \ref{cor:density} and \ref{cor:densitysat}); and, through the complement, the cut
 profile of every graph whose complement has that many edges, a class that contains
-graphs with $\Theta(n^2)$ edges (Corollary~\ref{cor:complement});
+graphs with $\Theta(n^2)$ edges (Corollary~\ref{cor:complement}), and more generally the
+cut profile of every graph that differs in that many pairs from a blow-up of a
+graph on $o(n/\log n)$ vertices, or from a weighted graph whose weights are a
+quadratic form in $s$ vertex weights with $s\log(n\Omega)=o(n)$
+(Theorem~\ref{thm:lowrank} and Corollary~\ref{cor:blowup}); a count shows that
+these classes contain almost no graphs (Remark~\ref{rem:lowrankcount});
 \item\label{it:snp} $k$-SAT lies in the class $\SE$ of problems solvable in
 time $2^{\varepsilon n}\poly$ for every $\varepsilon>0$, by the sparsification
 lemma of Impagliazzo, Paturi and Zane \cite{IPZ01}, and therefore every problem of
