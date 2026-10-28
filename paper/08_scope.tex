@@ -13,8 +13,11 @@ total degree $\Theta(n^2)$ and $\Theta(n)$ occurrences per variable; branching
 on frequent variables fixes $\Theta(n)$ of them. Theorem~\ref{thm:density}
 reaches average degree $o(\sqrt{\log n/\log\log n})$, and by
 Remark~\ref{rem:densityend} no design for the routine reaches total degree
-$\frac14(n+1)\log n$. Corollary~\ref{cor:complement} covers the dense graphs whose
-complement is sparse, and no other dense graphs. The
+$\frac14(n+1)\log n$. Theorem~\ref{thm:lowrank} and Corollary~\ref{cor:blowup} cover the dense graphs
+that differ in $o(n\sqrt{\log n/\log\log n})$ pairs from a graph whose adjacency is
+a quadratic form in $o(n/\log n)$ vertex weights, a blow-up of a graph on
+$o(n/\log n)$ vertices for instance; by Remark~\ref{rem:lowrankcount} these are
+almost no graphs, and $G(n,\frac12)$ is not among them. The
 chromatic and Tutte polynomials as polynomials in $q$ need connectivity, which
 is not a bounded sum of local factors; Theorem~\ref{thm:tutte} gives their
 values at each fixed positive integer $q$ on bounded-degree graphs, and nothing
